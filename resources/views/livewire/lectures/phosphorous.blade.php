@@ -36,14 +36,17 @@
                     </a> --}}
                     @if($methods and $control)
                     <select wire:model="method" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-4 py-3  sm:mx-0 mt-2 sm:mt-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full sm:w-60">
-                            <option value="null">{{__('Select your method')}}</option>
+                            <option value="null" selected>{{__('Select your method')}}</option>
                         
                         @foreach ($methods as $method)
 
-                            <option value="{{"'".$method->GEO."'"}}">{{$method->GEO}}</option>
+                            <option value="{{$method->GEO}}">{{$method->GEO}}</option>
                         @endforeach            
                     </select> 
-                    @endif    
+                    @endif 
+                    <a wire:click="getCo" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full sm:w-60 py-3 sm:py-0 mt-2 sm:mt-0 sm:mx-2 mr-1'>
+                        {{ __('Find CO') }}
+                    </a>   
                   
                 {{-- @endif  --}}
                 </div> 
@@ -51,14 +54,14 @@
               
                 <div class="flex sm:justify-end">
                   {{-- @if(in_array("company.create", $permissions))  --}}
-                    <a wire:click="$toggle('createNewCompany')" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full sm:w-60 py-3 sm:py-0 mt-2 sm:mt-0 sm:mx-2 mr-1'>
+                   {{--  <a wire:click="$toggle('createNewCompany')" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full sm:w-60 py-3 sm:py-0 mt-2 sm:mt-0 sm:mx-2 mr-1'>
                         {{ __('Create New') }}
-                    </a>
+                    </a> --}}
                   {{-- @endif --}}
                   {{--@if(in_array("company.download", $permissions))  --}}
-                    <a wire:click="downloadCompanies" type='button' class='inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:text-gray-500 hover:bg-gray-200 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full sm:w-60 py-3 sm:py-0 mt-2 sm:mt-0 sm:ml-2 ml-1'>
+                    {{-- <a wire:click="downloadCompanies" type='button' class='inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:text-gray-500 hover:bg-gray-200 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full sm:w-60 py-3 sm:py-0 mt-2 sm:mt-0 sm:ml-2 ml-1'>
                         {{ __('Download') }}
-                    </a>
+                    </a> --}}
                   {{-- @endif --}}
                 </div>
 
@@ -72,28 +75,38 @@
                             </strong> </div>
                             <div class="h4 text-sm text-gray-500 py-1">{{ __('Customer')}} : <strong>{{$control[0]->CLIENTE}} </strong></div>
                             @if ($samples)
-                                <div class="h4 text-sm text-gray-500 py-1">{{ __('Quantity')}} :<strong> {{count($samples)
+                                <div class="h4 text-sm text-gray-500 py-0">{{ __('Quantity')}} :<strong> {{count($samples)
                                 }} </strong></div>
                             @endif
+                            <a wire:click.prevent="info" class="focus:ring-blue-500 focus:border-blue-500 block ml-2 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-pointer">  
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                            </svg>
+                        </a>
                         </div>
                         <div>
-                            <div class="flex justify-start"> 
-                                <div class="h4 text-sm text-gray-500 mt-2 mr-4">{{ __('Aliquot')}} :
+                            <div class="flex justify-start">                                 
+                                <div class="h4 text-sm text-gray-500 mt-2 mr-4 w-32">{{ __('Aliquot')}} :
                                     
                                 </div>
-                                <input type="text" id="table-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-14 sm:w-14" placeholder="{{__('Insert value')}}" wire:model="aliquot">
+                                
+                                <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-14 sm:w-14" placeholder="{{__('Insert value')}}" wire:model="aliquot">    
+                                <span wire:click.prevent="applyAliquot" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Apply')}}</span>                       
                             </div>
                             <div class="flex justify-start"> 
-                                <div class="h4 text-sm text-gray-500 mt-2 mr-4">{{ __('Colorimetric Factor')}} :
+                                <div class="h4 text-sm text-gray-500 mt-2 mr-4 w-32">{{ __('Colorimetric Factor')}} :
                                     
                                 </div>
-                                <input type="text" id="table-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32" placeholder="{{__('Insert value')}}" wire:model="colorimetricFactor">
+                                <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32" placeholder="{{__('Insert value')}}" wire:model="colorimetricFactor">
+                                <span wire:click.prevent="applyColorimetric" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Apply')}}</span>
                             </div>
                             <div class="flex justify-start"> 
-                                <div class="h4 text-sm text-gray-500 mt-2 mr-4">{{ __('Dilution Factor')}} :
+                                <div class="h4 text-sm text-gray-500 mt-2 mr-4 w-32">{{ __('Absorbance')}} :
                                     
                                 </div>
-                                <input type="text" id="table-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-14 sm:w-14" placeholder="{{__('Insert value')}}" wire:model="dilutionFactor">
+                                <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-14 sm:w-14" placeholder="{{__('Insert value')}}" wire:model="absorbance">
+                                <span wire:click.prevent="applyAbsorbance" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Apply')}}</span>
                             </div>
                         </div>
                     </div>
@@ -144,59 +157,110 @@
                     <th scope="col" class="px-6 py-3 w-max rounded-tl-lg rounded-bl-lg">
                       {{ __('Number')}}
                     </th>
-                    <th scope="col" class="px-6 py-3 w-max">
+                    <th scope="col" class="px-6 py-2 w-max">
                       {{ __('Name')}}
                     </th>
-                    <th scope="col" class="px-6 py-3 w-max">
+                    <th scope="col" class="px-6 py-2 w-max">
                       {{ __('Absorbance')}}
                     </th>
-                    <th scope="col" class="px-6 py-3 w-max">
+                    <th scope="col" class="px-6 py-2 w-max">
                       {{ __('Weigth')}}
                     </th>
-                    <th scope="col" class="px-6 py-3 w-max">
+                    <th scope="col" class="px-6 py-2 w-max">
                       {{ __('Aliquot')}}
                     </th>
-                    <th scope="col" class="px-6 py-3 w-max">
+                    <th scope="col" class="px-6 py-2 w-max">
                       {{ __('Colorimetric Factor')}}
                     </th>
-                    <th scope="col" class="px-6 py-3 w-max">
+                    <th scope="col" class="px-6 py-2 w-max">
                       {{ __('Dilution Factor')}}
                     </th>
-                    <th scope="col" class="px-6 py-3 w-max">
+                    <th scope="col" class="px-6 py-2 w-max">
                       {{ __('Phosphorous %')}}
                     </th>
-                    <th scope="col" class="px-6 py-3 w-max rounded-tr-lg rounded-br-lg text-right">
+                    <th scope="col" class="px-6 py-2 w-max rounded-tr-lg rounded-br-lg text-right">
                       {{__('Actions')}}
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                    
-                  @forelse ($registers as $register)
+                  {{--dd($registers)--}}  
+                  @forelse ($registers as $key => $register)
                     <tr class="bg-white border-b hover:bg-gray-100 even:bg-gray-50">
-                    <td class="px-6 py-4 w-max">
+                    <td class="px-6 py-2 w-max">
+
                       {{$register->number}}
                     </td>
-                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
+                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
                       {{$register->name}}
                     </td>
-                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
-                      {{$register->absorbance}}
+                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
+                       
+                        
+                        @if($key !== $keyIdAbsorbance)  
+                            <div class="cursor-pointer" wire:click.prevent="$set('keyIdAbsorbance',{{$key}})">{{$register->absorbance}}</div>  
+
+                        @elseif($editAbsorbance === true and $key === $keyIdAbsorbance)
+
+                            <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32" placeholder="{{$register->absorbance}}" value="{{$register->absorbance}}" wire:model="absorbanceField"
+                            wire:keydown.enter="updateAbsorbance({{$register->id}})">
+
+                        @else
+
+                        @endif
+                        
+
+                        
                     </td>
-                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
-                      {{round($register->weight,4)}}
+                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
+                      {{round($register->weight,5)}}
                     </td>
-                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
-                      {{$register->aliquot}}
+                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
+                      
+                      
+                        @if($key !== $keyIdAliquot)  
+                            <div class="cursor-pointer" wire:click.prevent="$set('keyIdAliquot',{{$key}})">{{$register->aliquot}}</div>  
+
+                        @elseif($editAliquot === true and $key === $keyIdAliquot)
+
+                            <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32" placeholder="{{$register->aliquot}}" value="{{$register->aliquot}}" wire:model="aliquotField"
+                            wire:keydown.enter="updateAliquot({{$register->id}})">
+
+                        @else                        
+
+                        @endif
                     </td>
-                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
-                      {{$register->colorimetric_factor}}
+                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
+                        @if($key !== $keyIdColorimetric)  
+                            <div class="cursor-pointer" wire:click.prevent="$set('keyIdColorimetric',{{$key}})">{{$register->colorimetric_factor}}</div>  
+
+                        @elseif($editColorimetric === true and $key === $keyIdColorimetric)
+
+                            <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32" placeholder="{{$register->colorimetric_factor}}" value="{{$register->colorimetric_factor}}" wire:model="colorimetricField"
+                            wire:keydown.enter="updateColorimetric({{$register->id}})">
+
+                        @else                        
+
+                        @endif
                     </td>
-                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
-                      {{$register->dilution_factor}}
+                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">                     
+                       {{$register->dilution_factor}}
                     </td>
-                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
-                      {{$register->phosphorous}}
+                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
+                      {{round($register->phosphorous,3)}}
+                    </td>
+                    <td>
+                        <div class="flex justify-center">
+                                                
+                        <a wire:click.prevent="info" class="focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-pointer">  
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                            </svg>
+                        </a>
+
+                        </div>
+
                     </td>
 
                    
@@ -456,11 +520,11 @@
               {{ __('Create Company Account') }}
           </x-jet-danger-button>
       </x-slot>
-  </x-jet-dialog-modal>
+  </x-jet-dialog-modal> --}}
 
 
   <!-- Edit Company Modal -->
-  <x-jet-dialog-modal wire:model="editCompany"> 
+  <x-jet-dialog-modal wire:model="info"> 
       <x-slot name="title">
           {{ __('Update Company Account Data') }}
       </x-slot>
@@ -472,84 +536,7 @@
             <x-jet-input  class="block mt-1 w-full" type="text"  required autofocus wire:model="social_name"/>
             <x-jet-input-error for="social_name" class="mt-2" />
         </div>   
-        <div class="col-span-6 sm:col-span-4 py-2">
-            <x-jet-label for="name" value="{{ __('Fantasy name') }}" />
-            <x-jet-input  class="block mt-1 w-full" type="text"  autofocus wire:model="fantasy_name"/>
-            <x-jet-input-error for="fantasy_name" class="mt-2" />
-        </div>   
-        <div class="col-span-6 sm:col-span-4 py-2">
-            <x-jet-label for="name" value="{{ __('Email') }}" />
-            <x-jet-input  class="block mt-1 w-full" type="email"  autofocus wire:model="email"/>
-            <x-jet-input-error for="email" class="mt-2" />
-        </div>   
-        <div class="col-span-6 sm:col-span-4 py-2">
-            <x-jet-label for="name" value="{{ __('Phone') }}" />
-            <x-jet-input  class="block mt-1 w-full" type="text"  autofocus wire:model="phone"/>
-            <x-jet-input-error for="phone" class="mt-2" />
-        </div>   
-        <div class="col-span-6 sm:col-span-4 py-2">
-            <x-jet-label for="name" value="{{ __('Web site') }}" />
-            <x-jet-input  class="block mt-1 w-full" type="text"  autofocus wire:model="web"/>
-            <x-jet-input-error for="web" class="mt-2" />
-        </div>   
-        <div class="col-span-6 sm:col-span-4 py-2">
-            <x-jet-label for="name" value="{{ __('Adress') }}" />
-            <x-jet-input  class="block mt-1 w-full" type="text"  autofocus wire:model="adress"/>
-            <x-jet-input-error for="adress" class="mt-2" />
-        </div> 
-        <div class="col-span-6 sm:col-span-4 py-2">
-            <x-jet-label for="name" value="{{ __('Dni') }}" />
-            <x-jet-input  class="block mt-1 w-full" type="text"  autofocus wire:model="dni"/>
-            <x-jet-input-error for="dni" class="mt-2" />
-        </div> 
-        <div class="col-span-6 sm:col-span-4 py-2">
-            
-            @if($logo_saved != null)
-              Imagen Guardada:
-              <img class="rounded-xl" src="{{ url('storage/companies/'.$logo_saved) }}" alt="" width="200px">
-
-            @endif
-
-            @if ($logo != null)
-                {{ __('Photo Preview:') }}
-                <img width="100px" src="{{ $logo->temporaryUrl() }}">
-            @endif
-            <x-jet-label for="name" value="{{ __('Logo') }}" />
-            <x-jet-input  class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="file"  autofocus wire:model="logo"/>
-            <x-jet-input-error for="logo" class="mt-2" />
-        </div>  
-
-        <div class="col-span-6 sm:col-span-4 py-2">
-            <x-jet-label for="name" value="{{ __('Headline name') }}" />
-            <x-jet-input  class="block mt-1 w-full" type="text"  autofocus wire:model="headline_name"/>
-            <x-jet-input-error for="headline_name" class="mt-2" />
-        </div>      
-        <div class="col-span-6 sm:col-span-4 py-2">
-            <x-jet-label for="name" value="{{ __('Bank name') }}" />
-            <x-jet-input  class="block mt-1 w-full" type="text"  autofocus wire:model="bank_name"/>
-            <x-jet-input-error for="bank_name" class="mt-2" />
-        </div>   
-        <div class="col-span-6 sm:col-span-4 py-2">
-            <x-jet-label for="name" value="{{ __('Type account') }}" />
-            <x-jet-input  class="block mt-1 w-full" type="text"  autofocus wire:model="type_account"/>
-            <x-jet-input-error for="type_account" class="mt-2" />
-        </div>
-        <div class="col-span-6 sm:col-span-4 py-2">
-            <x-jet-label for="name" value="{{ __('Account number') }}" />
-            <x-jet-input  class="block mt-1 w-full" type="text"  autofocus wire:model="account_number"/>
-            <x-jet-input-error for="account_number" class="mt-2" />
-        </div> 
-        <div class="col-span-6 sm:col-span-4 py-2">
-            <x-jet-label for="name" value="{{ __('Notification email') }}" />
-            <x-jet-input  class="block mt-1 w-full" type="text"  autofocus wire:model="notification_email"/>
-            <x-jet-input-error for="notification_email" class="mt-2" />
-        </div>   
-        <div class="col-span-6 sm:col-span-4 py-2">
-            <x-jet-label for="name" value="{{ __('Detail') }}" />
-            
-            <textarea class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="text" rows="4" autofocus wire:model="detail"></textarea>
-            <x-jet-input-error for="detail" class="mt-2" />
-        </div>               
+        
          
       </x-slot>
 
@@ -562,10 +549,10 @@
               {{ __('Update Company Account Data') }}
           </x-jet-danger-button>
       </x-slot>
-  </x-jet-dialog-modal>
+  </x-jet-dialog-modal> 
 
 
-  <!-- Show Company Modal -->
+ {{--  <!-- Show Company Modal -->
   @if($companyShow)
   <x-jet-dialog-modal wire:model="showCompany"> 
       <x-slot name="title">
