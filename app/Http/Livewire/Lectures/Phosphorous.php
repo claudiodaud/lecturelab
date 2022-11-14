@@ -41,6 +41,8 @@ class Phosphorous extends Component
     public $keyIdAbsorbance;
     public $keyIdDilution;
 
+    public $focusAliquot;
+
 
 
     public function render()
@@ -132,11 +134,16 @@ class Phosphorous extends Component
                 
             }
 
-            if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->method != null and $this->codCart != null) {
-                $query = "SELECT * FROM presamples WHERE CO = $this->co and cod_carta = $this->codCart and method = '".$this->method."' ORDER BY presamples.number ASC";     
-                $this->registers = DB::connection('mysql')->select($query);
-            }
+            $this->getRegisters();
         }
+    }
+
+    public function getRegisters()
+    {
+        if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->method != null and $this->codCart != null) {
+            $query = "SELECT * FROM presamples WHERE CO = $this->co and cod_carta = $this->codCart and method = '".$this->method."' ORDER BY presamples.number ASC";     
+            $this->registers = DB::connection('mysql')->select($query);
+        }   
     }
 
    
@@ -174,14 +181,7 @@ class Phosphorous extends Component
 
     }
 
-    public function updatingKeyIdDilution($key)
-    {
-            $this->keyIdDilution = null;
-            $this->editDilution = false;
-            $this->keyIdDilution= $key;
-            $this->editDilution = true;
-
-    }
+   
 
     public function updateAliquot($id)
     {
@@ -217,6 +217,19 @@ class Phosphorous extends Component
         
 
         $this->aliquotField = null;
+        if (count($this->samples) > $this->keyIdAliquot + 1) {
+            
+            $this->keyIdAliquot = $this->keyIdAliquot + 1;
+            $this->editAliquot = true;
+            $this->dispatchBrowserEvent('focus-aliquot', ['key' => $this->keyIdAliquot]);
+            
+        }else{
+            $this->closeAliquot();
+        }
+    }
+
+    public function closeAliquot()
+    {
         $this->keyIdAliquot = null;
         $this->editAliquot = false;
     }
@@ -267,6 +280,17 @@ class Phosphorous extends Component
         }
 
         $this->colorimetricField = null;
+        if (count($this->samples) > $this->keyIdColorimetric + 1) {
+            $this->keyIdColorimetric = $this->keyIdColorimetric + 1;
+            $this->editColorimetric = true;
+            $this->dispatchBrowserEvent('focus-colorimetric', ['key' => $this->keyIdColorimetric]);
+        }else{
+            $this->closeColorimetric();
+        }
+    }
+
+    public function closeColorimetric()
+    {
         $this->keyIdColorimetric = null;
         $this->editColorimetric = false;
     }
@@ -318,11 +342,23 @@ class Phosphorous extends Component
         }
 
         $this->absorbanceField = null;
+        if (count($this->samples) > $this->keyIdAbsorbance + 1) {
+            $this->keyIdAbsorbance = $this->keyIdAbsorbance + 1;
+            $this->editAbsorbance = true;
+            $this->dispatchBrowserEvent('focus-absorbance', ['key' => $this->keyIdAbsorbance]);
+        }else{
+            $this->closeAbsorbance();
+        }
+       
+    }
+
+    public function closeAbsorbance()
+    {
         $this->keyIdAbsorbance = null;
         $this->editAbsorbance = false;
     }
 
-     public function applyAbsorbance()
+    public function applyAbsorbance()
     {
         //buscamos las muestras 
         if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->method != null and $this->codCart != null) {

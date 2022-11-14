@@ -63,6 +63,12 @@
                         {{ __('Download') }}
                     </a> --}}
                   {{-- @endif --}}
+                    <a wire:click.prevent="info" class="focus:ring-blue-500 focus:border-blue-500 block ml-2 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-pointer">  
+                        
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                    </svg>
+                    </a>
                 </div>
 
                 </div>
@@ -71,19 +77,15 @@
                     <div class="block sm:flex sm:justify-between ">
                         <div>
                             <p>{{-- dd($control[0]) --}}</p>
-                            <div class="h4 text-sm text-gray-500 py-1">{{ __('CO')}} : <strong>{{$control[0]->CODIGO}}
-                            </strong> </div>
-                            <div class="h4 text-sm text-gray-500 py-1">{{ __('Customer')}} : <strong>{{$control[0]->CLIENTE}} </strong></div>
+                            <div class="h4 text-sm text-gray-500 py-2">{{ __('CO')}} : <strong>{{$control[0]->CODIGO}} </strong> 
+                                
+                            </div>
+                            <div class="h4 text-sm text-gray-500 py-2">{{ __('Customer')}} : <strong>{{$control[0]->CLIENTE}} </strong></div>
                             @if ($samples)
-                                <div class="h4 text-sm text-gray-500 py-0">{{ __('Quantity')}} :<strong> {{count($samples)
+                                <div class="h4 text-sm text-gray-500 py-2">{{ __('Quantity')}} :<strong> {{count($samples)
                                 }} </strong></div>
                             @endif
-                            <a wire:click.prevent="info" class="focus:ring-blue-500 focus:border-blue-500 block ml-2 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-pointer">  
-                        
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-                            </svg>
-                        </a>
+                            
                         </div>
                         <div>
                             <div class="flex justify-start">                                 
@@ -201,9 +203,16 @@
                             <div class="cursor-pointer" wire:click.prevent="$set('keyIdAbsorbance',{{$key}})">{{$register->absorbance}}</div>  
 
                         @elseif($editAbsorbance === true and $key === $keyIdAbsorbance)
+                            <div class="flex justify-center">
+                            <input type="text" id="absorbance-{{$key}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" placeholder="{{$register->absorbance}}" value="{{$register->absorbance}}" wire:model="absorbanceField"
+                            wire:keydown.enter="updateAbsorbance({{$register->id}})" autofocus="autofocus" wire:key="absorbance-{{$key}}">
 
-                            <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32" placeholder="{{$register->absorbance}}" value="{{$register->absorbance}}" wire:model="absorbanceField"
-                            wire:keydown.enter="updateAbsorbance({{$register->id}})">
+                            <a href="" class="pt-2" wire:click.prevent="closeAbsorbance">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="00 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            </a>
+                            </div>
 
                         @else
 
@@ -222,9 +231,15 @@
                             <div class="cursor-pointer" wire:click.prevent="$set('keyIdAliquot',{{$key}})">{{$register->aliquot}}</div>  
 
                         @elseif($editAliquot === true and $key === $keyIdAliquot)
-
-                            <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32" placeholder="{{$register->aliquot}}" value="{{$register->aliquot}}" wire:model="aliquotField"
-                            wire:keydown.enter="updateAliquot({{$register->id}})">
+                            <div class="flex justify-center">
+                            <input type="text" id="aliquot-{{$key}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" placeholder="{{$register->aliquot}}" value="{{$register->aliquot}}" wire:model="aliquotField"
+                            wire:keydown.enter="updateAliquot({{$register->id}})" autofocus="autofocus" wire:key="aliquot-{{$key}}">
+                            <a href="" class="pt-2" wire:click.prevent="closeAliquot">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="00 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            </a>
+                            </div>
 
                         @else                        
 
@@ -235,9 +250,16 @@
                             <div class="cursor-pointer" wire:click.prevent="$set('keyIdColorimetric',{{$key}})">{{$register->colorimetric_factor}}</div>  
 
                         @elseif($editColorimetric === true and $key === $keyIdColorimetric)
-
-                            <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32" placeholder="{{$register->colorimetric_factor}}" value="{{$register->colorimetric_factor}}" wire:model="colorimetricField"
-                            wire:keydown.enter="updateColorimetric({{$register->id}})">
+                            <div class="flex justify-center">
+                            <input type="text" id="colorimetric-{{$key}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus" placeholder="{{$register->colorimetric_factor}}" value="{{$register->colorimetric_factor}}" wire:model="colorimetricField"
+                            wire:keydown.enter="updateColorimetric({{$register->id}})" wire:key="colorimetric-{{$key}}" autofocus="autofocus">
+                            
+                            <a href="" class="pt-2" wire:click.prevent="closeColorimetric">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="00 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            </a>
+                            </div>
 
                         @else                        
 
@@ -609,8 +631,28 @@
       </x-slot>
   </x-jet-dialog-modal>   
   @endif --}}
-    
   
+    
+<script>
+    window.addEventListener('focus-aliquot', event => {
+        
+        document.getElementById('aliquot-'+ event.detail.key).focus();
+    })
+
+    window.addEventListener('focus-colorimetric', event => {
+        
+        document.getElementById('colorimetric-'+ event.detail.key).focus();
+    })
+
+    window.addEventListener('focus-absorbance', event => {
+        
+        document.getElementById('absorbance-'+ event.detail.key).focus();
+    })
+</script>
+    
+
    
 
 </div>
+
+
