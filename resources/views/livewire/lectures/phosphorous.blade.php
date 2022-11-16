@@ -25,7 +25,7 @@
                   {{-- @endif    --}}
                   
                   {{--@if(in_array("company.filter", $permissions))  --}}
-                      <input type="text" id="table-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-10 py-3  sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full sm:w-60" placeholder="{{__('Search Your Control')}}" wire:model="co">
+                      <input type="text" id="table-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-10 py-4  sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full sm:w-60" placeholder="{{__('Search Your Control')}}" wire:model="co" wire:keydown.enter="getCo">
                   {{-- @endif --}}
                 </div>
                     
@@ -34,19 +34,23 @@
                     {{-- <a wire:click.prevent="active(false)" type='button' class='inline-flex items-center  px-2 sm:px-2 py-3 sm:mx-2 sm:py-0 mt-2 sm:mt-0 bg-white border border-gray-300 rounded-md font-semibold text-xs text-red-700 uppercase tracking-widest shadow-sm hover:text-red-500 hover:bg-red-50 focus:outline-none focus:border-gary-300 focus:ring focus:ring-blue-200 active:text-red-800 active:bg-gray-50 disabled:opacity-25 transition w-full sm:w-40'>
                         {{ __('Deleted Registers') }}
                     </a> --}}
-                    @if($methods and $control)
-                    <select wire:model="method" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-4 py-3  sm:mx-0 mt-2 sm:mt-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full sm:w-60">
+                    @if($methodsRegisters and $control)
+                   
+                    <select wire:model="methode" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-4 py-3  sm:mx-0 mt-2 sm:mt-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full sm:w-60">
                             <option value="null" selected>{{__('Select your method')}}</option>
                         
-                        @foreach ($methods as $method)
-
-                            <option value="{{$method->GEO}}">{{$method->GEO}}</option>
+                        @foreach ($methodsRegisters as $methodr)
+                            
+                            <option value="{{$methodr->GEO}}">{{$methodr->GEO}}</option>
+                            
                         @endforeach            
                     </select> 
+                    
                     @endif 
-                    <a wire:click="getCo" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full sm:w-60 py-3 sm:py-0 mt-2 sm:mt-0 sm:mx-2 mr-1'>
+                    {{-- <a wire:click="getCo" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full sm:w-60 py-3 sm:py-0 mt-2 sm:mt-0 sm:mx-2 mr-1'>
                         {{ __('Find CO') }}
                     </a>   
+                     --}}
                   
                 {{-- @endif  --}}
                 </div> 
@@ -59,19 +63,20 @@
                     </a> --}}
                   {{-- @endif --}}
                   {{--@if(in_array("company.download", $permissions))  --}}
-                    {{-- <a wire:click="downloadCompanies" type='button' class='inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:text-gray-500 hover:bg-gray-200 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full sm:w-60 py-3 sm:py-0 mt-2 sm:mt-0 sm:ml-2 ml-1'>
+                     <a wire:click="downloadCompanies" type='button' class='inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:text-gray-500 hover:bg-gray-200 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full sm:w-60 py-3 sm:py-0 mt-2 sm:mt-0 sm:ml-2 ml-1 mr-4'>
                         {{ __('Download') }}
-                    </a> --}}
-                  {{-- @endif --}}
-                    <a wire:click.prevent="info" class="focus:ring-blue-500 focus:border-blue-500 block ml-2 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-pointer">  
+                    </a> 
+                    {{--@endif--}}
+                    <a wire:click.prevent="info" class="focus:ring-blue-500 focus:border-blue-500 block ml-2 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-pointer mt-2">  
                         
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
                     </svg>
                     </a>
                 </div>
 
                 </div>
+
                 <div class="pt-4">
                 @if ($control)
                     <div class="block sm:flex sm:justify-between ">
@@ -88,28 +93,11 @@
                             
                         </div>
                         <div>
-                            <div class="flex justify-start">                                 
-                                <div class="h4 text-sm text-gray-500 mt-2 mr-4 w-32">{{ __('Aliquot')}} :
-                                    
-                                </div>
-                                
-                                <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-14 sm:w-14" placeholder="{{__('Insert value')}}" wire:model="aliquot">    
-                                <span wire:click.prevent="applyAliquot" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Apply')}}</span>                       
-                            </div>
-                            <div class="flex justify-start"> 
-                                <div class="h4 text-sm text-gray-500 mt-2 mr-4 w-32">{{ __('Colorimetric Factor')}} :
-                                    
-                                </div>
-                                <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32" placeholder="{{__('Insert value')}}" wire:model="colorimetricFactor">
-                                <span wire:click.prevent="applyColorimetric" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Apply')}}</span>
-                            </div>
-                            <div class="flex justify-start"> 
-                                <div class="h4 text-sm text-gray-500 mt-2 mr-4 w-32">{{ __('Absorbance')}} :
-                                    
-                                </div>
-                                <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-14 sm:w-14" placeholder="{{__('Insert value')}}" wire:model="absorbance">
-                                <span wire:click.prevent="applyAbsorbance" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Apply')}}</span>
-                            </div>
+                            @if ($samples)
+                                <livewire:lectures.parameters />
+                            @endif
+                            
+                            
                         </div>
                     </div>
                 @endif
@@ -150,10 +138,12 @@
 
               {{--Table--}}
 
-              @if($registers != null   and $control and $samples)
+              @if($samples != null   and $control and $samples)
               {{--count($registers)--}}
               <div class="relative overflow-x-auto">
-              <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 ">
+                
+                <livewire:lectures.table />
+              {{-- <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 ">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400 ">
                   <tr>
                     <th scope="col" class="px-6 py-3 w-max rounded-tl-lg rounded-bl-lg">
@@ -187,7 +177,7 @@
                 </thead>
                 <tbody>
                   {{--dd($registers)--}}  
-                  @forelse ($registers as $key => $register)
+                  {{-- @forelse ($registers as $key => $register)
                     <tr class="bg-white border-b hover:bg-gray-100 even:bg-gray-50">
                     <td class="px-6 py-2 w-max">
 
@@ -323,14 +313,14 @@
                         </div> 
                       </td>
                     @endif --}}
-                  </tr> 
-                  @empty
+                 {{--  </tr> 
+                  @empty --}}
                     {{-- empty expr --}}
-                  @endforelse
+                 {{--  @endforelse
                   
                   
                 </tbody>
-              </table>
+              </table> --}} 
               </div>
               @endif
             </div>

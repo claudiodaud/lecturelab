@@ -14,52 +14,56 @@ class Phosphorous extends Component
     public $coControl;
     public $cart;
     public $codCart;
-    public $methods;
-    public $method = 'GEO-517';
+    public $methodsRegisters;
+    public $methode;
     public $codMethod;
     public $samples; 
-    public $registers = null; 
+     
     public $aliquot = 25;
     public $colorimetricFactor = 0.125359884;
     public $absorbance = 0;
+
+    public $listeners = ['applyAliquot','applyAbsorbance','applyColorimetric'];
 
 
     //modales
     public $info = false;
 
-    //fields
-    public $editAliquot;
-    public $editColorimetric;
-    public $editAbsorbance;
-    public $editDilution;
-    Public $aliquotField;
-    public $absorbanceField;
-    public $colorimetricField;
-    public $dilutionField;
-    public $keyIdAliquot;
-    public $keyIdColorimetric;
-    public $keyIdAbsorbance;
-    public $keyIdDilution;
-
-    public $focusAliquot;
-
-
-
+   
     public function render()
     {
-        $this->getCo();
-        
+       
+        $this->getCo(); 
+
+
         return view('livewire.lectures.phosphorous');
     }
 
     public function updatingCo()
     {
         if ($this->coControl != strval($this->co)) {
-            $this->method = null;
-            $this->registers = null;
+            $this->methode = null;
+            $this->control = null;
+            $this->coControl = null;
+            $this->samples = null;
         }
     }
 
+    public function updatedMethode()
+    {
+        
+        $this->emit('change_params',[
+            'co' => $this->co,
+            'coControl' => $this->coControl,
+            'methode' => $this->methode,
+            'codCart' => $this->codCart 
+        ]);
+
+        $this->emit('render');
+           
+    }
+
+        
     public function getCo()
     {
         //verificamos que la variable co no sea null
@@ -75,27 +79,14 @@ class Phosphorous extends Component
                 $this->coControl = $this->control[0]->CODIGO;
 
                 //si el codControl es igual co buscamos la carta 
-                if($this->coControl != strval($this->co)){
-                    $this->method = null; 
-                }elseif ($this->coControl == strval($this->co)) {
+                if ($this->coControl == strval($this->co)) {
                     $query = "SELECT * FROM CARTA WHERE COD_CONTROL = $this->codControl";
                     $this->cart = DB::connection('sqlsrv')->select($query);
                     if ($this->cart) {
                         $this->codCart = $this->cart[0]->CODCARTA;
 
-                        if ($this->codCart != null) {
-                        $query = "SELECT * FROM METODOSGEO WHERE CODCARTA = $this->codCart AND (ELEMENTO = 'P' OR ELEMENTO = 'P DTT')";
-                        $this->methods = DB::connection('sqlsrv')->select($query);
-
-
-                            if ($this->coControl == $this->co and $this->codCart != null and $this->method != null) {
-                                $query = "SELECT * FROM pesajevolumen WHERE codcarta = $this->codCart AND  METODO = '".$this->method."' ";      
-                                $this->samples = DB::connection('sqlsrv')->select($query);
-
-                                $this->getSamples();
-                            }
-                            
-                        }
+                        $this->getMethods();
+                        
                     }
                 }
                 
@@ -103,50 +94,72 @@ class Phosphorous extends Component
         }    
     }
 
-    
-    public function getSamples()
+    public function getMethods()
     {
-        //validamos que las muestras existen en plus manager 
-        if ($this->samples != null and $this->codControl != null and $this->codCart != null and $this->method != null) {
+        if ($this->codCart != null) {
+            $query = "SELECT * FROM METODOSGEO WHERE CODCARTA = $this->codCart AND (ELEMENTO = 'P' OR ELEMENTO = 'P DTT')";
+            $this->methodsRegisters = DB::connection('sqlsrv')->select($query);
+            if ($this->coControl == $this->co and $this->codCart != null and $this->methode != null) {
+                $query = "SELECT * FROM pesajevolumen WHERE codcarta = $this->codCart AND  METODO = '".$this->methode."' ";      
+                    $this->samples = DB::connection('sqlsrv')->select($query);
 
-
-            //asignamos las muestras a una tabla momentanea para analizar manipular la informacion.     
-            foreach ($this->samples as $key => $sample) {                
-                    
-                    Presample::updateOrCreate([
-                        
-                        'co' => $this->co,    
-                        'cod_carta' => $this->codCart, 
-                        'method' => $this->method,
-                        'number' => $sample->numero,
-
-                    ],[ 
-                        'co' => $this->co,    
-                        'cod_carta' => $this->codCart, 
-                        'method' => $this->method,    
-                        'number' => $sample->numero,
-                        'name' => $sample->muestra,
-                        
-                        'weight' => $sample->peso,
-                        
-                        
-                    ]);              
-                
+                    $this->getSamples();
             }
 
-            $this->getRegisters();
         }
     }
 
-    public function getRegisters()
-    {
-        if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->method != null and $this->codCart != null) {
-            $query = "SELECT * FROM presamples WHERE CO = $this->co and cod_carta = $this->codCart and method = '".$this->method."' ORDER BY presamples.number ASC";     
-            $this->registers = DB::connection('mysql')->select($query);
+       
+    public function getSamples()
+    {   
+        if ($this->coControl == $this->co and $this->codCart != null and $this->methode != null) {
+                $query = "SELECT * FROM pesajevolumen WHERE codcarta = $this->codCart AND  METODO = '".$this->methode."' ";      
+                $this->samples = DB::connection('sqlsrv')->select($query);
+
+                //$this->getSamples();
+        }
+
+        if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->methode != null and $this->codCart != null) {
+            $query = "SELECT * FROM presamples WHERE CO = $this->co and cod_carta = $this->codCart and method = '".$this->methode."' ORDER BY presamples.number ASC";     
+            $samplesMySQL = DB::connection('mysql')->select($query);
+        
+
+            //validamos que las muestras existen en plus manager 
+            if ($samplesMySQL == null) {
+
+
+                //asignamos las muestras a una tabla momentanea para analizar manipular la informacion.     
+                foreach ($this->samples as $key => $sample) {                
+                        
+                        Presample::updateOrCreate([
+                            
+                            'co' => $this->co,    
+                            'cod_carta' => $this->codCart, 
+                            'method' => $this->methode,
+                            'number' => $sample->numero,
+
+                        ],[ 
+                            'co' => $this->co,    
+                            'cod_carta' => $this->codCart, 
+                            'method' => $this->methode,    
+                            'number' => $sample->numero,
+                            'name' => $sample->muestra,
+                            'weight' => $sample->peso,            
+                        ]);              
+                    
+                }
+
+                
+            }
+
+            //$this->emit('getRegisters');
+
         }   
+        
+        
     }
 
-   
+     
 
     public function info()
     {        
@@ -154,222 +167,92 @@ class Phosphorous extends Component
         $this->info = true;
     }
 
-    public function updatingKeyIdAbsorbance($key)
+    public function applyAliquot($value)
     {
-            $this->keyIdAbsorbance = null;
-            $this->editAbsorbance= false;
-            $this->keyIdAbsorbance = $key;
-            $this->editAbsorbance = true;
+        $this->emit('hideRegisters'); 
+        //buscamos las muestras 
+        if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->methode != null and $this->codCart != null) {
+            $query = "SELECT * FROM presamples WHERE CO = $this->co and cod_carta = $this->codCart and method = '".$this->methode."' ORDER BY presamples.number ASC";     
+            $samples = DB::connection('mysql')->select($query);
+        }
 
+        foreach ($samples as $key => $sample) {
+            Presample::find($sample->id)->update(['aliquot' => $value]);
+            $this->updateDilutionAndPhosphorous($sample);
+        } 
+        $this->emit('getRegisters');       
+           
     }
 
-    public function updatingKeyIdAliquot($key)
+    
+    public function applyColorimetric($value)
     {
-            $this->keyIdAliquot = null;
-            $this->editAliquot = false;
-            $this->keyIdAliquot = $key;
-            $this->editAliquot = true;
-
-    }
-
-    public function updatingKeyIdColorimetric($key)
-    {
-            $this->keyIdColorimetric = null;
-            $this->editColorimetric = false;
-            $this->keyIdColorimetric= $key;
-            $this->editColorimetric = true;
-
+        $this->emit('hideRegisters');
+        //buscamos las muestras 
+        if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->methode != null and $this->codCart != null) {
+            $query = "SELECT * FROM presamples WHERE CO = $this->co and cod_carta = $this->codCart and method = '".$this->methode."' ORDER BY presamples.number ASC";     
+            $samples = DB::connection('mysql')->select($query);
+        }
+        
+        foreach ($samples as $key => $sample) {
+            Presample::find($sample->id)->update(['colorimetric_factor' => $value]);
+            $this->updateDilutionAndPhosphorous($sample);
+        } 
+        $this->emit('getRegisters');        
+           
     }
 
    
 
-    public function updateAliquot($id)
+    public function applyAbsorbance($value)
     {
-        
-        if ($this->aliquotField != null) {
-            $sample = Presample::updateOrCreate([
-                'id' => $id,
-            ],[
-                'aliquot' => $this->aliquotField,
-            ]);
-
-            //factor de dilucion = (1/((PESO/250)*(ALICUOTA/100)))/1000
-            $dilutionFactor = (1/(($sample->weight/250)*($sample->aliquot/100)))/1000;
-
-            $sample = Presample::updateOrCreate([
-                'id' => $id,
-            ],[
-                'dilution_factor' => $dilutionFactor,                
-            ]);
-
-            //% fosforo = factor colorimetrico * factor de dilucion * absorbancia
-            $FC = $sample->colorimetric_factor;
-            $FD = $sample->dilution_factor;
-            $A  = $sample->absorbance;
-            $phosphorous = $FC * $FD * $A; 
-            //dd($phosphorous);
-            Presample::updateOrCreate([
-                'id' => $id,
-            ],[
-                'phosphorous' => $phosphorous,                
-            ]);
-        }
-        
-
-        $this->aliquotField = null;
-        if (count($this->samples) > $this->keyIdAliquot + 1) {
-            
-            $this->keyIdAliquot = $this->keyIdAliquot + 1;
-            $this->editAliquot = true;
-            $this->dispatchBrowserEvent('focus-aliquot', ['key' => $this->keyIdAliquot]);
-            
-        }else{
-            $this->closeAliquot();
-        }
-    }
-
-    public function closeAliquot()
-    {
-        $this->keyIdAliquot = null;
-        $this->editAliquot = false;
-    }
-
-    public function applyAliquot()
-    {
+        $this->emit('hideRegisters');
         //buscamos las muestras 
-        if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->method != null and $this->codCart != null) {
-            $query = "SELECT * FROM presamples WHERE CO = $this->co and cod_carta = $this->codCart and method = '".$this->method."' ORDER BY presamples.number ASC";     
-            $samples = DB::connection('mysql')->select($query);
-        }
-
-        foreach ($samples as $key => $sample) {
-            Presample::find($sample->id)->update(['aliquot' => $this->aliquot]);
-        }       
-           
-    }
-
-    public function updateColorimetric($id)
-    {
-        if ($this->colorimetricField != null) {       
-            $sample = Presample::updateOrCreate([
-                'id' => $id,
-            ],[
-                'colorimetric_factor' => $this->colorimetricField,
-            ]);
-
-            //factor de dilucion = (1/((PESO/250)*(ALICUOTA/100)))/1000
-            $dilutionFactor = (1/(($sample->weight/250)*($sample->aliquot/100)))/1000;
-
-            $sample = Presample::updateOrCreate([
-                'id' => $id,
-            ],[
-                'dilution_factor' => $dilutionFactor,                
-            ]);
-
-            //% fosforo = factor colorimetrico * factor de dilucion * absorbancia
-            $FC = $sample->colorimetric_factor;
-            $FD = $sample->dilution_factor;
-            $A  = $sample->absorbance;
-            $phosphorous = $FC * $FD * $A; 
-            //dd($phosphorous);
-            Presample::updateOrCreate([
-                'id' => $id,
-            ],[
-                'phosphorous' => $phosphorous,                
-            ]);
-        }
-
-        $this->colorimetricField = null;
-        if (count($this->samples) > $this->keyIdColorimetric + 1) {
-            $this->keyIdColorimetric = $this->keyIdColorimetric + 1;
-            $this->editColorimetric = true;
-            $this->dispatchBrowserEvent('focus-colorimetric', ['key' => $this->keyIdColorimetric]);
-        }else{
-            $this->closeColorimetric();
-        }
-    }
-
-    public function closeColorimetric()
-    {
-        $this->keyIdColorimetric = null;
-        $this->editColorimetric = false;
-    }
-
-    public function applyColorimetric()
-    {
-        //buscamos las muestras 
-        if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->method != null and $this->codCart != null) {
-            $query = "SELECT * FROM presamples WHERE CO = $this->co and cod_carta = $this->codCart and method = '".$this->method."' ORDER BY presamples.number ASC";     
+        if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->methode != null and $this->codCart != null) {
+            $query = "SELECT * FROM presamples WHERE CO = $this->co and cod_carta = $this->codCart and method = '".$this->methode."' ORDER BY presamples.number ASC";     
             $samples = DB::connection('mysql')->select($query);
         }
         
         foreach ($samples as $key => $sample) {
-            Presample::find($sample->id)->update(['colorimetric_factor' => $this->colorimetricFactor]);
-        }        
+            // actualizamos para todas la absorbancia 
+            Presample::find($sample->id)->update(['absorbance' => $value]);
+                                
+            $this->updateDilutionAndPhosphorous($sample);
+                        
+        }
+        $this->emit('getRegisters');      
            
     }
 
-    public function updateAbsorbance($id)
+    public function updateDilutionAndPhosphorous($sample)
     {
-        //dd($id);
-        if ($this->absorbanceField != null) {       
-            $sample = Presample::updateOrCreate([
-                'id' => $id,
-            ],[
-                'absorbance' => $this->absorbanceField,
-            ]);
-            
-            //factor de dilucion = (1/((PESO/250)*(ALICUOTA/100)))/1000
+        
+        //CALCULAMOS EL factor de dilucion = (1/((PESO/250)*(ALICUOTA/100)))/1000
+        if ($sample->weight > 0 and $sample->aliquot > 0) {
             $dilutionFactor = (1/(($sample->weight/250)*($sample->aliquot/100)))/1000;
-
+            //actualizamos para la muestra su factor de dilucion.
+            //actualizamos la variable sample
+            
             $sample = Presample::updateOrCreate([
-                'id' => $id,
+                'id' => $sample->id,
             ],[
                 'dilution_factor' => $dilutionFactor,                
             ]);
 
-            //% fosforo = factor colorimetrico * factor de dilucion * absorbancia
+            //CALCULAMOS % fosforo = factor colorimetrico * factor de dilucion * absorbancia
             $FC = $sample->colorimetric_factor;
             $FD = $sample->dilution_factor;
             $A  = $sample->absorbance;
-            $phosphorous = $FC * $FD * $A; 
-            //dd($phosphorous);
-            Presample::updateOrCreate([
-                'id' => $id,
-            ],[
-                'phosphorous' => $phosphorous,                
-            ]);
-        }
 
-        $this->absorbanceField = null;
-        if (count($this->samples) > $this->keyIdAbsorbance + 1) {
-            $this->keyIdAbsorbance = $this->keyIdAbsorbance + 1;
-            $this->editAbsorbance = true;
-            $this->dispatchBrowserEvent('focus-absorbance', ['key' => $this->keyIdAbsorbance]);
-        }else{
-            $this->closeAbsorbance();
+            //evaluamos si alguna de las variables anteriores es null,
+            //si todas son variables calculamos el % de fosforo si no, no hacemos nada 
+            if ($FC != null and $FD != null and $A != null and $FC > 0 and $FD > 0 and $A > 0) {
+                //calculamos el fosforo 
+                $phosphorous = $FC * $FD * $A; 
+                //insertamos en la base de datos                 
+                Presample::find($sample->id)->update(['phosphorous' => $phosphorous]);
+            }
         }
-       
-    }
-
-    public function closeAbsorbance()
-    {
-        $this->keyIdAbsorbance = null;
-        $this->editAbsorbance = false;
-    }
-
-    public function applyAbsorbance()
-    {
-        //buscamos las muestras 
-        if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->method != null and $this->codCart != null) {
-            $query = "SELECT * FROM presamples WHERE CO = $this->co and cod_carta = $this->codCart and method = '".$this->method."' ORDER BY presamples.number ASC";     
-            $samples = DB::connection('mysql')->select($query);
-        }
-        
-        foreach ($samples as $key => $sample) {
-            Presample::find($sample->id)->update(['absorbance' => $this->absorbance]);
-        }        
-           
     }
 
     
