@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('method');
             $table->integer('number');
             $table->string('name');
-            $table->float('absorbance', 6, 3)->nullable();
+            $table->float('absorbance', 12, 9)->nullable();
             $table->float('weight', 8, 5);
             $table->integer('aliquot')->nullable();
             $table->float('colorimetric_factor', 12, 9)->nullable();

@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class Phosphorous extends Component
 {
-    public $co = 71242; 
+    public $co; 
     public $control; 
     public $codControl; 
     public $coControl;
@@ -34,8 +34,6 @@ class Phosphorous extends Component
     {
        
         $this->getCo(); 
-
-
         return view('livewire.lectures.phosphorous');
     }
 
@@ -47,6 +45,12 @@ class Phosphorous extends Component
             $this->coControl = null;
             $this->samples = null;
         }
+
+        if ($this->coControl != strval($this->co) and $this->methode == null) {
+          $this->dispatchBrowserEvent('focus-geo-select');  
+        }
+            
+        
     }
 
     public function updatedMethode()
@@ -60,6 +64,12 @@ class Phosphorous extends Component
         ]);
 
         $this->emit('render');
+        if ($this->methode != null) {
+            $this->emit('methode');
+        }
+
+        // limpiar las variables de kei alicuota y edit alicuota 
+        
            
     }
 
@@ -104,6 +114,7 @@ class Phosphorous extends Component
                     $this->samples = DB::connection('sqlsrv')->select($query);
 
                     $this->getSamples();
+
             }
 
         }
@@ -167,9 +178,9 @@ class Phosphorous extends Component
         $this->info = true;
     }
 
-    public function applyAliquot($value)
+    public function applyAliquot()
     {
-        $this->emit('hideRegisters'); 
+        $this->emit('success'); 
         //buscamos las muestras 
         if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->methode != null and $this->codCart != null) {
             $query = "SELECT * FROM presamples WHERE CO = $this->co and cod_carta = $this->codCart and method = '".$this->methode."' ORDER BY presamples.number ASC";     
@@ -177,7 +188,7 @@ class Phosphorous extends Component
         }
 
         foreach ($samples as $key => $sample) {
-            Presample::find($sample->id)->update(['aliquot' => $value]);
+            Presample::find($sample->id)->update(['aliquot' => $this->aliquot]);
             $this->updateDilutionAndPhosphorous($sample);
         } 
         $this->emit('getRegisters');       
@@ -185,9 +196,9 @@ class Phosphorous extends Component
     }
 
     
-    public function applyColorimetric($value)
+    public function applyColorimetric()
     {
-        $this->emit('hideRegisters');
+        $this->emit('success');
         //buscamos las muestras 
         if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->methode != null and $this->codCart != null) {
             $query = "SELECT * FROM presamples WHERE CO = $this->co and cod_carta = $this->codCart and method = '".$this->methode."' ORDER BY presamples.number ASC";     
@@ -195,7 +206,7 @@ class Phosphorous extends Component
         }
         
         foreach ($samples as $key => $sample) {
-            Presample::find($sample->id)->update(['colorimetric_factor' => $value]);
+            Presample::find($sample->id)->update(['colorimetric_factor' => $this->colorimetricFactor]);
             $this->updateDilutionAndPhosphorous($sample);
         } 
         $this->emit('getRegisters');        
@@ -204,9 +215,9 @@ class Phosphorous extends Component
 
    
 
-    public function applyAbsorbance($value)
+    public function applyAbsorbance()
     {
-        $this->emit('hideRegisters');
+        $this->emit('success');
         //buscamos las muestras 
         if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->methode != null and $this->codCart != null) {
             $query = "SELECT * FROM presamples WHERE CO = $this->co and cod_carta = $this->codCart and method = '".$this->methode."' ORDER BY presamples.number ASC";     
@@ -215,7 +226,7 @@ class Phosphorous extends Component
         
         foreach ($samples as $key => $sample) {
             // actualizamos para todas la absorbancia 
-            Presample::find($sample->id)->update(['absorbance' => $value]);
+            Presample::find($sample->id)->update(['absorbance' => $this->absorbance]);
                                 
             $this->updateDilutionAndPhosphorous($sample);
                         

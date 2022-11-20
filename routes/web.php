@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Livewire\Lectures\Phosphorous;
+use App\Http\Livewire\Roles\RoleIndex;
+use App\Http\Livewire\Users\UserIndex;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
@@ -26,12 +28,16 @@ Route::middleware([
     'verified'
 ])->group(function () {
 
-
-    Route::get('/dashboard', function () {        
-
+    Route::get('/dashboard', function () {   
         return view('dashboard');
-
     })->name('dashboard');
 
     Route::get('/phosphorous', Phosphorous::class)->name('phosphorous');
+
+    //Users - Roles and Permission Modules
+    Route::get('/users-index', UserIndex::class)->name('users.index');
+    Route::get('/roles-index', RoleIndex::class)->name('roles.index');
+
 });
+
+

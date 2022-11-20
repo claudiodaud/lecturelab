@@ -71,10 +71,63 @@ class Table extends Component
         
     }
 
+    public function updatedKeyIdAliquot($keyIdAliquot)
+    {
+        $this->keyIdAliquot = $keyIdAliquot;
+        $this->dispatchBrowserEvent('focus-aliquot', ['key' => $this->keyIdAliquot]);
+    }
+
+    public function updatedKeyIdColorimetric($keyIdColorimetric)
+    {
+        $this->keyIdColorimetric = $keyIdColorimetric;
+        $this->dispatchBrowserEvent('focus-colorimetric', ['key' => $this->keyIdColorimetric]);
+    }
+
+    public function updatedKeyIdAbsorbance($keyIdAbsorbance)
+    {
+        $this->keyIdAbsorbance = $keyIdAbsorbance;
+        $this->dispatchBrowserEvent('focus-absorbance', ['key' => $this->keyIdAbsorbance]);
+    }
+
+    public function moveToAliquot($key)
+    {
+        $this->keyIdColorimetric = null;
+        $this->keyIdAbsorbance = null;
+        $this->editColorimetric = false;
+        $this->editAbsorbance = false;
+        $this->keyIdAliquot= $key;
+        $this->editAliquot = true;
+        $this->dispatchBrowserEvent('focus-aliquot', ['key' => $this->keyIdAliquot]);
+    }
+
+    public function moveToAbsorbance($key)
+    {
+        $this->keyIdColorimetric = null;
+        $this->keyIdAliquot = null;
+        $this->editColorimetric = false;
+        $this->editAliquot = false;        
+        $this->keyIdAbsorbance = $key;
+        $this->editAbsorbance = true;
+        $this->dispatchBrowserEvent('focus-absorbance', ['key' => $this->keyIdAbsorbance]);
+    }
+
+    public function moveToColorimetric($key)
+    {
+        $this->keyIdAliquot = null;
+        $this->keyIdAbsorbance = null;
+        $this->editAliquot= false;
+        $this->editAbsorbance = false;
+        $this->keyIdColorimetric = $key;
+        $this->editColorimetric = true;
+        $this->dispatchBrowserEvent('focus-colorimetric', ['key' => $this->keyIdColorimetric]);
+    }
+
+    
+
     public function updatingKeyIdAbsorbance($key)
     {
             $this->keyIdAbsorbance = null;
-            $this->editAbsorbance= false;
+            $this->editAbsorbance = false;
             $this->keyIdAbsorbance = $key;
             $this->editAbsorbance = true;
 
@@ -99,12 +152,7 @@ class Table extends Component
 
     }
 
-    public function hideRegisters()
-    {
-        $this->registers = null;
-    }
-
-   
+     
 
     public function updateAliquot($id)
     {
