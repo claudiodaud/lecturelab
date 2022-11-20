@@ -3,8 +3,11 @@
 namespace App\Http\Livewire\Lectures;
 
 use App\Models\Presample;
+use App\Models\Role;
+use App\Models\User;
 use DB;
 use Livewire\Component;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class Phosphorous extends Component
 {
@@ -29,12 +32,59 @@ class Phosphorous extends Component
     //modales
     public $info = false;
 
+    //permissions
+    public $permissions; 
+
+
+    public function mount()
+    {
+        $this->getPermissions();
+    }
    
     public function render()
     {
-       
-        $this->getCo(); 
-        return view('livewire.lectures.phosphorous');
+        
+        if(in_array("viewPhosphorous", $this->permissions)){
+            
+            $this->getCo(); 
+            return view('livewire.lectures.phosphorous');
+
+        }else{
+
+            throw UnauthorizedException::forPermissions($this->permissions);
+
+        }
+
+    }
+
+    public function getPermissions()
+    {
+        $userWithRolesAndPermissions = User::where('id',auth()->user()->id)->with('roles')->first();
+        $userWithDirectsPermissions = User::where('id',auth()->user()->id)->with('permissions')->first();
+        
+        
+        $permissions = [];
+
+        //find permissions for roles
+        foreach ($userWithRolesAndPermissions->roles as $key => $role) {
+           
+            $role = Role::where('id',$role->id)->with('permissions')->first();
+                
+                foreach ($role->permissions as $key => $permission) {
+                    array_push($permissions,$permission->name);
+                }                
+        }
+
+        //find directs permissions
+        foreach ($userWithDirectsPermissions->permissions as $key => $permission) {
+        
+            array_push($permissions,$permission->name);
+                         
+        }
+
+        $this->permissions = array_unique($permissions);
+
+        //dd($this->permissions);
     }
 
     public function updatingCo()
@@ -142,6 +192,14 @@ class Phosphorous extends Component
                 //asignamos las muestras a una tabla momentanea para analizar manipular la informacion.     
                 foreach ($this->samples as $key => $sample) {                
                         
+                    $dilutionFactor = (1/(($sample->peso/250)*($this->aliquot/100)))/1000;
+
+                    $FC = $this->colorimetricFactor;
+                    $FD = $dilutionFactor;
+                    $A  = $this->absorbance;
+
+                    $phosphorous = $FC * $FD * $A; 
+
                         Presample::updateOrCreate([
                             
                             'co' => $this->co,    
@@ -155,7 +213,13 @@ class Phosphorous extends Component
                             'method' => $this->methode,    
                             'number' => $sample->numero,
                             'name' => $sample->muestra,
-                            'weight' => $sample->peso,            
+                            'weight' => $sample->peso,
+                            'absorbance' => $this->absorbance,
+                            'aliquot' => $this->aliquot,
+                            'colorimetric_factor' => $this->colorimetricFactor,
+                            'dilution_factor' => $dilutionFactor,
+                            'phosphorous' => $phosphorous,
+
                         ]);              
                     
                 }

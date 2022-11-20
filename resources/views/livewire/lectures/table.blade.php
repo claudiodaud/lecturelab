@@ -47,7 +47,17 @@
                        
                         
                         @if($key !== $keyIdAbsorbance)  
-                            <div class="cursor-pointer" wire:click.prevent="$set('keyIdAbsorbance',{{$key}})">{{$register->absorbance}}</div>  
+                            @if(in_array("phosphorous.absorbance", $permissions))
+                              <div class="cursor-pointer"                            
+                              wire:click.prevent="$set('keyIdAbsorbance',{{$key}})">
+                              {{$register->absorbance}}
+                              </div>
+                            @else
+                              <div>                            
+                              {{$register->absorbance}}
+                              </div>                            
+                            @endif
+                            
 
                         @elseif($editAbsorbance === true and $key === $keyIdAbsorbance)
                             <div class="flex justify-center">
@@ -81,7 +91,14 @@
                       
                       
                         @if($key !== $keyIdAliquot)  
-                            <div class="cursor-pointer" wire:click.prevent="$set('keyIdAliquot',{{$key}})">{{$register->aliquot}}</div>  
+                            @if(in_array("phosphorous.aliquot", $permissions))
+                              <div class="cursor-pointer" 
+                              wire:click.prevent="$set('keyIdAliquot',{{$key}})">
+                              {{$register->aliquot}}
+                              </div>  
+                            @else
+                              <div>{{$register->aliquot}}</div>  
+                            @endif
 
                         @elseif($editAliquot === true and $key === $keyIdAliquot)
                             <div class="flex justify-center">
@@ -105,7 +122,14 @@
                     </td>
                     <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
                         @if($key !== $keyIdColorimetric)  
-                            <div class="cursor-pointer" wire:click.prevent="$set('keyIdColorimetric',{{$key}})">{{$register->colorimetric_factor}}</div>  
+                            @if(in_array("phosphorous.colorimetric", $permissions))
+                              <div class="cursor-pointer" 
+                              wire:click.prevent="$set('keyIdColorimetric',{{$key}})">
+                              {{$register->colorimetric_factor}}
+                              </div>
+                            @else 
+                              <div>{{$register->colorimetric_factor}}</div>
+                            @endif  
 
                         @elseif($editColorimetric === true and $key === $keyIdColorimetric)
                             <div class="flex justify-center">

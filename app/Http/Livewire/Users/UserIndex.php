@@ -65,7 +65,7 @@ class UserIndex extends Component
     public $addRemovePermissions;
     public $permissionsAddByUser;
     public $permissionsForAddByUser;
-     
+    
 
 
     public $permissions;

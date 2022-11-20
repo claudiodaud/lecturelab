@@ -18,6 +18,7 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'viewUsers','guard_name' => 'web']);
         Permission::create(['name' => 'viewRoles','guard_name' => 'web']);
         Permission::create(['name' => 'viewPermissions','guard_name' => 'web']);
+        Permission::create(['name' => 'viewPhosphorous','guard_name' => 'web']);
         
 
         //User permissions
@@ -48,9 +49,15 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'role.addPermissions','guard_name' => 'web']);
         Permission::create(['name' => 'role.removePermissions','guard_name' => 'web']);
 
+        //Phosphorous Permissions
+        Permission::create(['name' => 'phosphorous.find','guard_name' => 'web']);
+        Permission::create(['name' => 'phosphorous.upload','guard_name' => 'web']);
+        Permission::create(['name' => 'phosphorous.parameters','guard_name' => 'web']);
+        Permission::create(['name' => 'phosphorous.download','guard_name' => 'web']);
+        Permission::create(['name' => 'phosphorous.absorbance','guard_name' => 'web']);
+        Permission::create(['name' => 'phosphorous.aliquot','guard_name' => 'web']);
+        Permission::create(['name' => 'phosphorous.colorimetric','guard_name' => 'web']);
         
-        
-
 
     }
 }

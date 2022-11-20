@@ -379,18 +379,17 @@
       <x-slot name="footer">
           <x-jet-secondary-button wire:click="closeShowRole()" wire:loading.attr="disabled">
               {{ __('Return') }}
-          </x-jet-secondary-button>
-          
-          
+          </x-jet-secondary-button>         
                
       </x-slot>
   </x-jet-dialog-modal>   
   @endif
 
-   <!-- Add / Remove Contract Modal -->
+   <!-- Add / Remove Role Modal -->
   <x-jet-dialog-modal wire:model="addRemovePermissions" maxWidth="xl"> 
       <x-slot name="title">
-          {{ __('Add or remove permissions to ') }}
+          {{ __('Add or remove permissions to ') }} 
+
       </x-slot>
 
       <x-slot name="content">
@@ -448,9 +447,18 @@
       </x-slot>
 
       <x-slot name="footer">
-          <x-jet-secondary-button wire:click="closeAddRemovePermission()" wire:loading.attr="disabled">
+          <x-jet-secondary-button 
+          wire:click="closeAddRemovePermission()" 
+          wire:loading.attr="disabled">
               {{ __('Return') }}
-          </x-jet-secondary-button>      
+          </x-jet-secondary-button>
+
+          <a  href="{{ route('users.index')}}" 
+              wire:click="closeAddRemovePermission()"
+              class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition ml-4">
+            {{ __('Return to users Index') }}
+          </a>
+
       </x-slot>
   </x-jet-dialog-modal>   
 </div>
