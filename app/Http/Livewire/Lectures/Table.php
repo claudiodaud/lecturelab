@@ -92,6 +92,13 @@ class Table extends Component
         $this->coControl = $value['coControl'];
         $this->methode = $value['methode'];
         $this->codCart = $value['codCart'];
+
+        $this->keyIdAliquot = null;
+        $this->keyIdAbsorbance = null; 
+        $this->keyIdColorimetric = null;
+        $this->editAliquot = null; 
+        $this->editAbsorbance = null; 
+        $this->editColorimetric = null; 
         
         //dd([$this->co ,$this->coControl, $this->methode , $this->codCart, $value]);
 
