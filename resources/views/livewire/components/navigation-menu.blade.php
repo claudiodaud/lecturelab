@@ -18,13 +18,13 @@
                     </x-jet-nav-link>
                 </div>
                 <!-- Navigation Links -->
-                {{--@if(in_array("viewPhosphorous", $permissions))--}}
+                @if(in_array("viewPhosphorous", $permissions))
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-jet-nav-link href="{{ route('phosphorous') }}" :active="request()->routeIs('phosphorous')">
                         {{ __('Phosphorous') }}
                     </x-jet-nav-link>
                 </div>
-                {{--@endif--}}
+                @endif
                 
             </div>
 
@@ -109,7 +109,16 @@
                             <x-jet-dropdown-link href="{{ route('profile.show') }}">
                                 {{ __('Profile') }}
                             </x-jet-dropdown-link>
-
+                            @if(in_array("viewUsers", $permissions))
+                            <x-jet-dropdown-link href="{{ route('users.index') }}">
+                                {{ __('Users') }}
+                            </x-jet-dropdown-link>
+                            @endif
+                            @if(in_array("viewRoles", $permissions))
+                            <x-jet-dropdown-link href="{{ route('roles.index') }}">
+                                {{ __('Roles') }}
+                            </x-jet-dropdown-link>
+                            @endif
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                                 <x-jet-dropdown-link href="{{ route('api-tokens.index') }}">
                                     {{ __('API Tokens') }}

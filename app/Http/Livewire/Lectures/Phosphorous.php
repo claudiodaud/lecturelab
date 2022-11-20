@@ -2,12 +2,14 @@
 
 namespace App\Http\Livewire\Lectures;
 
+use App\Exports\SamplesExport;
 use App\Models\Presample;
 use App\Models\Role;
 use App\Models\User;
 use DB;
 use Livewire\Component;
 use Spatie\Permission\Exceptions\UnauthorizedException;
+use Carbon\Carbon;
 
 class Phosphorous extends Component
 {
@@ -328,6 +330,15 @@ class Phosphorous extends Component
                 Presample::find($sample->id)->update(['phosphorous' => $phosphorous]);
             }
         }
+    }
+
+
+    public function downloadSamples()
+    {
+       
+       return (new SamplesExport(['co' => $this->co], ['method' => $this->methode]))
+       ->download('co-'.$this->co.'-cant-'.count($this->samples).'-method-'.$this->methode.'-'.Carbon::today().'.xlsx'); 
+       
     }
 
     
