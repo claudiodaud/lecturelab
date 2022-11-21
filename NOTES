@@ -1,0 +1,23 @@
+--SELECT * FROM CONTROL WHERE CODIGO = 71520
+
+SELECT * FROM CARTA WHERE COD_CONTROL= 255821
+--SELECT * FROM METODOSGEO WHERE CODCARTA = 260377 AND (ELEMENTO = 'P' OR ELEMENTO = 'P DTT')
+--select * from anmuestra where cod_control = '254389' -- para traer el limite de deteccion. <0.005
+-- SELECT * FROM movimiento WHERE CODCARTA= 260377
+SELECT * FROM standar_co where co = 71242 and elemento = 'P DTT' -- BUSCO EL STANDART 
+SELECT * FROM standar where standar = 'OREAS 522' AND elemento = 'P DTT'  
+--SELECT * FROM pesajevolumen WHERE CO= 71242 AND  (METODO = 'GEO-517' OR  METODO = 'GEO-535') 
+-- SELECT * FROM METODOS WHERE CODMETODO=502
+-- SELECT * FROM ELEMENTOMETODOS WHERE CODMETODO = 502 
+ 
+ --SELECT * FROM AAS400 WHERE CODCARTA = 261609 AND METODO = 'GEO-517' 
+
+--select * from usuario 
+
+-- limite de deteccion LdeD
+-- BUSCO LOS MINIMO Y MAXIMOS PARA AVISAR AL QUIMICO QUE ESTA FUERA DE STANDART
+
+-- resultado real numero tal cual con todos los decimales, ley de acuerdo a limite de detecccion LdeD 
+
+-- chq = chequeos N = no  S = si  P = preparacion mecanica / deverian ser muy parecidos 10% de diferencia mas menos
+
