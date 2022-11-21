@@ -3,13 +3,14 @@
 namespace App\Http\Livewire\Lectures;
 
 use App\Exports\SamplesExport;
+use App\Models\Parameter;
 use App\Models\Presample;
 use App\Models\Role;
 use App\Models\User;
+use Carbon\Carbon;
 use DB;
 use Livewire\Component;
 use Spatie\Permission\Exceptions\UnauthorizedException;
-use Carbon\Carbon;
 
 class Phosphorous extends Component
 {
@@ -24,9 +25,9 @@ class Phosphorous extends Component
     public $codMethod;
     public $samples; 
      
-    public $aliquot = 25;
-    public $colorimetricFactor = 0.125359884;
-    public $absorbance = 0;
+    public $aliquot;
+    public $colorimetricFactor;
+    public $absorbance;
 
     public $listeners = ['applyAliquot','applyAbsorbance','applyColorimetric'];
 
@@ -40,6 +41,15 @@ class Phosphorous extends Component
 
     public function mount()
     {
+        $aliquot = DB::table('parameters')->where('control', 'phosphorous')->where('type_var', 'aliquot')->first('value');
+        $this->aliquot = $aliquot->value;
+
+        $colorimetricFactor = Parameter::where('control', 'phosphorous')->where('type_var', 'colorimetric_factor')->first('value');
+        $this->colorimetricFactor = $colorimetricFactor->value;
+       
+        $absorbance = Parameter::where('control', 'phosphorous')->where('type_var', 'absorbance')->first('value');
+        $this->absorbance = $absorbance->value;
+
         $this->getPermissions();
     }
    
@@ -125,6 +135,20 @@ class Phosphorous extends Component
            
     }
 
+    public function updatedAliquot()
+    {
+        Parameter::where('control', 'phosphorous')->where('type_var', 'aliquot')->update(['value' => $this->aliquot]);
+    }
+
+    public function updatedColorimetric()
+    {
+        Parameter::where('control', 'phosphorous')->where('type_var', 'colorimetric_factor')->update(['value' => $this->colorimetricFactor]);
+    }
+
+    public function updatedAbsorbance()
+    {
+        Parameter::where('control', 'phosphorous')->where('type_var', 'absorbance')->update(['value' => $this->absorbance]);
+    }    
         
     public function getCo()
     {
