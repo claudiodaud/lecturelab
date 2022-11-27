@@ -241,7 +241,7 @@ class Phosphorous extends Component
 
                     $phosphorous = $FC * $FD * $A; 
 
-                    
+
                         Presample::updateOrCreate([
                             
                             'co' => $this->co,    
@@ -263,7 +263,9 @@ class Phosphorous extends Component
                             'dilution_factor' => $dilutionFactor,
                             'phosphorous' => $phosphorous,
 
-                        ]);              
+                        ]);  
+
+                                    
                     
                 }
 
@@ -419,111 +421,222 @@ class Phosphorous extends Component
         $FechaCreacion   = $now;             
 
         foreach($samples as $sample){
-            //creamos las muestras ;)
-            DB::connection('sqlsrv')
-            ->insert('INSERT INTO AAS400 (CO,METODO,NUMERO) VALUES (?,?,?)',
-                [$this->co,$this->methode,$sample->number]);
+            
 
-            //variables dinamicas que dependen de la muestra
-            $grade = round($sample->phosphorous,3); // two parameters is long of LdeD 
-            $writtenBy = User::where('id',$sample->written_by)->first('name');
+            $validate = DB::connection('sqlsrv')
+                        ->select('SELECT NUMERO FROM AAS400 WHERE CO = ? and METODO = ? and NUMERO = ?',
+                            [$this->co,$this->methode,$sample->number]);
+            if ($validate) {
+
+                dd('aqui');
+                //variables dinamicas que dependen de la muestra
+                $grade = round($sample->phosphorous,3); // two parameters is long of LdeD 
+                $writtenBy = User::where('id',$sample->written_by)->first('name');
+                    
+                //
+                    $NUMERO          = $sample->number;
+                    $MUESTRA         = $sample->name;            
+                    $RESULTADOREAL   = $sample->phosphorous;
+                    $ELEMENTO        = $sample->element; 
+                    if ($grade <= $this->LdeD) {
+                        $Ley= '<'.$grade;           
+                    }elseif($grade > $this->LdeD){
+                        $Ley= $grade; 
+                    }           
+                               
+                    $peso            = $sample->weight;
+                    $dilucion        = $sample->dilution_factor;
+
+                    if ($sample->name == 'STD') {
+                         $estandar = $this->standart;
+                    }else{
+                        $estandar = null;
+                    }           
+                    
+                    if ($writtenBy) {
+                        $modificadopor   = $writtenBy->name;                
+                    }else{
+                        $modificadopor   = null;
+                    }
                 
-            
-            $NUMERO          = $sample->number;
-            $MUESTRA         = $sample->name;            
-            $RESULTADOREAL   = $sample->phosphorous;
-            $ELEMENTO        = $sample->element; 
-            if ($grade <= $this->LdeD) {
-                $Ley= '<'.$grade;           
-            }elseif($grade > $this->LdeD){
-                $Ley= $grade; 
-            }           
-                       
-            $peso            = $sample->weight;
-            $dilucion        = $sample->dilution_factor;
+                
 
-            if ($sample->name == 'STD') {
-                 $estandar = $this->standart;
+                // las actualizamos ;)
+                DB::connection('sqlsrv')->update('UPDATE AAS400 
+                            SET 
+                            CODCARTA        = ?, 
+                            CO              = ?,
+                            NUMERO          = ?,
+                            MUESTRA         = ?,
+                            RESULTADO       = ?,
+                            RESULTADOREAL   = ?,
+                            ELEMENTO        = ?, 
+                            METODO          = ?,
+                            UNIDAD1         = ?,
+                            UNIDAD2         = ?,
+                            LdeD            = ?,
+                            LEIDOPOR        = ?,
+                            FECHAHORA       = ?,
+                            Ley             = ?,
+                            volumen         = ?,
+                            peso            = ?,
+                            dilucion        = ?,
+                            estandar        = ?,
+                            provisorio      = ?,
+                            modificadopor   = ?,
+                            Oculta          = ?,
+                            FechaCreacion   = ?
+                            WHERE 
+                            CO = ? and 
+                            METODO = ? And  
+                            NUMERO = ? 
+                            '
+                            ,[
+                                
+                                $CODCARTA,
+                                $CO,
+                                $NUMERO,
+                                $MUESTRA,
+                                $RESULTADO,
+                                $RESULTADOREAL,
+                                $ELEMENTO, 
+                                $METODO,
+                                $UNIDAD1,
+                                $UNIDAD2,
+                                $LdeD,
+                                $LEIDOPOR,
+                                $FECHAHORA,
+                                $Ley,
+                                $volumen,
+                                $peso,
+                                $dilucion,
+                                $estandar,
+                                $provisorio,
+                                $modificadopor,
+                                $Oculta,
+                                $FechaCreacion,
+                                $CO,
+                                $METODO,
+                                $NUMERO,
+                                
+                                
+                                                    
+                             
+                            ]); 
+
+                
+
+
+                Presample::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
+
             }else{
-                $estandar = null;
-            }           
-            
-            if ($writtenBy) {
-                $modificadopor   = $writtenBy->name;                
-            }else{
-                $modificadopor   = null;
+       
+                 
+                //creamos las muestras ;)
+                DB::connection('sqlsrv')
+                ->insert('INSERT INTO AAS400 (CO,METODO,NUMERO) VALUES (?,?,?)',
+                    [$this->co,$this->methode,$sample->number]);
+
+                //variables dinamicas que dependen de la muestra
+                $grade = round($sample->phosphorous,3); // two parameters is long of LdeD 
+                $writtenBy = User::where('id',$sample->written_by)->first('name');
+                    
+                //
+                    $NUMERO          = $sample->number;
+                    $MUESTRA         = $sample->name;            
+                    $RESULTADOREAL   = $sample->phosphorous;
+                    $ELEMENTO        = $sample->element; 
+                    if ($grade <= $this->LdeD) {
+                        $Ley= '<'.$grade;           
+                    }elseif($grade > $this->LdeD){
+                        $Ley= $grade; 
+                    }           
+                               
+                    $peso            = $sample->weight;
+                    $dilucion        = $sample->dilution_factor;
+
+                    if ($sample->name == 'STD') {
+                         $estandar = $this->standart;
+                    }else{
+                        $estandar = null;
+                    }           
+                    
+                    if ($writtenBy) {
+                        $modificadopor   = $writtenBy->name;                
+                    }else{
+                        $modificadopor   = null;
+                    }
+                
+                
+
+                // las actualizamos ;)
+                DB::connection('sqlsrv')->update('UPDATE AAS400 
+                            SET 
+                            CODCARTA        = ?, 
+                            CO              = ?,
+                            NUMERO          = ?,
+                            MUESTRA         = ?,
+                            RESULTADO       = ?,
+                            RESULTADOREAL   = ?,
+                            ELEMENTO        = ?, 
+                            METODO          = ?,
+                            UNIDAD1         = ?,
+                            UNIDAD2         = ?,
+                            LdeD            = ?,
+                            LEIDOPOR        = ?,
+                            FECHAHORA       = ?,
+                            Ley             = ?,
+                            volumen         = ?,
+                            peso            = ?,
+                            dilucion        = ?,
+                            estandar        = ?,
+                            provisorio      = ?,
+                            modificadopor   = ?,
+                            Oculta          = ?,
+                            FechaCreacion   = ?
+                            WHERE 
+                            CO = ? and 
+                            METODO = ? And  
+                            NUMERO = ? 
+                            '
+                            ,[
+                                
+                                $CODCARTA,
+                                $CO,
+                                $NUMERO,
+                                $MUESTRA,
+                                $RESULTADO,
+                                $RESULTADOREAL,
+                                $ELEMENTO, 
+                                $METODO,
+                                $UNIDAD1,
+                                $UNIDAD2,
+                                $LdeD,
+                                $LEIDOPOR,
+                                $FECHAHORA,
+                                $Ley,
+                                $volumen,
+                                $peso,
+                                $dilucion,
+                                $estandar,
+                                $provisorio,
+                                $modificadopor,
+                                $Oculta,
+                                $FechaCreacion,
+                                $CO,
+                                $METODO,
+                                $NUMERO,
+                                
+                                
+                                                    
+                             
+                            ]); 
+
+                
+
+
+                Presample::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
             }
-            
-            
-
-            // las actualizamos ;)
-            DB::connection('sqlsrv')->update('UPDATE AAS400 
-                        SET 
-                        CODCARTA        = ?, 
-                        CO              = ?,
-                        NUMERO          = ?,
-                        MUESTRA         = ?,
-                        RESULTADO       = ?,
-                        RESULTADOREAL   = ?,
-                        ELEMENTO        = ?, 
-                        METODO          = ?,
-                        UNIDAD1         = ?,
-                        UNIDAD2         = ?,
-                        LdeD            = ?,
-                        LEIDOPOR        = ?,
-                        FECHAHORA       = ?,
-                        Ley             = ?,
-                        volumen         = ?,
-                        peso            = ?,
-                        dilucion        = ?,
-                        estandar        = ?,
-                        provisorio      = ?,
-                        modificadopor   = ?,
-                        Oculta          = ?,
-                        FechaCreacion   = ?
-                        WHERE 
-                        CO = ? and 
-                        METODO = ? And  
-                        NUMERO = ? 
-                        '
-                        ,[
-                            
-                            $CODCARTA,
-                            $CO,
-                            $NUMERO,
-                            $MUESTRA,
-                            $RESULTADO,
-                            $RESULTADOREAL,
-                            $ELEMENTO, 
-                            $METODO,
-                            $UNIDAD1,
-                            $UNIDAD2,
-                            $LdeD,
-                            $LEIDOPOR,
-                            $FECHAHORA,
-                            $Ley,
-                            $volumen,
-                            $peso,
-                            $dilucion,
-                            $estandar,
-                            $provisorio,
-                            $modificadopor,
-                            $Oculta,
-                            $FechaCreacion,
-                            $CO,
-                            $METODO,
-                            $NUMERO,
-                            
-                            
-                                                
-                         
-                        ]); 
-
-            
-
-
-            Presample::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
-
         }
             
         $this->showUpdateModal = false;
