@@ -41,7 +41,11 @@
                       {{$register->number}}
                     </td>
                     <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
-                      {{$register->name}}
+                      @if($register->name == "STD")
+                        {{$register->name}} - {{$this->standart}}
+                      @else
+                        {{$register->name}}
+                      @endif
                     </td>
                     <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
                        

@@ -1,5 +1,5 @@
 <div>
-    
+
       <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
       {{ __('Phosphorous Module') }}
@@ -17,6 +17,10 @@
           <div class=" shadow-md sm:rounded-lg">
             <div class="p-4 ">
               <div class="block sm:flex sm:justify-between">
+                <div wire:offline>
+                    {{ __('You are now offline.') }}
+                </div>
+
                 @if(in_array("phosphorous.find", $permissions))
                 <div class="block sm:flex justify-start ">
                     
@@ -55,7 +59,7 @@
                 <div class="flex sm:justify-end">
                     @if($samples)
                         @if(in_array("phosphorous.upload", $permissions))
-                        <a wire:click="UploadSamples" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full py-3 sm:py-0 sm:mt-0 sm:ml-2 ml-1'>
+                        <a wire:click.prevent="showModalUpdate" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full py-3 sm:py-0 sm:mt-0 sm:ml-2 ml-1'>
                             {{__('Upload')}}
                             
                             <div class="mx-2">
@@ -169,13 +173,13 @@
                 <div class="text-xl font-normal  max-w-full flex-initial bg-fuchsia-100 p-4 my-4 rounded-lg border border-fuchsia-800 flex justify-start">
                   <div class="text-sm font-base px-4 text-fuchsia-900 ">{{ __('Company register successfull force deleted') }}</div>  
                 </div>        
-              </x-jet-action-message> 
+              </x-jet-action-message> --}}
 
-              <x-jet-action-message class="" on="colorimetricFactor">
+              <x-jet-action-message class="" on="updatedSamplesToPlusManager">
                 <div class="text-xl font-normal  max-w-full flex-initial bg-blue-100 p-4 my-4 rounded-lg border border-blue-800 flex justify-start">
                   <div class="text-sm font-base px-4 text-blue-900 ">{{ __('Company register successfull restored') }}</div>  
                 </div>        
-              </x-jet-action-message>  --}}
+              </x-jet-action-message> 
 
               <x-jet-action-message class="" on="success">
                 <div class="text-xl font-normal  max-w-full flex-initial bg-green-100 p-4 my-4 rounded-lg border border-green-800 ">
@@ -234,13 +238,38 @@
       </x-slot>
 
       <x-slot name="footer">
-          <x-jet-secondary-button wire:click="$toggle('editCompany')" wire:loading.attr="disabled">
+          <x-jet-secondary-button wire:click="$toggle('info')" wire:loading.attr="disabled">
+              {{ __('Exit') }}
+          </x-jet-secondary-button>
+
+          {{-- <x-jet-danger-button class="ml-3" wire:click="updateCompany" wire:loading.attr="disabled">
+              {{ __('Update Company Account Data') }}
+          </x-jet-danger-button> --}}
+      </x-slot>
+  </x-jet-dialog-modal> 
+
+  <!-- Confirmacion Update Modal -->
+  <x-jet-dialog-modal wire:model="showUpdateModal"> 
+      <x-slot name="title">
+          {{ __('¿Do you really want to upload the information to plus manager?') }}
+      </x-slot>
+
+      <x-slot name="content">         
+            <div wire:loading >
+                <span class="mt-10"><strong>{{__('Loading files in Plus Manager, please wait a moment...')}}</strong></span>
+            </div>
+         
+      </x-slot>
+
+      <x-slot name="footer">
+          <x-jet-secondary-button wire:click="$toggle('showUpdateModal')" wire:loading.attr="disabled">
               {{ __('Cancel') }}
           </x-jet-secondary-button>
 
-          <x-jet-danger-button class="ml-3" wire:click="updateCompany" wire:loading.attr="disabled">
-              {{ __('Update Company Account Data') }}
+          <x-jet-danger-button class="ml-3" wire:click="updateSampleToPlusManager" wire:loading.attr="disabled">
+              {{ __('Update Samples To Plus Manager') }}
           </x-jet-danger-button>
+          
       </x-slot>
   </x-jet-dialog-modal> 
 

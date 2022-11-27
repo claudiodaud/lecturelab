@@ -11,9 +11,11 @@ class Presample extends Model
 
     
     protected $fillable = [
+        
         'co',
         'cod_carta',
         'method',
+        'element',
         'number',
         'name',
         'absorbance',
@@ -22,5 +24,8 @@ class Presample extends Model
         'colorimetric_factor',
         'dilution_factor',
         'phosphorous',
+        'updated_by',
+        'updated_date', 
+        'written_by',
     ];
 }

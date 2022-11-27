@@ -38,6 +38,8 @@ class Table extends Component
 
     public $permissions; 
 
+    public $standart;
+
     public function mount()
     {
         $this->getPermissions();
@@ -47,6 +49,8 @@ class Table extends Component
     public function render()
     {
         //esta linea debe estar aqui paraq la actualizacion de registros es para mantener la carga directa 
+
+
         
         $this->getRegisters();
 
@@ -92,6 +96,7 @@ class Table extends Component
         $this->coControl = $value['coControl'];
         $this->methode = $value['methode'];
         $this->codCart = $value['codCart'];
+        $this->standart = $value['standart'];
 
         $this->keyIdAliquot = null;
         $this->keyIdAbsorbance = null; 
@@ -231,7 +236,8 @@ class Table extends Component
             Presample::updateOrCreate([
                 'id' => $id,
             ],[
-                'phosphorous' => $phosphorous,                
+                'phosphorous' => $phosphorous, 
+                'written_by' => auth()->user()->id              
             ]);
         }
 
@@ -288,7 +294,8 @@ class Table extends Component
             Presample::updateOrCreate([
                 'id' => $id,
             ],[
-                'phosphorous' => $phosphorous,                
+                'phosphorous' => $phosphorous,
+                'written_by' => auth()->user()->id                
             ]);
         }
 
@@ -340,7 +347,8 @@ class Table extends Component
             Presample::updateOrCreate([
                 'id' => $id,
             ],[
-                'phosphorous' => $phosphorous,                
+                'phosphorous' => $phosphorous,
+                'written_by' => auth()->user()->id                
             ]);
         }
 

@@ -21,3 +21,10 @@ SELECT * FROM standar where standar = 'OREAS 522' AND elemento = 'P DTT'
 
 -- chq = chequeos N = no  S = si  P = preparacion mecanica / deverian ser muy parecidos 10% de diferencia mas menos
 
+-- cantidades no se hacen en forma, que concuerde con la carta 
+
+
+PRE CHECK DE MUSTRAS SUPERIOR A 8% EN METODO GEO-202 DEBEN SER PESADA Y SE LES HARAN LOS ANALISIS DE FOSFOROS 
+
+
+INSERTAR O ACTUALIZAR EN UNA PRIMERA INSTANCIA. 

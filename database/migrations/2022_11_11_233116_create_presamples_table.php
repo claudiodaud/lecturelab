@@ -15,9 +15,11 @@ return new class extends Migration
     {
         Schema::create('presamples', function (Blueprint $table) {
             $table->id();
+            
             $table->integer('co');
             $table->integer('cod_carta');
             $table->string('method');
+            $table->string('element');
             $table->integer('number');
             $table->string('name');
             $table->float('absorbance', 12, 9)->nullable();
@@ -26,7 +28,11 @@ return new class extends Migration
             $table->float('colorimetric_factor', 12, 9)->nullable();
             $table->float('dilution_factor', 12, 9)->nullable();
             $table->float('phosphorous', 12, 9)->nullable();
+            $table->string('updated_by')->nullable();
+            $table->dateTime('updated_date')->nullable();
+            $table->string('written_by')->nullable();
             $table->timestamps();
+
         });
     }
 

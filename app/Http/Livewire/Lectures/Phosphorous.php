@@ -34,9 +34,16 @@ class Phosphorous extends Component
 
     //modales
     public $info = false;
+    public $showUpdateModal = false;
 
     //permissions
     public $permissions; 
+
+    //
+    public $standart;
+    public $LdeD;
+
+
 
 
     public function mount()
@@ -118,11 +125,21 @@ class Phosphorous extends Component
     public function updatedMethode()
     {
         
+        
+        // limpiar las variables de kei alicuota y edit alicuota 
+        
+        $standart = DB::connection('sqlsrv')->select('SELECT standart FROM standar_co WHERE co = ? and metodo = ?',[$this->co, $this->methode]);
+        $this->standart = $standart[0]->standart;
+
+        $LdeD = DB::connection('sqlsrv')->select('SELECT LdeD FROM anmuestra WHERE cod_control = ? and analisis = ?',[$this->codControl, $this->methode]);
+        $this->LdeD = $LdeD[0]->LdeD;
+
         $this->emit('change_params',[
             'co' => $this->co,
             'coControl' => $this->coControl,
             'methode' => $this->methode,
-            'codCart' => $this->codCart 
+            'codCart' => $this->codCart, 
+            'standart' => $this->standart
         ]);
 
         $this->emit('render');
@@ -130,8 +147,6 @@ class Phosphorous extends Component
             $this->emit('methode');
         }
 
-        // limpiar las variables de kei alicuota y edit alicuota 
-        
            
     }
 
@@ -217,7 +232,7 @@ class Phosphorous extends Component
 
                 //asignamos las muestras a una tabla momentanea para analizar manipular la informacion.     
                 foreach ($this->samples as $key => $sample) {                
-                        
+                    
                     $dilutionFactor = (1/(($sample->peso/250)*($this->aliquot/100)))/1000;
 
                     $FC = $this->colorimetricFactor;
@@ -226,6 +241,7 @@ class Phosphorous extends Component
 
                     $phosphorous = $FC * $FD * $A; 
 
+                    
                         Presample::updateOrCreate([
                             
                             'co' => $this->co,    
@@ -236,10 +252,11 @@ class Phosphorous extends Component
                         ],[ 
                             'co' => $this->co,    
                             'cod_carta' => $this->codCart, 
-                            'method' => $this->methode,    
+                            'method' => $this->methode,  
+                            'element' => $sample->Elemento,  
                             'number' => $sample->numero,
                             'name' => $sample->muestra,
-                            'weight' => $sample->peso,
+                            'weight' => $sample->peso,                            
                             'absorbance' => $this->absorbance,
                             'aliquot' => $this->aliquot,
                             'colorimetric_factor' => $this->colorimetricFactor,
@@ -351,7 +368,7 @@ class Phosphorous extends Component
                 //calculamos el fosforo 
                 $phosphorous = $FC * $FD * $A; 
                 //insertamos en la base de datos                 
-                Presample::find($sample->id)->update(['phosphorous' => $phosphorous]);
+                Presample::find($sample->id)->update(['phosphorous' => $phosphorous, 'written_by' => auth()->user()->id]);
             }
         }
     }
@@ -365,6 +382,153 @@ class Phosphorous extends Component
        
     }
 
+    public function showModalUpdate()
+    {
+        $this->showUpdateModal = true;
+    }
+
+    public function updateSampleToPlusManager()
+    {
+        // buscamos las muestras por los parametros establecidos 
+        $samples = Presample::where('co',$this->co)
+                            ->where('cod_carta', $this->codCart)
+                            ->where('method', $this->methode)
+                            ->get();
+        
+        // element encontrar crear query o sacar de method
+        // LdeD = buscar limite de deteccion de standart 
+
+        // capturamos la fecha del disparador                     
+        $now = Carbon::now();  
+
+        //capturamos las variables que no cambiaran durante el update 
+        $CODCARTA        = $this->codCart;
+        $CO              = $this->co;    
+        $RESULTADO       = null;     
+        $METODO          = $this->methode;
+        $UNIDAD1         = '%';
+        $UNIDAD2         = '%';
+        $LdeD            = $this->LdeD;
+        $LEIDOPOR        = auth()->user()->name;
+        $FECHAHORA       = $now;        
+        $volumen         = null; 
+
+        
+        $provisorio      = 'SI';        
+        $Oculta          = 0;
+        $FechaCreacion   = $now;             
+
+        foreach($samples as $sample){
+            //creamos las muestras ;)
+            DB::connection('sqlsrv')
+            ->insert('INSERT INTO AAS400 (CO,METODO,NUMERO) VALUES (?,?,?)',
+                [$this->co,$this->methode,$sample->number]);
+
+            //variables dinamicas que dependen de la muestra
+            $grade = round($sample->phosphorous,3); // two parameters is long of LdeD 
+            $writtenBy = User::where('id',$sample->written_by)->first('name');
+                
+            
+            $NUMERO          = $sample->number;
+            $MUESTRA         = $sample->name;            
+            $RESULTADOREAL   = $sample->phosphorous;
+            $ELEMENTO        = $sample->element; 
+            if ($grade <= $this->LdeD) {
+                $Ley= '<'.$grade;           
+            }elseif($grade > $this->LdeD){
+                $Ley= $grade; 
+            }           
+                       
+            $peso            = $sample->weight;
+            $dilucion        = $sample->dilution_factor;
+
+            if ($sample->name == 'STD') {
+                 $estandar = $this->standart;
+            }else{
+                $estandar = null;
+            }           
+            
+            if ($writtenBy) {
+                $modificadopor   = $writtenBy->name;                
+            }else{
+                $modificadopor   = null;
+            }
+            
+            
+
+            // las actualizamos ;)
+            DB::connection('sqlsrv')->update('UPDATE AAS400 
+                        SET 
+                        CODCARTA        = ?, 
+                        CO              = ?,
+                        NUMERO          = ?,
+                        MUESTRA         = ?,
+                        RESULTADO       = ?,
+                        RESULTADOREAL   = ?,
+                        ELEMENTO        = ?, 
+                        METODO          = ?,
+                        UNIDAD1         = ?,
+                        UNIDAD2         = ?,
+                        LdeD            = ?,
+                        LEIDOPOR        = ?,
+                        FECHAHORA       = ?,
+                        Ley             = ?,
+                        volumen         = ?,
+                        peso            = ?,
+                        dilucion        = ?,
+                        estandar        = ?,
+                        provisorio      = ?,
+                        modificadopor   = ?,
+                        Oculta          = ?,
+                        FechaCreacion   = ?
+                        WHERE 
+                        CO = ? and 
+                        METODO = ? And  
+                        NUMERO = ? 
+                        '
+                        ,[
+                            
+                            $CODCARTA,
+                            $CO,
+                            $NUMERO,
+                            $MUESTRA,
+                            $RESULTADO,
+                            $RESULTADOREAL,
+                            $ELEMENTO, 
+                            $METODO,
+                            $UNIDAD1,
+                            $UNIDAD2,
+                            $LdeD,
+                            $LEIDOPOR,
+                            $FECHAHORA,
+                            $Ley,
+                            $volumen,
+                            $peso,
+                            $dilucion,
+                            $estandar,
+                            $provisorio,
+                            $modificadopor,
+                            $Oculta,
+                            $FechaCreacion,
+                            $CO,
+                            $METODO,
+                            $NUMERO,
+                            
+                            
+                                                
+                         
+                        ]); 
+
+            
+
+
+            Presample::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
+
+        }
+            
+        $this->showUpdateModal = false;
+        $this->emit('updatedSamplesToPlusManager');
+    }
     
     
 }
