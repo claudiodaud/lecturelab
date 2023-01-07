@@ -116,7 +116,7 @@
                             @endif
                             @if(in_array("viewRoles", $permissions))
                             <x-jet-dropdown-link href="{{ route('roles.index') }}">
-                                {{ __('Roles') }}
+                                <span class="capitalize">{{ __('Roles') }}</span>
                             </x-jet-dropdown-link>
                             @endif
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
@@ -139,7 +139,16 @@
                         </x-slot>
                     </x-jet-dropdown>
                 </div>
+                @if(in_array("phosphorous.find", $permissions))
+                <a href="https://cheddar-bicycle-878.notion.site/Manual-de-Uso-LectureLAB-b0b7d7cc54a4452d8fc45e3c1351e12f" target="_blank" type='button' class="focus:ring-blue-500 focus:border-blue-500 block ml-2 py-0.5 sm:mx-0 sm:mr-2 pb-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-pointer mt-2">  
+                    
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                </svg>
+                </a>
+                @endif 
             </div>
+            
 
             <!-- Hamburger -->
             <div class="-mr-2 flex items-center sm:hidden">
@@ -149,7 +158,16 @@
                         <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
+                @if(in_array("phosphorous.find", $permissions))
+                    <a href="https://cheddar-bicycle-878.notion.site/Manual-de-Uso-LectureLAB-b0b7d7cc54a4452d8fc45e3c1351e12f" target="_blank" type='button' class="focus:ring-blue-500 focus:border-blue-500 block ml-2 py-0.5 sm:mx-0 sm:mr-2 pb-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-pointer mt-2">  
+                        
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                    </svg>
+                    </a>
+                @endif 
             </div>
+
         </div>
     </div>
 
@@ -235,6 +253,7 @@
                 @endif
             </div>
         </div>
+
     </div>
 </nav>
 </div>

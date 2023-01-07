@@ -29,7 +29,7 @@ class SamplesExport implements FromView
     public function view(): View
     {     
 
-        $samples = Presample::where('co', $this->co)->where('method', $this->method)->orderBy('id', 'ASC')get();  
+        $samples = Presample::where('co', $this->co)->where('method', $this->method)->orderBy('id', 'ASC')->get();  
             
         return view('exports.SamplesExport', [
 

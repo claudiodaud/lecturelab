@@ -33,7 +33,7 @@ class Phosphorous extends Component
 
 
     //modales
-    public $info = false;
+    //public $info = false;
     public $showUpdateModal = false;
 
     //permissions
@@ -281,11 +281,11 @@ class Phosphorous extends Component
 
      
 
-    public function info()
-    {        
+    // public function info()
+    // {        
 
-        $this->info = true;
-    }
+    //     $this->info = true;
+    // }
 
     public function applyAliquot()
     {
