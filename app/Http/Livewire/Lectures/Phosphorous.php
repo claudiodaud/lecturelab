@@ -428,7 +428,7 @@ class Phosphorous extends Component
                             [$this->co,$this->methode,$sample->number]);
             if ($validate) {
 
-                dd('aqui');
+                //dd('aqui');
                 //variables dinamicas que dependen de la muestra
                 $grade = round($sample->phosphorous,3); // two parameters is long of LdeD 
                 $writtenBy = User::where('id',$sample->written_by)->first('name');
