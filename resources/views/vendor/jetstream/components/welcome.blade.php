@@ -1,21 +1,28 @@
 <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
     <div>
-        <x-jet-application-logo class="block h-12 w-auto" />
+        <x-jet-application-mark class="block h-12 w-auto" />
     </div>
 
     <div class="mt-8 text-2xl">
-        Welcome to your Jetstream application!
+        {{ __('Welcome to your application!')}}
     </div>
 
     <div class="mt-6 text-gray-500">
-        Laravel Jetstream provides a beautiful, robust starting point for your next Laravel application. Laravel is designed
-        to help you build your application using a development environment that is simple, powerful, and enjoyable. We believe
-        you should love expressing your creativity through programming, so we have spent time carefully crafting the Laravel
-        ecosystem to be a breath of fresh air. We hope you love it.
-    </div>
+        {{ __('Lecture-lab provides a beautiful and solid starting point to insert your chemical analyses, Lecture-lab is designed to help you easily calculate the results of analyzed samples using a development environment that is simple, powerful and friendly.
+            ')}}
+            <br> 
+        <div class="flex    ">      
+        <h6>{{ __('We hope you like.')}}</h6>
+        
+        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewBox="0 0 24 24" class="-mt-px w-5 h-5 text-gray-400">
+            <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+        </svg>
+        </div> 
+    </div>    
+    <div class="my-10"></div>
 </div>
 
-<div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2">
+{{--<div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2">
     <div class="p-6">
         <div class="flex items-center">
             <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-400"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
@@ -87,4 +94,4 @@
             </div>
         </div>
     </div>
-</div>
+</div>--}}

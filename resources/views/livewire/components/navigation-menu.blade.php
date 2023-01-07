@@ -116,7 +116,7 @@
                             @endif
                             @if(in_array("viewRoles", $permissions))
                             <x-jet-dropdown-link href="{{ route('roles.index') }}">
-                                {{ __('Roles') }}
+                                <span class="capitalize">{{ __('Roles') }}</span>
                             </x-jet-dropdown-link>
                             @endif
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
