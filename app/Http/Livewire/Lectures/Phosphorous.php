@@ -49,13 +49,13 @@ class Phosphorous extends Component
     public function mount()
     {
         $aliquot = DB::table('parameters')->where('control', 'phosphorous')->where('type_var', 'aliquot')->first('value');
-        $this->aliquot = $aliquot->value;
+        $this->aliquot = $aliquot->value ?? 0;
 
         $colorimetricFactor = Parameter::where('control', 'phosphorous')->where('type_var', 'colorimetric_factor')->first('value');
-        $this->colorimetricFactor = $colorimetricFactor->value;
+        $this->colorimetricFactor = $colorimetricFactor->value ?? 0;
        
         $absorbance = Parameter::where('control', 'phosphorous')->where('type_var', 'absorbance')->first('value');
-        $this->absorbance = $absorbance->value;
+        $this->absorbance = $absorbance->value ?? 0;
 
         $this->getPermissions();
     }
@@ -397,19 +397,7 @@ class Phosphorous extends Component
         //calculamos el fosforo 
         $phosphorous = $FC * $FD * $A; 
         //insertamos en la base de datos                 
-        Presample::find($sample->id)->update(['phosphorous' => $phosphorous, 'written_by' => auth()->user()->id]);
-        
-        // if ($FC != null and $FD != null and $A != null ) {
-        //     if($FC = 0 or $FD = 0 or $A = 0){
-        //         Presample::find($sample->id)->update(['phosphorous' => 0, 'written_by' => auth()->user()->id]);
-        //     }elseif($FC > 0 and $FD > 0 and $A > 0) {
-        //         //calculamos el fosforo 
-        //         $phosphorous = $FC * $FD * $A; 
-        //         //insertamos en la base de datos                 
-        //         Presample::find($sample->id)->update(['phosphorous' => $phosphorous, 'written_by' => auth()->user()->id]);
-        //     }
-            
-        // }
+        Presample::find($sample->id)->update(['phosphorous' => $phosphorous, 'written_by' => auth()->user()->id]);   
         
 
     }

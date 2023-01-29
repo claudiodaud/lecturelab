@@ -123,7 +123,9 @@
                                             
                                         </div>
                                         <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-16 sm:w-16" placeholder="{{__('Insert value')}}" wire:model="absorbance">
+                                        @if($absorbance != null)
                                         <span wire:click.prevent="applyAbsorbance" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Apply')}}</span>
+                                        @endif
                                     </div>
    
                                     <div class="flex justify-start">                                 
@@ -132,8 +134,9 @@
                                         </div>
                                         
                                         <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-16 sm:w-16" placeholder="{{__('Insert value')}}" wire:model="aliquot">    
+                                        @if($aliquot != null)
                                         <span wire:click.prevent="applyAliquot" wire:loading.attr="disabled" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer disabled:bg-gray-400 disabled:border-blue-500 ">{{__('Apply')}}</span> 
-
+                                        @endif
                                                              
                                     </div>
                                     <div class="flex justify-start"> 
@@ -141,7 +144,9 @@
                                             
                                         </div>
                                         <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32" placeholder="{{__('Insert value')}}" wire:model="colorimetricFactor">
+                                        @if($colorimetricFactor != null)
                                         <span wire:click.prevent="applyColorimetric" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Apply')}}</span>
+                                        @endif
                                     </div>
                                     
                                                         
