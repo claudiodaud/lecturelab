@@ -444,6 +444,7 @@ class Phosphorous extends Component
         $FECHAHORA       = $now;        
         $volumen         = null; 
 
+        //dd(number_format($this->LdeD,3));
         
         $provisorio      = 'SI';        
         $Oculta          = 0;
@@ -468,7 +469,7 @@ class Phosphorous extends Component
                     $RESULTADOREAL   = $sample->phosphorous;
                     $ELEMENTO        = $sample->element; 
                     if ($grade <= $this->LdeD) {
-                        $Ley= '<'.$grade;           
+                        $Ley= '<'.number_format($this->LdeD,3);           
                     }elseif($grade > $this->LdeD){
                         $Ley= $grade; 
                     }           
