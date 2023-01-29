@@ -469,9 +469,9 @@ class Phosphorous extends Component
                     $RESULTADOREAL   = $sample->phosphorous;
                     $ELEMENTO        = $sample->element; 
                     if ($grade <= $this->LdeD) {
-                        $Ley= '<'.number_format($this->LdeD,3);           
+                        $Ley= '<'.number_format($this->LdeD,3, ",", ".");           
                     }elseif($grade > $this->LdeD){
-                        $Ley= $grade; 
+                        $Ley= number_format($grade ,3, ",", "."); 
                     }           
                                
                     $peso            = $sample->weight;
