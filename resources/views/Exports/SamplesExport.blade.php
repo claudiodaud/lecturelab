@@ -1,6 +1,24 @@
 <table>
     <thead>
     <tr>
+        <th>CO</th>
+        <th>Method</th>
+        <th>Quantity</th>
+        <th>Date</th>
+    </tr>
+    </thead>
+    <tbody>   
+        <tr>
+            <td>{{ $co }}</td>            
+            <td>{{ $method }}</td>
+            <td>{{ $quantity }}</td>
+            <td>{{ $date }}</td>
+        </tr>
+    </tbody>
+</table>
+<table>
+    <thead>
+    <tr>
         <th>ID</th>
         <th>Number</th>
         <th>Name</th>

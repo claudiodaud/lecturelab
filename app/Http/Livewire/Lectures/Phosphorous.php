@@ -152,17 +152,32 @@ class Phosphorous extends Component
 
     public function updatedAliquot()
     {
-        Parameter::where('control', 'phosphorous')->where('type_var', 'aliquot')->update(['value' => $this->aliquot]);
+        if($this->aliquot == null){
+       
+        }else{
+            Parameter::where('control', 'phosphorous')->where('type_var', 'aliquot')->update(['value' => $this->aliquot]);
+        }
+        
+        
     }
 
     public function updatedColorimetric()
     {
+        if($this->colorimetricFactor == null){
+       
+        }else{
         Parameter::where('control', 'phosphorous')->where('type_var', 'colorimetric_factor')->update(['value' => $this->colorimetricFactor]);
+        }
     }
 
     public function updatedAbsorbance()
     {
-        Parameter::where('control', 'phosphorous')->where('type_var', 'absorbance')->update(['value' => $this->absorbance]);
+        if ($this->absorbance == null) {
+            
+        }else{
+            Parameter::where('control', 'phosphorous')->where('type_var', 'absorbance')->update(['value' => $this->absorbance]);
+        }
+        
     }    
         
     public function getCo()
@@ -332,6 +347,8 @@ class Phosphorous extends Component
             $query = "SELECT * FROM presamples WHERE CO = $this->co and cod_carta = $this->codCart and method = '".$this->methode."' ORDER BY presamples.number ASC";     
             $samples = DB::connection('mysql')->select($query);
         }
+
+        //dd($this->absorbance);
         
         foreach ($samples as $key => $sample) {
             // actualizamos para todas la absorbancia 
@@ -347,39 +364,61 @@ class Phosphorous extends Component
     public function updateDilutionAndPhosphorous($sample)
     {
         
+        //dd($sample);
         //CALCULAMOS EL factor de dilucion = (1/((PESO/250)*(ALICUOTA/100)))/1000
-        if ($sample->weight > 0 and $sample->aliquot > 0) {
-            $dilutionFactor = (1/(($sample->weight/250)*($sample->aliquot/100)))/1000;
-            //actualizamos para la muestra su factor de dilucion.
-            //actualizamos la variable sample
-            
+        if ($sample->weight > 0 and $this->aliquot > 0) {
+            $dilutionFactor = (1/(($sample->weight/250)*($this->aliquot/100)))/1000;
+
             $sample = Presample::updateOrCreate([
                 'id' => $sample->id,
             ],[
                 'dilution_factor' => $dilutionFactor,                
             ]);
 
-            //CALCULAMOS % fosforo = factor colorimetrico * factor de dilucion * absorbancia
-            $FC = $sample->colorimetric_factor;
-            $FD = $sample->dilution_factor;
-            $A  = $sample->absorbance;
-
-            //evaluamos si alguna de las variables anteriores es null,
-            //si todas son variables calculamos el % de fosforo si no, no hacemos nada 
-            if ($FC != null and $FD != null and $A != null and $FC > 0 and $FD > 0 and $A > 0) {
-                //calculamos el fosforo 
-                $phosphorous = $FC * $FD * $A; 
-                //insertamos en la base de datos                 
-                Presample::find($sample->id)->update(['phosphorous' => $phosphorous, 'written_by' => auth()->user()->id]);
-            }
+        }else{
+            $sample = Presample::updateOrCreate([
+                'id' => $sample->id,
+            ],[
+                'dilution_factor' => 0,                
+            ]);
         }
+
+
+        //CALCULAMOS % fosforo = factor colorimetrico * factor de dilucion * absorbancia
+        $FC = $sample->colorimetric_factor;
+        $FD = $sample->dilution_factor;
+        $A  = $sample->absorbance;
+
+        //dd([$FC,$FD,$A]);
+
+        // //evaluamos si alguna de las variables anteriores es null o 0,
+        // //si todas son variables calculamos el % de fosforo si no, no hacemos nada 
+        
+        //calculamos el fosforo 
+        $phosphorous = $FC * $FD * $A; 
+        //insertamos en la base de datos                 
+        Presample::find($sample->id)->update(['phosphorous' => $phosphorous, 'written_by' => auth()->user()->id]);
+        
+        // if ($FC != null and $FD != null and $A != null ) {
+        //     if($FC = 0 or $FD = 0 or $A = 0){
+        //         Presample::find($sample->id)->update(['phosphorous' => 0, 'written_by' => auth()->user()->id]);
+        //     }elseif($FC > 0 and $FD > 0 and $A > 0) {
+        //         //calculamos el fosforo 
+        //         $phosphorous = $FC * $FD * $A; 
+        //         //insertamos en la base de datos                 
+        //         Presample::find($sample->id)->update(['phosphorous' => $phosphorous, 'written_by' => auth()->user()->id]);
+        //     }
+            
+        // }
+        
+
     }
 
 
     public function downloadSamples()
     {
        
-       return (new SamplesExport(['co' => $this->co], ['method' => $this->methode]))
+       return (new SamplesExport(['co' => $this->co], ['method' => $this->methode], ['quantity' => count($this->samples)]))
        ->download('co-'.$this->co.'-cant-'.count($this->samples).'-method-'.$this->methode.'-'.Carbon::today().'.xlsx'); 
        
     }
@@ -391,8 +430,10 @@ class Phosphorous extends Component
 
     public function updateSampleToPlusManager()
     {
-        // buscamos las muestras por los parametros establecidos 
+        // buscamos las muestras por los parametros establecidos y solo subiremos las que tengan ley filtrando por la insersion del parametro de absorbance y por el calculo de la ley de fosforo  
         $samples = Presample::where('co',$this->co)
+                            ->where('absorbance','>',0)
+                            ->where('phosphorous','>',0)
                             ->where('cod_carta', $this->codCart)
                             ->where('method', $this->methode)
                             ->get();
