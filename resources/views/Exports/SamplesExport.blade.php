@@ -5,6 +5,7 @@
         <th>Method</th>
         <th>Quantity</th>
         <th>Date</th>
+        <th></th>
     </tr>
     </thead>
     <tbody>   
@@ -13,6 +14,7 @@
             <td>{{ $method }}</td>
             <td>{{ $quantity }}</td>
             <td>{{ $date }}</td>
+            <td></td>
         </tr>
     </tbody>
 </table>
@@ -36,14 +38,14 @@
         <tr>
             <td>{{ $key + 1 }}</td>
             {{--<td>{{ $sample->id }}</td>--}}
-            <td>{{ $sample->number }}</td>
+            <td>{{ number_format($sample->number ,3, ",", ".")}}</td>
             <td>{{ $sample->name }}</td>
-            <td>{{ $sample->absorbance }}</td>
-            <td>{{ $sample->weight }}</td>
-            <td>{{ $sample->aliquot }}</td>
-            <td>{{ $sample->colorimetric_factor }}</td>
-            <td>{{ $sample->dilution_factor }}</td>
-            <td>{{ $sample->phosphorous }}</td>
+            <td>{{ number_format($sample->absorbance ,3, ",", ".") }}</td>
+            <td>{{ number_format($sample->weight ,3, ",", ".") }}</td>
+            <td>{{ number_format($sample->aliquot ,3, ",", ".") }}</td>
+            <td>{{ number_format($sample->colorimetric_factor ,3, ",", ".") }}</td>
+            <td>{{ number_format($sample->dilution_factor ,3, ",", ".") }}</td>
+            <td>{{ number_format($sample->phosphorous ,3, ",", ".") }}</td>
         </tr>
     @endforeach
     </tbody>
