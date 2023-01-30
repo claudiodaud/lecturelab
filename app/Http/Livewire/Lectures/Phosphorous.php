@@ -123,29 +123,33 @@ class Phosphorous extends Component
     }
 
     public function updatedMethode()
-    {
+    {        
         
+        //dd($this->methode);
+        if ($this->methode != 0) {
+            // limpiar las variables de kei alicuota y edit alicuota 
         
-        // limpiar las variables de kei alicuota y edit alicuota 
-        
-        $standart = DB::connection('sqlsrv')->select('SELECT standart FROM standar_co WHERE co = ? and metodo = ?',[$this->co, $this->methode]);
-        $this->standart = $standart[0]->standart;
+            $standart = DB::connection('sqlsrv')->select('SELECT standart FROM standar_co WHERE co = ? and metodo = ?',[$this->co, $this->methode]);
+            $this->standart = $standart[0]->standart;
 
-        $LdeD = DB::connection('sqlsrv')->select('SELECT LdeD FROM anmuestra WHERE cod_control = ? and analisis = ?',[$this->codControl, $this->methode]);
-        $this->LdeD = $LdeD[0]->LdeD;
+            $LdeD = DB::connection('sqlsrv')->select('SELECT LdeD FROM anmuestra WHERE cod_control = ? and analisis = ?',[$this->codControl, $this->methode]);
+            $this->LdeD = $LdeD[0]->LdeD;
 
-        $this->emit('change_params',[
-            'co' => $this->co,
-            'coControl' => $this->coControl,
-            'methode' => $this->methode,
-            'codCart' => $this->codCart, 
-            'standart' => $this->standart
-        ]);
+            $this->emit('change_params',[
+                'co' => $this->co,
+                'coControl' => $this->coControl,
+                'methode' => $this->methode,
+                'codCart' => $this->codCart, 
+                'standart' => $this->standart
+            ]);
 
-        $this->emit('render');
-        if ($this->methode != null) {
+            $this->emit('render');
+            
+        }  
+
+        if ($this->methode != 0) {
             $this->emit('methode');
-        }
+        }     
 
            
     }
