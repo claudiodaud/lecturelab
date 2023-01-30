@@ -48,8 +48,10 @@
                         @endforeach            
                     </select> 
 
-                    
-                    
+                    @else
+                    <div class="pt-4 pl-4 text-gray-300">
+                       {{ __('This CO dont have methods')}} 
+                    </div>                   
                     @endif 
                     
                 </div> 
@@ -90,8 +92,8 @@
 
                 <div class="pt-4">
                 @if ($control == null and $this->co)
-                    <div class="h4 text-sm text-gray-500 py-2">
-                        <strong>{{ __('no records found!')}} </strong>
+                    <div class="h4 text-sm text-gray-300 py-2">
+                        <strong>{{ __('Searching...')}} </strong>
                     </div>
                 @endif    
 
