@@ -48,15 +48,9 @@ class Phosphorous extends Component
 
     public function mount()
     {
-        $aliquot = DB::table('parameters')->where('control', 'phosphorous')->where('type_var', 'aliquot')->first('value');
-        $this->aliquot = $aliquot->value ?? 0;
-
-        $colorimetricFactor = Parameter::where('control', 'phosphorous')->where('type_var', 'colorimetric_factor')->first('value');
-        $this->colorimetricFactor = $colorimetricFactor->value ?? 0;
-       
-        $absorbance = Parameter::where('control', 'phosphorous')->where('type_var', 'absorbance')->first('value');
-        $this->absorbance = $absorbance->value ?? 0;
-
+        
+        $this->getParameters();
+        
         $this->getPermissions();
     }
    
@@ -118,6 +112,8 @@ class Phosphorous extends Component
         if ($this->coControl != strval($this->co) and $this->methode == null) {
           $this->dispatchBrowserEvent('focus-geo-select');  
         }
+
+        $this->getParameters();
             
         
     }
@@ -145,13 +141,27 @@ class Phosphorous extends Component
 
             $this->emit('render');
             
+            $this->getParameters();
         }  
 
         if ($this->methode != 0) {
             $this->emit('methode');
         }     
 
+
            
+    }
+
+    public function getParameters()
+    {
+       $aliquot = DB::table('parameters')->where('control', 'phosphorous')->where('type_var', 'aliquot')->first('value');
+        $this->aliquot = $aliquot->value ?? 0;
+
+        $colorimetricFactor = Parameter::where('control', 'phosphorous')->where('type_var', 'colorimetric_factor')->first('value');
+        $this->colorimetricFactor = $colorimetricFactor->value ?? 0;
+       
+        $absorbance = Parameter::where('control', 'phosphorous')->where('type_var', 'absorbance')->first('value');
+        $this->absorbance = $absorbance->value ?? 0; 
     }
 
     public function updatedAliquot()
