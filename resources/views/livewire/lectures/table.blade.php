@@ -32,7 +32,7 @@
                     
                   </tr>
                 </thead>
-                <tbody>
+                <tbody >
                   {{--dd($registers)--}}
                   @forelse ($registers as $key => $register)
                     <tr class="bg-white border-b hover:bg-gray-100 even:bg-gray-50">

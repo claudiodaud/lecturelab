@@ -246,24 +246,28 @@ class Phosphorous extends Component
         if ($this->coControl == $this->co and $this->codCart != null and $this->methode != null) {
                 $query = "SELECT * FROM pesajevolumen WHERE codcarta = $this->codCart AND  METODO = '".$this->methode."' ";      
                 $this->samples = DB::connection('sqlsrv')->select($query);
-
+                //dd($this->samples);
                 //$this->getSamples();
         }
 
-        if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->methode != null and $this->codCart != null) {
-            $query = "SELECT * FROM presamples WHERE CO = $this->co and cod_carta = $this->codCart and method = '".$this->methode."' ORDER BY presamples.number ASC";     
-            $samplesMySQL = DB::connection('mysql')->select($query);
+       // if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->methode != null and $this->codCart != null) {
+       //     $query = "SELECT * FROM presamples WHERE CO = $this->co and cod_carta = $this->codCart and method = '".$this->methode."' ORDER BY presamples.number ASC";     
+       //     $samplesMySQL = DB::connection('mysql')->select($query);
         
 
             //validamos que las muestras existen en plus manager 
-            if ($samplesMySQL == null) {
+        //    if ($samplesMySQL == null) {
 
 
                 //asignamos las muestras a una tabla momentanea para analizar manipular la informacion.     
                 foreach ($this->samples as $key => $sample) {                
                     
-                    $dilutionFactor = (1/(($sample->peso/250)*($this->aliquot/100)))/1000;
-
+                    if($sample->peso == 0 or $this->aliquot == 0){
+                        $dilutionFactor = 0; 
+                    }else{                        
+                        $dilutionFactor = (1/(($sample->peso/250)*($this->aliquot/100)))/1000;
+                    }    
+                    
                     $FC = $this->colorimetricFactor;
                     $FD = $dilutionFactor;
                     $A  = $this->absorbance;
@@ -272,13 +276,15 @@ class Phosphorous extends Component
 
 
                         Presample::updateOrCreate([
-                            
+
+                            'number' => $sample->numero,
                             'co' => $this->co,    
                             'cod_carta' => $this->codCart, 
                             'method' => $this->methode,
-                            'number' => $sample->numero,
-
+                                                        
+                                                        
                         ],[ 
+                            
                             'co' => $this->co,    
                             'cod_carta' => $this->codCart, 
                             'method' => $this->methode,  
@@ -289,7 +295,7 @@ class Phosphorous extends Component
                             'absorbance' => $this->absorbance,
                             'aliquot' => $this->aliquot,
                             'colorimetric_factor' => $this->colorimetricFactor,
-                            'dilution_factor' => $dilutionFactor,
+                            'dilution_factor' => $dilutionFactor ,
                             'phosphorous' => $phosphorous,
 
                         ]);  
@@ -299,11 +305,11 @@ class Phosphorous extends Component
                 }
 
                 
-            }
+           // }
 
             //$this->emit('getRegisters');
 
-        }   
+        //}   
         
         
     }
@@ -591,10 +597,10 @@ class Phosphorous extends Component
                     $RESULTADOREAL   = $sample->phosphorous;
                     $ELEMENTO        = $sample->element; 
                     if ($grade <= $this->LdeD) {
-                        $Ley= '<'.$grade;           
+                        $Ley= '<'.number_format($this->LdeD,3, ",", ".");           
                     }elseif($grade > $this->LdeD){
-                        $Ley= $grade; 
-                    }           
+                        $Ley= number_format($grade ,3, ",", "."); 
+                    }         
                                
                     $peso            = $sample->weight;
                     $dilucion        = $sample->dilution_factor;

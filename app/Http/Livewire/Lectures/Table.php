@@ -118,9 +118,10 @@ class Table extends Component
         //dd($this->method);
         if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->methode != null and $this->codCart != null) {
                  
-            $this->registers = DB::table('presamples')->where('co', $this->co)->where('cod_carta', $this->codCart)->where('method', $this->methode)->get();
+            $this->registers = DB::table('presamples')->where('co', $this->co)->where('cod_carta', $this->codCart)->where('method', $this->methode)->orderBy('number', 'ASC')->get();
         }  
 
+        
         
     }
 
