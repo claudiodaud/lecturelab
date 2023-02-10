@@ -246,82 +246,211 @@ class Phosphorous extends Component
         if ($this->coControl == $this->co and $this->codCart != null and $this->methode != null) {
                 $query = "SELECT * FROM pesajevolumen WHERE codcarta = $this->codCart AND  METODO = '".$this->methode."' ";      
                 $this->samples = DB::connection('sqlsrv')->select($query);
-                //dd($this->samples);
-                //$this->getSamples();
+                
+        }      
+
+                    
+            
+            
+        // VOY A BUSCAR LA MUeSTRA, LA TRAIGO, SI EXISTE ACTUALIZO EL PESO Y RECALCULO LOS VALORES EN BASE A LOS VALORES GUARDADOS INICIALES  
+        //$samplex = Presample::where('number', $sample->numero)->first();
+
+        //     if ($samplex) {                    
+                
+        //         $samplex->weight = $sample->peso;
+
+        //             // ACTUALIZAMOS LOS CALCULOS BASADOS EN EL PESO y la aliquota traidos desde el mismo registro interno 
+        //             if($sample->peso == 0 or $samplex->aliquot == 0){
+        //                 $dilutionFactor = 0; 
+        //             }else{                        
+        //                 $dilutionFactor = (1/(($sample->peso/250)*($samplex->aliquot/100)))/1000;
+        //             }    
+                    
+        //             $FC = $samplex->colorimetric_factor;
+        //             $FD = $dilutionFactor;
+        //             $A  = $samplex->absorbance;
+
+        //             if ($FC == 0 or $FD == 0 or $A == 0) {
+        //                 $phosphorous = 0;
+        //             }else{
+        //                 $phosphorous = $FC * $FD * $A;   
+        //             }
+                    
+                    
+        //         // actualizamos los valores de los campos calculados y guardamos el registro 
+        //         $samplex->dilution_factor = $dilutionFactor;
+        //         $samplex->phosphorous = $phosphorous;    
+        //         $samplex->save();
+
+        //     }else{
+
+        //         // ACTUALIZAMOS LOS CALCULOS BASADOS EN EL PESO del resgitro traido desde plusmanager
+        //         if($sample->peso == 0 or $this->aliquot == 0){
+        //             $dilutionFactor = 0; 
+        //         }else{                        
+        //             $dilutionFactor = (1/(($sample->peso/250)*($this->aliquot/100)))/1000;
+        //         }    
+                
+        //         $FC = $this->colorimetricFactor;
+        //         $FD = $dilutionFactor;
+        //         $A  = $this->absorbance;
+
+        //         if ($FC == 0 or $FD == 0 or $A == 0) {
+        //             $phosphorous = 0;
+        //         }else{
+        //             $phosphorous = $FC * $FD * $A;   
+        //         }
+
+        //         Presample::create([ 
+                    
+        //             'co' => $this->co,    
+        //             'cod_carta' => $this->codCart, 
+        //             'method' => $this->methode,  
+        //             'element' => $sample->Elemento,  
+        //             'number' => $sample->numero,
+        //             'name' => $sample->muestra,
+        //             'weight' => $sample->peso,                            
+        //             'absorbance' => $this->absorbance,
+        //             'aliquot' => $this->aliquot,
+        //             'colorimetric_factor' => $this->colorimetricFactor,
+        //             'dilution_factor' => $dilutionFactor ,
+        //             'phosphorous' => $phosphorous,
+
+        //         ]);  
+                
+        //     } 
+
+        // } 
+
+        // traer el array de muestras en mysql y revisar que exista en el array de sqlserver si existe, no hago nada, si no existe lo elimino de mysql, significaria que la muestra fue eliminada.
+        //traemos las muestras 
+        $samplesMySQL = DB::table('presamples')->where('co', $this->co)->where('method', $this->methode)->where('cod_carta', $this->codCart)->get('number');
+        
+        $arrayMySQL = [];
+
+        $arraySQLServer = [];
+        
+        foreach ($samplesMySQL as $key => $sample) {
+            array_push($arrayMySQL, $sample->number);
+        }   
+
+        foreach ($this->samples as $key => $sample) {
+            array_push($arraySQLServer, $sample->numero);
         }
 
-       // if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->methode != null and $this->codCart != null) {
-       //     $query = "SELECT * FROM presamples WHERE CO = $this->co and cod_carta = $this->codCart and method = '".$this->methode."' ORDER BY presamples.number ASC";     
-       //     $samplesMySQL = DB::connection('mysql')->select($query);
+
+        //dd([$arrayMySQL,$arraySQLServer]);    
+
+        $diffArrayToDelete = array_diff($arrayMySQL, $arraySQLServer);    
+        $diffArrayToCreate = array_diff($arraySQLServer, $arrayMySQL);   
+        $diffArrayToUpdate = array_intersect($arraySQLServer, $arrayMySQL);      
         
+        //dd($diffArrayToUpdate);    
+        // para eliminar 
+        foreach ($diffArrayToDelete as $key => $r) {
+            
+            Presample::where('co',$this->co)
+                    ->where('method',$this->methode)
+                    ->where('cod_carta', $this->codCart)
+                    ->where('number',$r)->forceDelete();        
+        }
 
-            //validamos que las muestras existen en plus manager 
-        //    if ($samplesMySQL == null) {
+        // para crear     
+        foreach ($diffArrayToCreate as $key => $r) {
+            
+            $query = "SELECT *  FROM pesajevolumen WHERE codcarta = $this->codCart and numero = $r AND  METODO = '".$this->methode."' ";      
+                $sample = DB::connection('sqlsrv')->select($query);
+            
+            // ACTUALIZAMOS LOS CALCULOS BASADOS EN EL PESO del resgitro traido desde plusmanager
+            if($sample[0]->peso == 0 or $this->aliquot == 0){
+                $dilutionFactor = 0; 
+            }else{                        
+                $dilutionFactor = (1/(($sample[0]->peso/250)*($this->aliquot/100)))/1000;
+            }    
+            
+            $FC = $this->colorimetricFactor;
+            $FD = $dilutionFactor;
+            $A  = $this->absorbance;
 
+            if ($FC == 0 or $FD == 0 or $A == 0) {
+                $phosphorous = 0;
+            }else{
+                $phosphorous = $FC * $FD * $A;   
+            }    
 
-                //asignamos las muestras a una tabla momentanea para analizar manipular la informacion.     
-                foreach ($this->samples as $key => $sample) {                
+            Presample::create([ 
                     
-                    if($sample->peso == 0 or $this->aliquot == 0){
-                        $dilutionFactor = 0; 
-                    }else{                        
-                        $dilutionFactor = (1/(($sample->peso/250)*($this->aliquot/100)))/1000;
-                    }    
-                    
-                    $FC = $this->colorimetricFactor;
-                    $FD = $dilutionFactor;
-                    $A  = $this->absorbance;
+                'co' => $this->co,    
+                'cod_carta' => $this->codCart, 
+                'method' => $this->methode,  
+                'element' => $sample[0]->Elemento,  
+                'number' => $r,
+                'name' => $sample[0]->muestra,
+                'weight' => $sample[0]->peso,                            
+                'absorbance' => $this->absorbance,
+                'aliquot' => $this->aliquot,
+                'colorimetric_factor' => $this->colorimetricFactor,
+                'dilution_factor' => $dilutionFactor ,
+                'phosphorous' => $phosphorous,
 
-                    $phosphorous = $FC * $FD * $A; 
+            ]);         
+        }
 
+        //asignamos las muestras a una tabla momentanea para analizar manipular la informacion.     
+        foreach ($this->samples as $key => $sample) {    
+            
+            // VOY A BUSCAR LA MUeSTRA, LA TRAIGO, SI EXISTE ACTUALIZO EL PESO Y RECALCULO LOS VALORES EN BASE A LOS VALORES GUARDADOS INICIALES  
+            $samplex = Presample::where('co',$this->co)
+                    ->where('method',$this->methode)
+                    ->where('cod_carta', $this->codCart)
+                    ->where('number',$sample->numero)->first();
+            
+            //guardamos el peso 
+            $samplex->weight = $sample->peso;
+            $samplex->save();
 
-                        Presample::updateOrCreate([
+            
+                
+            // ACTUALIZAMOS LOS CALCULOS BASADOS EN EL PESO del resgitro traido desde plusmanager
+            if($sample->peso == 0 or $samplex->aliquot == 0){
+                $dilutionFactor = 0; 
+            }else{                        
+                $dilutionFactor = (1/(($sample->peso/250)*($samplex->aliquot/100)))/1000;
+            }    
+            
+            $FC = $samplex->colorimetric_factor;
+            $FD = $dilutionFactor;
+            $A  = $samplex->absorbance;
 
-                            'number' => $sample->numero,
-                            'co' => $this->co,    
-                            'cod_carta' => $this->codCart, 
-                            'method' => $this->methode,
-                                                        
-                                                        
-                        ],[ 
-                            
-                            'co' => $this->co,    
-                            'cod_carta' => $this->codCart, 
-                            'method' => $this->methode,  
-                            'element' => $sample->Elemento,  
-                            'number' => $sample->numero,
-                            'name' => $sample->muestra,
-                            'weight' => $sample->peso,                            
-                            'absorbance' => $this->absorbance,
-                            'aliquot' => $this->aliquot,
-                            'colorimetric_factor' => $this->colorimetricFactor,
-                            'dilution_factor' => $dilutionFactor ,
-                            'phosphorous' => $phosphorous,
+            if ($FC == 0 or $FD == 0 or $A == 0) {
+                $phosphorous = 0;
+            }else{
+                $phosphorous = $FC * $FD * $A;   
+            }    
 
-                        ]);  
-
-                                    
-                    
-                }
+            //guardamos el nombre, peso y los recalculos.
+            $samplex->name = $sample->muestra;                      
+            $samplex->weight = $sample->peso;                           
+            $samplex->absorbance = $samplex->absorbance;
+            $samplex->aliquot = $samplex->aliquot;
+            $samplex->colorimetric_factor = $samplex->colorimetric_factor;
+            $samplex->dilution_factor = $dilutionFactor;
+            $samplex->phosphorous = $phosphorous;
+            $samplex->save();
 
                 
-           // }
-
-            //$this->emit('getRegisters');
-
-        //}   
+                       
         
+
+        }       
+
+                  
         
     }
 
      
 
-    // public function info()
-    // {        
-
-    //     $this->info = true;
-    // }
-
+    
     public function applyAliquot()
     {
         $this->emit('success'); 

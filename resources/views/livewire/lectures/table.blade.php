@@ -3,7 +3,7 @@
     
     @if($registers)
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 ">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400 ">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
                     <th scope="col" class="px-6 py-3 w-max rounded-tl-lg rounded-bl-lg">
                       {{ __('Number')}}
@@ -15,7 +15,7 @@
                       {{ __('Absorbance')}}
                     </th>
                     <th scope="col" class="px-6 py-2 w-max">
-                      {{ __('Weigth')}}
+                      {{ __('Weight')}}
                     </th>
                     <th scope="col" class="px-6 py-2 w-max">
                       {{ __('Aliquot')}}
@@ -32,7 +32,7 @@
                     
                   </tr>
                 </thead>
-                <tbody >
+                <tbody>
                   {{--dd($registers)--}}
                   @forelse ($registers as $key => $register)
                     <tr class="bg-white border-b hover:bg-gray-100 even:bg-gray-50">
