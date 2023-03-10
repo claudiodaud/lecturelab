@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\Irons\Irons;
 use App\Http\Livewire\Lectures\Phosphorous;
 use App\Http\Livewire\Roles\RoleIndex;
 use App\Http\Livewire\Users\UserIndex;
@@ -33,6 +34,7 @@ Route::middleware([
     })->name('dashboard');
 
     Route::get('/phosphorous', Phosphorous::class)->name('phosphorous');
+    Route::get('/irons', Irons::class)->name('irons');
 
     //Users - Roles and Permission Modules
     Route::get('/users-index', UserIndex::class)->name('users.index');

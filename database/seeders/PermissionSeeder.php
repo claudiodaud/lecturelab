@@ -19,6 +19,7 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'viewRoles','guard_name' => 'web']);
         Permission::create(['name' => 'viewPermissions','guard_name' => 'web']);
         Permission::create(['name' => 'viewPhosphorous','guard_name' => 'web']);
+        Permission::create(['name' => 'viewIrons','guard_name' => 'web']);
         
 
         //User permissions
@@ -57,6 +58,13 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'phosphorous.absorbance','guard_name' => 'web']);
         Permission::create(['name' => 'phosphorous.aliquot','guard_name' => 'web']);
         Permission::create(['name' => 'phosphorous.colorimetric','guard_name' => 'web']);
+
+
+        //Irons Permissions
+        Permission::create(['name' => 'irons.find','guard_name' => 'web']);
+        Permission::create(['name' => 'irons.upload','guard_name' => 'web']);
+        Permission::create(['name' => 'irons.download','guard_name' => 'web']);
+        
         
 
     }
