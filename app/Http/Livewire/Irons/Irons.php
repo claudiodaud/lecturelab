@@ -107,7 +107,9 @@ class Irons extends Component
                         //realizamos la busqueda en plusmanager por el CO
                         $query = "SELECT * FROM movimiento WHERE analisis = $this->co order by numero ASC";
                         //CONTAMOS LAS MUESTRAS EN EL BACK Y LAS PASAMOS AL FRONT COMO NUMERO SUMADO 
-                        $this->samples = DB::connection('sqlsrv')->select($query);                   
+                        $this->samples = DB::connection('sqlsrv')->select($query);  
+
+                        $this->syncSamples();                 
                     }
                 }
                 
@@ -122,19 +124,15 @@ class Irons extends Component
 
     public function updatingCo()
     {
-        $this->samples = null;                      
-        
-    }
-
-    public function updatedCo()
-    {
-        if ($this->samples) {
+        if ($this->co != $this->coControl and $this->samples) {
+           $this->samples = null;  
+        }
             
-           $this->syncSamples();
-        }                
-        
+          
+
     }
 
+    
     // guardar las muestras en la base de datos MySQL
     public function syncSamples()
     {   
@@ -168,7 +166,7 @@ class Irons extends Component
         $diffArrayToCreate = array_diff($arraySQLServer, $arrayMySQL);   
         $diffArrayToUpdate = array_intersect($arraySQLServer, $arrayMySQL);      
         
-        //dd($diffArrayToUpdate);    
+        //dd([$this->samples,$diffArrayToDelete,$diffArrayToCreate,$diffArrayToUpdate]);    
         // para eliminar 
         foreach ($diffArrayToDelete as $key => $r) {
             
@@ -203,54 +201,22 @@ class Irons extends Component
             ]);         
         }
 
-        // // para actualizar 
-        // //asignamos las muestras a una tabla momentanea para analizar manipular la informacion.     
-        // foreach ($this->samples as $key => $sample) {    
+        // para actualizar         
+        foreach ($this->samples as $key => $r) { 
+
+                   
+            // VOY A BUSCAR LA MUeSTRA, LA TRAIGO, SI EXISTE ACTUALIZO EL PESO Y RECALCULO LOS VALORES EN BASE A LOS VALORES GUARDADOS INICIALES  
+            $samplex = Iron::where('co',$this->co)
+                    ->where('cod_carta', $this->codCart)
+                    ->where('number',$r->numero)->first();
             
-        //     // VOY A BUSCAR LA MUeSTRA, LA TRAIGO, SI EXISTE ACTUALIZO EL PESO Y RECALCULO LOS VALORES EN BASE A LOS VALORES GUARDADOS INICIALES  
-        //     $samplex = Presample::where('co',$this->co)
-        //             ->where('method',$this->methode)
-        //             ->where('cod_carta', $this->codCart)
-        //             ->where('number',$sample->numero)->first();
-            
-        //     //guardamos el peso 
-        //     $samplex->weight = $sample->peso;
-        //     $samplex->save();
+            //guardamos el peso 
+            $samplex->name = $r->muestra;
+            $samplex->chq = $r->chq;
+            $samplex->save();
 
-            
-                
-        //     // ACTUALIZAMOS LOS CALCULOS BASADOS EN EL PESO del resgitro traido desde plusmanager
-        //     if($sample->peso == 0 or $samplex->aliquot == 0){
-        //         $dilutionFactor = 0; 
-        //     }else{                        
-        //         $dilutionFactor = (1/(($sample->peso/250)*($samplex->aliquot/100)))/1000;
-        //     }    
-            
-        //     $FC = $samplex->colorimetric_factor;
-        //     $FD = $dilutionFactor;
-        //     $A  = $samplex->absorbance;
 
-        //     if ($FC == 0 or $FD == 0 or $A == 0) {
-        //         $phosphorous = 0;
-        //     }else{
-        //         $phosphorous = $FC * $FD * $A;   
-        //     }    
-
-        //     //guardamos el nombre, peso y los recalculos.
-        //     $samplex->name = $sample->muestra;                      
-        //     $samplex->weight = $sample->peso;                           
-        //     $samplex->absorbance = $samplex->absorbance;
-        //     $samplex->aliquot = $samplex->aliquot;
-        //     $samplex->colorimetric_factor = $samplex->colorimetric_factor;
-        //     $samplex->dilution_factor = $dilutionFactor;
-        //     $samplex->phosphorous = $phosphorous;
-        //     $samplex->save();
-
-                
-                       
-        
-
-        // }       
+        }       
 
                   
         
