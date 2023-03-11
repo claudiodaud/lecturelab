@@ -11,25 +11,20 @@ use Livewire\Component;
 class Irons extends Component
 {
 
-    public $co;    
+    public $co = 63635;    
     public $samples;  
     public $control;
     public $codControl;
     public $coControl;
     public $cart;
-    public $codCart;   
+    public $codCart;
+    public $standart;   
 
     //permissions
     public $permissions;
 
 
-    //
-    public $absorbance;
-    public $dilutionFactor; 
-    public $colorimetricFactor;
-    public $aliquot;
-
-
+    
     public function mount()
     {
         
@@ -115,12 +110,18 @@ class Irons extends Component
                         $this->syncSamples();
 
 
+                        
+
+                        $standart = DB::connection('sqlsrv')->select('SELECT standart FROM standar_co WHERE co = ? ',[$this->co]);
+                        $this->standart = $standart[0]->standart;
+
                         // cuando encuentra mustras y el co coincide con el encontrado en en la carta 
                         if ($this->coControl == strval($this->co)) {
                         $this->emit('change_params',[
                                 'co' => $this->co,
                                 'coControl' => $this->coControl,
                                 'codCart' => $this->codCart, 
+                                'standart' => $this->standart,
                                ]);
                         $this->emit('samples');
                         }
@@ -142,7 +143,8 @@ class Irons extends Component
         $this->emit('change_params',[
                 'co' => null,
                 'coControl' => null,
-                'codCart' => null, 
+                'codCart' => null,
+                'standart' => null, 
                ]);
         
         }

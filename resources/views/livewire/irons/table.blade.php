@@ -11,23 +11,26 @@
                       {{ __('Name')}}
                     </th>
                     <th scope="col" class="px-6 py-2 w-max">
-                      {{ __('Absorbance')}}
+                      {{ __('Satmagan')}} <br>
+                      {{ __('reading')}}                      
                     </th>
                     <th scope="col" class="px-6 py-2 w-max">
-                      {{ __('Weight')}}
+                      {{ __('Geo-615')}}
+                      {{ __('Fe3O4')}}
                     </th>
                     <th scope="col" class="px-6 py-2 w-max">
-                      {{ __('Aliquot')}}
+                      {{ __('geo-618')}}<br>
+                      {{ __('FeMag')}}
                     </th>
                     <th scope="col" class="px-6 py-2 w-max">
-                      {{ __('Colorimetric Factor')}}
+                      {{ __('Geo-644')}}<br>
+                      {{ __('Fe')}}
                     </th>
-                    <th scope="col" class="px-6 py-2 w-max">
-                      {{ __('Dilution Factor')}}
+                    <th scope="col" class="px-6 py-2 w-max rounded-tr-lg rounded-br-lg">
+                      {{ __('Comparative')}} <br>
+                      {{ __('Geo-644 > Geo-618')}}
                     </th>
-                    <th scope="col" class="px-6 py-2 w-max">
-                      {{ __('Phosphorous %')}}
-                    </th>
+                    
                     
                   </tr>
                 </thead>
@@ -41,10 +44,45 @@
                     </td>
                     <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
                       @if($register->name == "STD")
-                        {{$register->name}} - {{--$this->standart--}}
+                        {{$register->name}} - <h6 class="text-xs capitalize">{{$this->standart}}</h6>
                       @else
                         {{$register->name}}
+                        @if($register->chq == "N")
+                        @else
+                          {{__('Chq')}}
+                        @endif
                       @endif
+                    </td>
+                    
+                    <td class="px-6 py-2 w-max">
+                      <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" placeholder="{{$register->iron_grade}}" value="{{$register->iron_grade}}" 
+                            wire:model="ironGradeField"
+                            wire:keydown.enter="updateIronGrade({{$register->id}})" 
+                            {{--wire:keydown.arrow-up="$set('keyIdAbsorbance',{{$keyIdAbsorbance - 1 }})"
+                            wire:keydown.arrow-down="$set('keyIdAbsorbance',{{$keyIdAbsorbance + 1 }})"
+                            wire:keydown.arrow-left="moveToColorimetric({{$keyIdAbsorbance}})"
+                            wire:keydown.arrow-right="moveToAliquot({{$keyIdAbsorbance}})"
+                            autofocus="autofocus" wire:key="absorbance-{{$key}} --}}">
+                    </td>
+                    <td class="px-6 py-2 w-max sm:w-32">
+
+                      {{$register->geo615}}
+                    </td>
+                    <td class="px-6 py-2 w-max sm:w-32">
+
+                      {{$register->geo618}}
+                    </td>
+                    <td class="px-6 py-2 w-max sm:w-32">
+
+                      {{$register->geo644}}
+                    </td>
+                    <td class="px-6 py-2 w-max sm:w-32">
+                      @if($register->geo644 >= $register->geo618)
+                          <i class="fa-solid fa-square-check"></i>
+                      @else
+                          <i class="fa-solid fa-square-xmark"></i>
+                      @endif
+                      {{$register->geo644 }}
                     </td>
                     {{-- <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
                        

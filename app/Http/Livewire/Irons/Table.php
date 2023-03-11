@@ -8,10 +8,11 @@ use Livewire\Component;
 
 class Table extends Component
 {
-    public $co;
+    public $co = 63635;
     public $codCart;
     public $coControl;
     public $registers;
+    public $standart;
 
     public $listeners = ['change_params'];
 
@@ -43,6 +44,7 @@ class Table extends Component
         $this->co = $value['co'];
         $this->coControl = $value['coControl'];
         $this->codCart = $value['codCart'];
+        $this->standart = $value['standart'];
         
         if ($this->co != $this->coControl) {
             $this->registers = null;
