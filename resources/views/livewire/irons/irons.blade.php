@@ -1,7 +1,7 @@
 <div>
     <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-      {{ __('Phosphorous Module') }}
+      {{ __('Irons Module') }}
     </h2>
   </x-slot>
 
@@ -32,7 +32,8 @@
                       <input type="text" id="table-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-10 py-4  sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full sm:w-60" placeholder="{{__('Search Your Control')}}" wire:model="co" wire:keydown.enter="getCo" autocomplete="off">
                   
                     </div>
-                    
+
+                                        
                    
                    {{--  @if($methodsRegisters and $control)
                    
@@ -189,23 +190,23 @@
                 </div>        
               </x-jet-action-message>  
 
-              <x-jet-action-message class="" on="methode">
+              <x-jet-action-message class="" on="samples">
                 <div class="text-xl font-normal  max-w-full flex-initial bg-indigo-100 p-4 my-4 rounded-lg border border-indigo-800 ">
                   <div class="text-sm font-base px-4 text-indigo-800 ">
-                  {{ __('Loading method registers ...') }}</div>  
+                  {{ __('Loading samples registers ...') }}</div>  
                 </div>        
               </x-jet-action-message> 
 
               {{--Table--}}
 
-              @if($samples != null and $control and $samples)
+              @if($control and $samples) 
               
               <div class="relative overflow-x-auto">
                 
-                <livewire:irons.table co="{{$this->co}}"/>
+                <livewire:irons.table />
               
               </div>
-              @endif
+              @endif 
             </div>
             
           </div>

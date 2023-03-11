@@ -41,7 +41,10 @@ class Irons extends Component
         
         if(in_array("viewPhosphorous", $this->permissions)){
             
+
             $this->getCo(); 
+            
+            
             return view('livewire.irons.irons');
 
         }else{
@@ -108,36 +111,48 @@ class Irons extends Component
                         $query = "SELECT * FROM movimiento WHERE analisis = $this->co order by numero ASC";
                         //CONTAMOS LAS MUESTRAS EN EL BACK Y LAS PASAMOS AL FRONT COMO NUMERO SUMADO 
                         $this->samples = DB::connection('sqlsrv')->select($query);  
+                        
+                        $this->syncSamples();
 
-                        $this->syncSamples();                 
+
+                        // cuando encuentra mustras y el co coincide con el encontrado en en la carta 
+                        if ($this->coControl == strval($this->co)) {
+                        $this->emit('change_params',[
+                                'co' => $this->co,
+                                'coControl' => $this->coControl,
+                                'codCart' => $this->codCart, 
+                               ]);
+                        $this->emit('samples');
+                        }
+                                              
                     }
                 }
                 
             }
         }
-       
 
-
-              
 
     }
 
     public function updatingCo()
     {
-        if ($this->co != $this->coControl and $this->samples) {
-           $this->samples = null;  
+        // cuando se actualiza la variable co y no coincide con la del control encontrado 
+        // manda a null las variables y actualiza register en el controlador de la tabla 
+        if ($this->coControl == strval($this->co)) {
+        $this->emit('change_params',[
+                'co' => null,
+                'coControl' => null,
+                'codCart' => null, 
+               ]);
+        
         }
-            
-          
-
     }
 
+       
     
     // guardar las muestras en la base de datos MySQL
     public function syncSamples()
     {   
-          
-        
         // traer el array de muestras en mysql y revisar que exista en el array de sqlserver si existe, no hago nada, si no existe lo elimino de mysql, significaria que la muestra fue eliminada.
         //traemos las muestras 
         $samplesMySQL = DB::table('irons')->where('co', $this->co)->where('cod_carta', $this->codCart)->get('number');
@@ -157,11 +172,7 @@ class Irons extends Component
             }
 
         }
-        
-
-
-        //dd([$arrayMySQL,$arraySQLServer]);    
-
+    
         $diffArrayToDelete = array_diff($arrayMySQL, $arraySQLServer);    
         $diffArrayToCreate = array_diff($arraySQLServer, $arrayMySQL);   
         $diffArrayToUpdate = array_intersect($arraySQLServer, $arrayMySQL);      
@@ -170,7 +181,7 @@ class Irons extends Component
         // para eliminar 
         foreach ($diffArrayToDelete as $key => $r) {
             
-            Presample::where('co',$this->co)
+            Iron::where('co',$this->co)
                     ->where('cod_carta', $this->codCart)
                     ->where('number',$r)->forceDelete();        
         }
@@ -214,12 +225,9 @@ class Irons extends Component
             $samplex->name = $r->muestra;
             $samplex->chq = $r->chq;
             $samplex->save();
+        }  
 
 
-        }       
-
-                  
-        
     }
 
     
