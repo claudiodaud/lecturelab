@@ -396,6 +396,7 @@ class Phosphorous extends Component
             ]);         
         }
 
+        // para actualizar 
         //asignamos las muestras a una tabla momentanea para analizar manipular la informacion.     
         foreach ($this->samples as $key => $sample) {    
             

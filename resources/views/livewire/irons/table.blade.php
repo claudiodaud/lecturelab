@@ -31,7 +31,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {{--dd($registers)--}}
+                  {{dd($registers)}}
                   @forelse ($registers as $key => $register)
                     <tr class="bg-white border-b hover:bg-gray-100 even:bg-gray-50">
                     <td class="px-6 py-2 w-max">
@@ -45,7 +45,7 @@
                         {{$register->name}}
                       @endif
                     </td>
-                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
+                   {{--  <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
                        
                         
                         @if($key !== $keyIdAbsorbance)  
@@ -85,11 +85,11 @@
                         
 
                         
-                    </td>
-                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
+                    </td> --}} 
+                    {{-- <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
                       {{round($register->weight,5)}}
-                    </td>
-                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
+                    </td> --}}
+                    {{-- <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
                       
                       
                         @if($key !== $keyIdAliquot)  
@@ -121,8 +121,8 @@
                         @else                        
 
                         @endif
-                    </td>
-                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
+                    </td> --}}
+                    {{-- <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
                         @if($key !== $keyIdColorimetric)  
                             @if(in_array("phosphorous.colorimetric", $permissions))
                               <div class="cursor-pointer" 
@@ -153,13 +153,13 @@
                         @else                        
 
                         @endif
-                    </td>
-                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">                     
+                    </td> --}}
+                    {{-- <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">                     
                        {{$register->dilution_factor}}
                     </td>
                     <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
                       {{round($register->phosphorous,3)}}
-                    </td>
+                    </td> --}}
                     
 
                    
@@ -202,7 +202,7 @@
                     @endif --}}
                   </tr> 
                   @empty
-                    {{-- empty expr --}}
+                    
                   @endforelse
                   
                   

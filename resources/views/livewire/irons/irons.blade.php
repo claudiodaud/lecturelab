@@ -20,7 +20,7 @@
                     {{ __('You are now offline.') }}
                 </div>
 
-                @if(in_array("phosphorous.find", $permissions))
+                @if(in_array("irons.find", $permissions))
                 <div class="block sm:flex justify-start ">
                     
                     <div class="relative">
@@ -34,7 +34,7 @@
                     </div>
                     
                    
-                    @if($methodsRegisters and $control)
+                   {{--  @if($methodsRegisters and $control)
                    
                     <select id="focus-geo-select" wire:model="methode" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-4 py-3  sm:mx-0 mt-2 sm:mt-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full sm:w-60">
                             
@@ -51,7 +51,7 @@
                     <div class="pt-4 pl-4 text-gray-300">
                        {{ __('This CO dont have methods')}} 
                     </div>                   
-                    @endif 
+                    @endif  --}}
                     
                 </div> 
                 @endif
@@ -115,7 +115,7 @@
                             @endif
                             
                         </div>
-                        <div>
+                        {{-- <div>
                             @if ($samples)
                                 @if(in_array("phosphorous.parameters", $permissions))
                                 <div>
@@ -156,7 +156,7 @@
                             @endif
                             
                             
-                        </div>
+                        </div> --}}
                     </div>
                 @endif
                 </div> 
@@ -198,11 +198,11 @@
 
               {{--Table--}}
 
-              @if($samples != null   and $control and $samples)
+              @if($samples != null and $control and $samples)
               
               <div class="relative overflow-x-auto">
                 
-                <livewire:lectures.table />
+                <livewire:irons.table co="{{$this->co}}"/>
               
               </div>
               @endif
