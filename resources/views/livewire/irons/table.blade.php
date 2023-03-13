@@ -55,14 +55,29 @@
                     </td>
                     
                     <td class="px-6 py-2 w-max">
-                      <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" placeholder="{{$register->iron_grade}}" value="{{$register->iron_grade}}" 
+
+                        @if($key !== $keyIdIronGrade)  
+                            @if(in_array("irons.find", $permissions)) {{--actualizar el permiso a irons.grade--}}
+                              <div class="cursor-pointer"                            
+                              wire:click.prevent="$set('keyIdIronGrade',{{$key}})">
+                              {{$register->iron_grade}}
+                              </div>
+                            @else
+                              <div>                            
+                              {{$register->iron_grade}}
+                              </div>                            
+                            @endif
+                            
+
+                        @elseif($editIronGrade === true and $key === $keyIdIronGrade)
+                        <input type="text" id="iron-{{$key}}"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" placeholder="{{$register->iron_grade}}" value="{{$register->iron_grade}}" 
                             wire:model="ironGradeField"
                             wire:keydown.enter="updateIronGrade({{$register->id}})" 
-                            {{--wire:keydown.arrow-up="$set('keyIdAbsorbance',{{$keyIdAbsorbance - 1 }})"
-                            wire:keydown.arrow-down="$set('keyIdAbsorbance',{{$keyIdAbsorbance + 1 }})"
-                            wire:keydown.arrow-left="moveToColorimetric({{$keyIdAbsorbance}})"
-                            wire:keydown.arrow-right="moveToAliquot({{$keyIdAbsorbance}})"
-                            autofocus="autofocus" wire:key="absorbance-{{$key}} --}}">
+                            wire:keydown.arrow-up="$set('keyIdIronGrade',{{$keyIdIronGrade - 1 }})"
+                            wire:keydown.arrow-down="$set('keyIdIronGrade',{{$keyIdIronGrade + 1 }})"
+                            autofocus="autofocus" wire:key="ironGradeField-{{$key}}">
+                        @endif
+
                     </td>
                     <td class="px-6 py-2 w-max sm:w-32">
 

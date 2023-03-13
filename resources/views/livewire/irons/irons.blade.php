@@ -254,24 +254,11 @@
   
     
 <script>
-    window.addEventListener('focus-aliquot', event => {
+    window.addEventListener('focus-iron-grade', event => {
         
-        document.getElementById('aliquot-'+ event.detail.key).focus();
+        document.getElementById('iron-'+ event.detail.key).focus();
     })
 
-    window.addEventListener('focus-colorimetric', event => {
-        
-        document.getElementById('colorimetric-'+ event.detail.key).focus();
-    })
-
-    window.addEventListener('focus-absorbance', event => {
-        
-        document.getElementById('absorbance-'+ event.detail.key).focus();
-    })
-
-    window.addEventListener('focus-geo-select', event => {
-        
-        document.getElementById('focus-geo-select').focus();
-    })
+   
 </script>
 </div>

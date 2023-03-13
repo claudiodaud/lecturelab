@@ -62,6 +62,7 @@ class PermissionSeeder extends Seeder
 
         //Irons Permissions
         Permission::create(['name' => 'irons.find','guard_name' => 'web']);
+        Permission::create(['name' => 'irons.grade','guard_name' => 'web']);
         Permission::create(['name' => 'irons.upload','guard_name' => 'web']);
         Permission::create(['name' => 'irons.download','guard_name' => 'web']);
         
