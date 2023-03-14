@@ -1,32 +1,51 @@
 <div>
 
+    <x-jet-action-message class="" on="update">
+      <div class="text-xl font-normal  max-w-full flex-initial bg-indigo-100 p-4 my-4 rounded-lg border border-indigo-800 ">
+        <div class="text-sm font-base px-4 text-indigo-800 ">
+        {{ __('Update samples registers and GEO-644 sync...') }}</div>  
+      </div>        
+    </x-jet-action-message> 
+
     @if($registers)
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 ">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
-                    <th scope="col" class="px-6 py-3 w-max rounded-tl-lg rounded-bl-lg">
+                    <th scope="col" class="px-6 py-3 w-max rounded-tl-lg rounded-bl-lg text-center">
                       {{ __('Number')}}
                     </th>
-                    <th scope="col" class="px-6 py-2 w-max">
+                    <th scope="col" class="px-6 py-2 w-max text-center">
                       {{ __('Name')}}
                     </th>
-                    <th scope="col" class="px-6 py-2 w-max">
+                    <th scope="col" class="px-6 py-2 w-max text-center">
                       {{ __('Satmagan')}} <br>
                       {{ __('reading')}}                      
                     </th>
-                    <th scope="col" class="px-6 py-2 w-max">
+                    <th scope="col" class="px-6 py-2 w-max text-center">
                       {{ __('Geo-615')}}
                       {{ __('Fe3O4')}}
                     </th>
-                    <th scope="col" class="px-6 py-2 w-max">
+                    <th scope="col" class="px-6 py-2 w-max text-center">
                       {{ __('geo-618')}}<br>
                       {{ __('FeMag')}}
                     </th>
-                    <th scope="col" class="px-6 py-2 w-max">
-                      {{ __('Geo-644')}}<br>
-                      {{ __('Fe')}}
+                    <th scope="col" class="px-6 py-2 w-max sm:w-48 text-center">
+                    
+                        @if(in_array("phosphorous.upload", $permissions))
+                            <a wire:click.prevent="getGeo644()" type='button' class='block items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full py-3 sm:py-2 sm:mt-0 sm:ml-2 ml-1'>
+                                {{__('Sync GEO-644')}}
+                                
+                                {{-- <div class="mx-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                                </div> --}}
+                            </a> 
+                            
+                        @endif
+                    
                     </th>
-                    <th scope="col" class="px-6 py-2 w-max rounded-tr-lg rounded-br-lg">
+                    <th scope="col" class="px-6 py-2 w-max rounded-tr-lg rounded-br-lg text-center">
                       {{ __('Comparative')}} <br>
                       {{ __('Geo-644 > Geo-618')}}
                     </th>
@@ -38,11 +57,11 @@
                   
                   @forelse ($registers as $key => $register)
                     <tr class="bg-white border-b hover:bg-gray-100 even:bg-gray-50">
-                    <td class="px-6 py-2 w-max">
+                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max text-center">
 
                       {{$register->number}}
                     </td>
-                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
+                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max text-center">
                       @if($register->name == "STD")
                         {{$register->name}} - <h6 class="text-xs capitalize">{{$this->standart}}</h6>
                       @else
@@ -54,7 +73,7 @@
                       @endif
                     </td>
                     
-                    <td class="px-6 py-2 w-max">
+                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max text-center">
 
                         @if($key !== $keyIdIronGrade)  
                             @if(in_array("irons.find", $permissions)) {{--actualizar el permiso a irons.grade--}}
@@ -79,25 +98,25 @@
                         @endif
 
                     </td>
-                    <td class="px-6 py-2 w-max sm:w-32">
+                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max text-center">
 
                       {{$register->geo615}}
                     </td>
-                    <td class="px-6 py-2 w-max sm:w-32">
+                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max text-center">
 
                       {{$register->geo618}}
                     </td>
-                    <td class="px-6 py-2 w-max sm:w-32">
+                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max text-center">
 
                       {{$register->geo644}}
                     </td>
-                    <td class="px-6 py-2 w-max sm:w-32">
+                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max text-center">
                       @if($register->geo644 >= $register->geo618)
-                          <i class="fa-solid fa-square-check"></i>
+                          <i class="fa-solid fa-square-check text-green-500"></i>
                       @else
-                          <i class="fa-solid fa-square-xmark"></i>
+                          <i class="fa-solid fa-square-xmark text-red-500"></i>
                       @endif
-                      {{$register->geo644 }}
+                      
                     </td>
                     {{-- <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
                        

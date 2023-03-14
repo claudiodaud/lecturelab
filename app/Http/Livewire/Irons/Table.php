@@ -121,11 +121,13 @@ class Table extends Component
            $register->iron_grade = $this->ironGradeField;
            $register->geo615 = $this->ironGradeField * 10;
            $register->geo618 = $this->ironGradeField * 10 * 0.72;
+           if ($register->geo644 > $register->geo618 ) {
+                $register->comparative = true;
+            }else{
+                    $register->comparative = false;
+            } 
+          
            
-
-           $query = "SELECT * FROM AAS400 WHERE co = {{$register->co}} and numero = {{$register->number}} and elemento = 'Fe' ";
-           
-
            $register->save();
 
            $this->getRegisters();
@@ -152,6 +154,49 @@ class Table extends Component
     {
         $this->keyIdIronGrade = null;
         $this->editIronGrade = false;
+    }
+
+    public function getGeo644()
+    {
+        $query_aas400 = "SELECT numero, ley, LdeD  FROM aas400 WHERE aas400.co=$this->co and aas400.metodo='GEO-644' and aas400.ELEMENTO='Fe'";
+        $AASregisters = DB::connection('sqlsrv')->select($query_aas400);
+
+        foreach ($AASregisters as $key => $r) {
+            $samplex = Iron::where('co',$this->co)
+                    ->where('number',$r->numero)->first();
+            $samplex->geo644 = $this->tofloat($r->ley);
+            $samplex->save();
+
+        } 
+
+        // para recalcular los registros en el componente tabla 
+        if ($this->coControl == strval($this->co)) {
+        $this->emit('change_params',[
+                'co' => $this->co,
+                'coControl' => $this->coControl,
+                'codCart' => $this->codCart, 
+                'standart' => $this->standart,
+               ]);
+
+        $this->emit('update');    
+
+       }
+    }
+
+    function tofloat($num) {
+        $dotPos = strrpos($num, '.');
+        $commaPos = strrpos($num, ',');
+        $sep = (($dotPos > $commaPos) && $dotPos) ? $dotPos :
+            ((($commaPos > $dotPos) && $commaPos) ? $commaPos : false);
+      
+        if (!$sep) {
+            return floatval(preg_replace("/[^0-9]/", "", $num));
+        }
+
+        return floatval(
+            preg_replace("/[^0-9]/", "", substr($num, 0, $sep)) . '.' .
+            preg_replace("/[^0-9]/", "", substr($num, $sep+1, strlen($num)))
+        );
     }
 
 }
