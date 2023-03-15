@@ -70,7 +70,11 @@ class Table extends Component
     public function getRegisters()
     {
         if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->codCart != null) {
+            if (!$this->registers) {
+               $this->emit('samples');
+            }
             $this->registers = Iron::where('co',$this->co)->where('cod_carta',$this->codCart)->get();
+            
             
         }      
             
@@ -89,6 +93,7 @@ class Table extends Component
         }
 
         $this->getRegisters();
+
 
     }
 

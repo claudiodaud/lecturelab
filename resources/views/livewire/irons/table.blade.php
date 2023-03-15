@@ -7,6 +7,13 @@
       </div>        
     </x-jet-action-message> 
 
+    <x-jet-action-message class="pb-6" on="samples">
+      <div class="text-xl font-normal  max-w-full flex-initial bg-indigo-100 p-4 my-4 rounded-lg border border-indigo-800 ">
+        <div class="text-sm font-base px-4 text-indigo-800 ">
+        {{ __('Loading samples registers ...') }}</div>  
+      </div>        
+    </x-jet-action-message> 
+
     @if($registers)
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 ">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">

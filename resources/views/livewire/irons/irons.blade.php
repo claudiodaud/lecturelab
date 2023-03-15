@@ -3,7 +3,7 @@
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
       {{ __('Irons Module') }}
     </h2>
-  </x-slot>
+    </x-slot>
 
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -19,6 +19,7 @@
                 <div wire:offline>
                     {{ __('You are now offline.') }}
                 </div>
+
 
                 @if(in_array("irons.find", $permissions))
                 <div class="block sm:flex justify-start ">
@@ -73,7 +74,7 @@
               
                 <div class="flex sm:justify-end">
                     @if($samples and $control)
-                        
+                       
                         @if(in_array("phosphorous.upload", $permissions))
                         <a wire:click.prevent="showModalUpdate" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full py-3 sm:py-0 sm:mt-0 sm:ml-2 ml-1'>
                             {{__('Upload')}}

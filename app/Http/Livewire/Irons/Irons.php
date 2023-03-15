@@ -21,13 +21,17 @@ class Irons extends Component
     public $cart;
     public $codCart;
     public $standart;
-    public $methode;   
+    public $methode;
+    public $LdeD615;
+    public $LdeD618;   
 
     //permissions
     public $permissions;
 
     //modal
     public $showUpdateModal;
+
+
 
 
     
@@ -128,6 +132,14 @@ class Irons extends Component
                             $standart = DB::connection('sqlsrv')->select('SELECT standart FROM standar_co WHERE co = ? ',[$this->co]);
                             $this->standart = $standart[0]->standart;
 
+                            $LdeD615 = DB::connection('sqlsrv')->select('SELECT LdeD FROM anmuestra WHERE cod_control = ? and analisis = ?',[$this->codControl, 'GEO-615']);
+                            $this->LdeD615 = $LdeD615[0]->LdeD;
+
+                            $LdeD618 = DB::connection('sqlsrv')->select('SELECT LdeD FROM anmuestra WHERE cod_control = ? and analisis = ?',[$this->codControl, 'GEO-618']);
+                            $this->LdeD618 = $LdeD618[0]->LdeD;
+
+
+
                             // cuando encuentra mustras y el co coincide con el encontrado en en la carta 
                             if ($this->coControl == strval($this->co)) {
                             $this->emit('change_params',[
@@ -136,7 +148,8 @@ class Irons extends Component
                                     'codCart' => $this->codCart, 
                                     'standart' => $this->standart,
                                    ]);
-                            $this->emit('samples');
+                            
+                            
                             }
                         }else{
                             $this->samples = null; 
@@ -284,11 +297,8 @@ class Irons extends Component
     public function updateSampleToPlusManager()
     {
         // buscamos las muestras por los parametros establecidos y solo subiremos las que tengan ley filtrando por la insersion del parametro de absorbance y por el calculo de la ley de fosforo  
-        $samples = Presample::where('co',$this->co)
-                            ->where('absorbance','>',0)
-                            ->where('phosphorous','>',0)
+        $samples = Iron::where('co',$this->co)
                             ->where('cod_carta', $this->codCart)
-                            ->where('method', $this->methode)
                             ->get();
         
         // element encontrar crear query o sacar de method
