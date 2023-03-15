@@ -148,7 +148,7 @@ class Irons extends Component
                                     'codCart' => $this->codCart, 
                                     'standart' => $this->standart,
                                    ]);
-                            
+
                             
                             }
                         }else{
@@ -162,7 +162,6 @@ class Irons extends Component
                 
             }
         }
-
 
     }
 
@@ -278,7 +277,6 @@ class Irons extends Component
 
         }  
 
-
     }
 
      public function downloadSamples()
@@ -310,14 +308,24 @@ class Irons extends Component
         //capturamos las variables que no cambiaran durante el update 
         $CODCARTA        = $this->codCart;
         $CO              = $this->co;    
-        $RESULTADO       = null;     
-        $METODO          = $this->methode;
+        $RESULTADO       = null;   
+        
+        //depende del metodo a actualizar   
+        $METODO615          = 'GEO-615';
+        $METODO618          = 'GEO-618';
+
         $UNIDAD1         = '%';
         $UNIDAD2         = '%';
-        $LdeD            = $this->LdeD;
+
+        //depende del metodo a actualizar 
+        $LdeD615            = $this->LdeD615;
+        $LdeD618            = $this->LdeD618;
+
         $LEIDOPOR        = auth()->user()->name;
         $FECHAHORA       = $now;        
         $volumen         = null; 
+        $peso            = null;
+        $dilucion        = null;
 
         //dd(number_format($this->LdeD,3));
         
@@ -325,32 +333,37 @@ class Irons extends Component
         $Oculta          = 0;
         $FechaCreacion   = $now;             
 
+        // para INSERTAR MUSTRAS GEO615
         foreach($samples as $sample){
             
+            //ACTUALIZAR LAS MUESTRAS 
 
             $validate = DB::connection('sqlsrv')
-                        ->select('SELECT NUMERO FROM AAS400 WHERE CO = ? and METODO = ? and NUMERO = ?',
-                            [$this->co,$this->methode,$sample->number]);
+                        ->select('SELECT NUMERO FROM AAS400 WHERE CO = ? and METODO = ? and NUMERO = ? and ELEMENTO = ?',
+                            [$this->co,'GEO-615', $sample->number, 'Fe3O4']);
+
+            // SI ENCUENTRO LAS MUESTRAS, LAS ACTUALIZO, SI NO, LAS CREAMOS. GEO-615           
             if ($validate) {
 
-                //dd('aqui');
+                
                 //variables dinamicas que dependen de la muestra
-                $grade = round($sample->phosphorous,3); // two parameters is long of LdeD 
+                $grade = round($sample->geo615,3); // two parameters is long of LdeD 
                 $writtenBy = User::where('id',$sample->written_by)->first('name');
                     
                 //
                     $NUMERO          = $sample->number;
                     $MUESTRA         = $sample->name;            
-                    $RESULTADOREAL   = $sample->phosphorous;
-                    $ELEMENTO        = $sample->element; 
-                    if ($grade <= $this->LdeD) {
-                        $Ley= '<'.number_format($this->LdeD,3, ",", ".");           
-                    }elseif($grade > $this->LdeD){
+                    $RESULTADOREAL   = $sample->geo615;
+                    $LdeD            = $this->LdeD615;
+                    $METODO          = 'GEO-615';
+                    $ELEMENTO        = 'Fe3O4'; 
+                    if ($grade <= $this->LdeD615) {
+                        $Ley= '<'.number_format($this->LdeD615,3, ",", ".");           
+                    }elseif($grade > $this->LdeD615){
                         $Ley= number_format($grade ,3, ",", "."); 
                     }           
                                
-                    $peso            = $sample->weight;
-                    $dilucion        = $sample->dilution_factor;
+                    
 
                     if ($sample->name == 'STD') {
                          $estandar = $this->standart;
@@ -393,7 +406,8 @@ class Irons extends Component
                             FechaCreacion   = ?
                             WHERE 
                             CO = ? and 
-                            METODO = ? And  
+                            METODO = ? And
+                            ELEMENTO = ? And  
                             NUMERO = ? 
                             '
                             ,[
@@ -422,6 +436,7 @@ class Irons extends Component
                                 $FechaCreacion,
                                 $CO,
                                 $METODO,
+                                $ELEMENTO, 
                                 $NUMERO,
                                 
                                 
@@ -429,36 +444,35 @@ class Irons extends Component
                              
                             ]); 
 
-                
-
-
-                Presample::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
+                Iron::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
 
             }else{
        
                  
                 //creamos las muestras ;)
                 DB::connection('sqlsrv')
-                ->insert('INSERT INTO AAS400 (CO,METODO,NUMERO) VALUES (?,?,?)',
-                    [$this->co,$this->methode,$sample->number]);
+                ->insert('INSERT INTO AAS400 (CO,METODO,NUMERO,ELEMENTO) VALUES (?,?,?,?)',
+                    [$this->co,'GEO-615',$sample->number,'Fe3O4']);
 
                 //variables dinamicas que dependen de la muestra
-                $grade = round($sample->phosphorous,3); // two parameters is long of LdeD 
+                $grade = round($sample->geo615,3); // two parameters is long of LdeD 
                 $writtenBy = User::where('id',$sample->written_by)->first('name');
                     
                 //
                     $NUMERO          = $sample->number;
                     $MUESTRA         = $sample->name;            
-                    $RESULTADOREAL   = $sample->phosphorous;
-                    $ELEMENTO        = $sample->element; 
-                    if ($grade <= $this->LdeD) {
-                        $Ley= '<'.number_format($this->LdeD,3, ",", ".");           
-                    }elseif($grade > $this->LdeD){
+                    $RESULTADOREAL   = $sample->geo615;
+                    $METODO          = 'GEO-615';
+                    $LdeD            = $this->LdeD615;
+                    $ELEMENTO        = 'Fe3O4'; 
+                    if ($grade <= $this->LdeD615) {
+                        $Ley= '<'.number_format($this->LdeD615,3, ",", ".");           
+                    }elseif($grade > $this->LdeD615){
                         $Ley= number_format($grade ,3, ",", "."); 
                     }         
                                
-                    $peso            = $sample->weight;
-                    $dilucion        = $sample->dilution_factor;
+                    $peso            = null;
+                    $dilucion        = null;
 
                     if ($sample->name == 'STD') {
                          $estandar = $this->standart;
@@ -501,7 +515,8 @@ class Irons extends Component
                             FechaCreacion   = ?
                             WHERE 
                             CO = ? and 
-                            METODO = ? And  
+                            METODO = ? And
+                            ELEMENTO = ? And  
                             NUMERO = ? 
                             '
                             ,[
@@ -530,6 +545,7 @@ class Irons extends Component
                                 $FechaCreacion,
                                 $CO,
                                 $METODO,
+                                $ELEMENTO, 
                                 $NUMERO,
                                 
                                 
@@ -540,15 +556,234 @@ class Irons extends Component
                 
 
 
-                Presample::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
+                Iron::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
+            
             }
+
+            if ($validate) {
+
+                
+                //variables dinamicas que dependen de la muestra
+                $grade = round($sample->geo618,3); // two parameters is long of LdeD 
+                $writtenBy = User::where('id',$sample->written_by)->first('name');
+                    
+                //
+                    $NUMERO          = $sample->number;
+                    $MUESTRA         = $sample->name;            
+                    $RESULTADOREAL   = $sample->geo618;
+                    $LdeD            = $this->LdeD618;
+                    $METODO          = 'GEO-618';
+                    $ELEMENTO        = 'FeMag'; 
+                    if ($grade <= $this->LdeD618) {
+                        $Ley= '<'.number_format($this->LdeD618,3, ",", ".");           
+                    }elseif($grade > $this->LdeD618){
+                        $Ley= number_format($grade ,3, ",", "."); 
+                    }           
+                               
+                    
+
+                    if ($sample->name == 'STD') {
+                         $estandar = $this->standart;
+                    }else{
+                        $estandar = null;
+                    }           
+                    
+                    if ($writtenBy) {
+                        $modificadopor   = $writtenBy->name;                
+                    }else{
+                        $modificadopor   = null;
+                    }
+                
+                
+
+                // las actualizamos ;)
+                DB::connection('sqlsrv')->update('UPDATE AAS400 
+                            SET 
+                            CODCARTA        = ?, 
+                            CO              = ?,
+                            NUMERO          = ?,
+                            MUESTRA         = ?,
+                            RESULTADO       = ?,
+                            RESULTADOREAL   = ?,
+                            ELEMENTO        = ?, 
+                            METODO          = ?,
+                            UNIDAD1         = ?,
+                            UNIDAD2         = ?,
+                            LdeD            = ?,
+                            LEIDOPOR        = ?,
+                            FECHAHORA       = ?,
+                            Ley             = ?,
+                            volumen         = ?,
+                            peso            = ?,
+                            dilucion        = ?,
+                            estandar        = ?,
+                            provisorio      = ?,
+                            modificadopor   = ?,
+                            Oculta          = ?,
+                            FechaCreacion   = ?
+                            WHERE 
+                            CO = ? and 
+                            METODO = ? And
+                            ELEMENTO = ? And  
+                            NUMERO = ? 
+                            '
+                            ,[
+                                
+                                $CODCARTA,
+                                $CO,
+                                $NUMERO,
+                                $MUESTRA,
+                                $RESULTADO,
+                                $RESULTADOREAL,
+                                $ELEMENTO, 
+                                $METODO,
+                                $UNIDAD1,
+                                $UNIDAD2,
+                                $LdeD,
+                                $LEIDOPOR,
+                                $FECHAHORA,
+                                $Ley,
+                                $volumen,
+                                $peso,
+                                $dilucion,
+                                $estandar,
+                                $provisorio,
+                                $modificadopor,
+                                $Oculta,
+                                $FechaCreacion,
+                                $CO,
+                                $METODO,
+                                $ELEMENTO, 
+                                $NUMERO,
+                                
+                                
+                                                    
+                             
+                            ]); 
+
+                Iron::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
+
+            }else{
+       
+                 
+                //creamos las muestras ;)
+                DB::connection('sqlsrv')
+                ->insert('INSERT INTO AAS400 (CO,METODO,NUMERO,ELEMENTO) VALUES (?,?,?,?)',
+                    [$this->co,'GEO-618',$sample->number,'FeMag']);
+
+                //variables dinamicas que dependen de la muestra
+                $grade = round($sample->geo618,3); // two parameters is long of LdeD 
+                $writtenBy = User::where('id',$sample->written_by)->first('name');
+                    
+                //
+                    $NUMERO          = $sample->number;
+                    $MUESTRA         = $sample->name;            
+                    $RESULTADOREAL   = $sample->geo618;
+                    $METODO          = 'GEO-618';
+                    $LdeD            = $this->LdeD618;
+                    $ELEMENTO        = 'FeMag'; 
+                    if ($grade <= $this->LdeD618) {
+                        $Ley= '<'.number_format($this->LdeD618,3, ",", ".");           
+                    }elseif($grade > $this->LdeD618){
+                        $Ley= number_format($grade ,3, ",", "."); 
+                    }         
+                               
+                    $peso            = null;
+                    $dilucion        = null;
+
+                    if ($sample->name == 'STD') {
+                         $estandar = $this->standart;
+                    }else{
+                        $estandar = null;
+                    }           
+                    
+                    if ($writtenBy) {
+                        $modificadopor   = $writtenBy->name;                
+                    }else{
+                        $modificadopor   = null;
+                    }
+                
+                
+
+                // las actualizamos ;)
+                DB::connection('sqlsrv')->update('UPDATE AAS400 
+                            SET 
+                            CODCARTA        = ?, 
+                            CO              = ?,
+                            NUMERO          = ?,
+                            MUESTRA         = ?,
+                            RESULTADO       = ?,
+                            RESULTADOREAL   = ?,
+                            ELEMENTO        = ?, 
+                            METODO          = ?,
+                            UNIDAD1         = ?,
+                            UNIDAD2         = ?,
+                            LdeD            = ?,
+                            LEIDOPOR        = ?,
+                            FECHAHORA       = ?,
+                            Ley             = ?,
+                            volumen         = ?,
+                            peso            = ?,
+                            dilucion        = ?,
+                            estandar        = ?,
+                            provisorio      = ?,
+                            modificadopor   = ?,
+                            Oculta          = ?,
+                            FechaCreacion   = ?
+                            WHERE 
+                            CO = ? and 
+                            METODO = ? And
+                            ELEMENTO = ? And  
+                            NUMERO = ? 
+                            '
+                            ,[
+                                
+                                $CODCARTA,
+                                $CO,
+                                $NUMERO,
+                                $MUESTRA,
+                                $RESULTADO,
+                                $RESULTADOREAL,
+                                $ELEMENTO, 
+                                $METODO,
+                                $UNIDAD1,
+                                $UNIDAD2,
+                                $LdeD,
+                                $LEIDOPOR,
+                                $FECHAHORA,
+                                $Ley,
+                                $volumen,
+                                $peso,
+                                $dilucion,
+                                $estandar,
+                                $provisorio,
+                                $modificadopor,
+                                $Oculta,
+                                $FechaCreacion,
+                                $CO,
+                                $METODO,
+                                $ELEMENTO, 
+                                $NUMERO,
+                                
+                                
+                                                    
+                             
+                            ]); 
+
+                
+
+
+                Iron::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
+            
+            }
+
+
+
         }
             
         $this->showUpdateModal = false;
         $this->emit('updatedSamplesToPlusManager');
     }
-
-    
 
     
 }

@@ -132,7 +132,7 @@ class Table extends Component
                     $register->comparative = false;
             } 
           
-           
+           $register->written_by = auth()->user()->id;
            $register->save();
 
            $this->getRegisters();

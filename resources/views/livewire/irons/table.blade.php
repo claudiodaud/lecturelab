@@ -96,12 +96,20 @@
                             
 
                         @elseif($editIronGrade === true and $key === $keyIdIronGrade)
+                        <div class="flex justify-center">
                         <input type="text" id="iron-{{$key}}"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" placeholder="{{$register->iron_grade}}" value="{{$register->iron_grade}}" 
                             wire:model="ironGradeField"
                             wire:keydown.enter="updateIronGrade({{$register->id}})" 
                             wire:keydown.arrow-up="$set('keyIdIronGrade',{{$keyIdIronGrade - 1 }})"
                             wire:keydown.arrow-down="$set('keyIdIronGrade',{{$keyIdIronGrade + 1 }})"
                             autofocus="autofocus" wire:key="ironGradeField-{{$key}}">
+
+                        <a href="" class="pt-2" wire:click.prevent="closeIronGrade">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="00 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </a>
+                        </div>
                         @endif
 
                     </td>
