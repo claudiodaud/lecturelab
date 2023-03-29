@@ -47,7 +47,7 @@ class Irons extends Component
         if(in_array("viewPhosphorous", $this->permissions)){
             
 
-            $this->getCo(); 
+            //$this->getCo(); 
             
             
             return view('livewire.irons.irons');
@@ -109,19 +109,25 @@ class Irons extends Component
 
                 //si el codControl es igual co buscamos la carta 
                 if ($this->coControl == strval($this->co)) {
-                    $query = "SELECT * FROM CARTA WHERE COD_CONTROL = $this->codControl";
+                    $query = "SELECT CODCARTA FROM CARTA WHERE COD_CONTROL = $this->codControl";
                     $this->cart = DB::connection('sqlsrv')->select($query);
                     if ($this->cart) {
                         $this->codCart = $this->cart[0]->CODCARTA;
 
-                        $query = "SELECT * FROM METODOSGEO WHERE CODCARTA = $this->codCart and GEO = 'GEO-644' and ELEMENTO = 'Fe'";
+                        $query = "SELECT GEO FROM METODOSGEO WHERE CODCARTA = $this->codCart and GEO = 'GEO-644' and ELEMENTO = 'Fe'";
                             $geo = DB::connection('sqlsrv')->select($query);
-                            $this->methode = $geo[0]->GEO;
+                            //dd($geo);
+                            if (!$geo) {
+                                $this->emit('dontExits');
+                            }else{
+                                $this->methode = $geo[0]->GEO;
+                            }
+                            
                         
                         if ($this->methode) {
                             //realizamos la busqueda en plusmanager por el CO
-                            $query = "SELECT * FROM movimiento WHERE analisis = $this->co order by numero ASC";
-                            //CONTAMOS LAS MUESTRAS EN EL BACK Y LAS PASAMOS AL FRONT COMO NUMERO SUMADO 
+                            $query = "SELECT numero, muestra, chq FROM movimiento WHERE analisis = $this->co order by numero ASC";
+                            
                             $this->samples = DB::connection('sqlsrv')->select($query);  
                             
 
@@ -154,6 +160,18 @@ class Irons extends Component
                         }else{
                             $this->samples = null; 
                             $this->emit('dontExits');
+
+                            // cuando encuentra mustras y el co coincide con el encontrado en en la carta 
+                            if ($this->coControl == strval($this->co)) {
+                            $this->emit('change_params',[
+                                    'co' => null,
+                                    'coControl' => null,
+                                    'codCart' => null, 
+                                    'standart' => null,
+                                   ]);
+
+                            
+                            }
                         }
                         
                                               
@@ -170,17 +188,46 @@ class Irons extends Component
         // cuando se actualiza la variable co y no coincide con la del control encontrado 
         // manda a null las variables y actualiza register en el controlador de la tabla 
         if ($this->coControl == strval($this->co)) {
-        $this->emit('change_params',[
+            $this->emit('change_params',[
                 'co' => null,
                 'coControl' => null,
                 'codCart' => null,
                 'standart' => null, 
                ]);
         
+        }elseif($this->coControl != strval($this->co)){
+             $this->samples = null;  
+            $this->control = null;
+            $this->codControl = null;
+            $this->coControl = null;
+            $this->cart = null;
+            $this->codCart = null;
+            $this->standart = null;
+            $this->methode = null;
+            $this->LdeD615 = null;
+            $this->LdeD618 = null;
+        }
+
+  
+    }
+
+    public function updatedCo()
+    {
+        if($this->coControl != strval($this->co)){
+             $this->samples = null;  
+            $this->control = null;
+            $this->codControl = null;
+            $this->coControl = null;
+            $this->cart = null;
+            $this->codCart = null;
+            $this->standart = null;
+            $this->methode = null;
+            $this->LdeD615 = null;
+            $this->LdeD618 = null;
         }
     }
 
-       
+   
     
     // guardar las muestras en la base de datos MySQL
     public function syncSamples()

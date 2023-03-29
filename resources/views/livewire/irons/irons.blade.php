@@ -33,19 +33,16 @@
                       <input type="text" id="table-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-10 py-4  sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full sm:w-60" placeholder="{{__('Search Your Control')}}" wire:model="co" wire:keydown.enter="getCo" autocomplete="off">
                   
                     </div>
-                    {{-- @if($samples and $control)
-                        @if(in_array("phosphorous.upload", $permissions))
-                            <a wire:click.prevent="getGeo644()" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full py-3 sm:py-0 sm:mt-0 sm:ml-2 ml-1'>
-                                {{__('Sync GEO-644')}}
-                                
-                                <div class="mx-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                </svg>
-                                </div>
-                            </a> 
-                        @endif
-                    @endif --}}
+                    
+                        
+                    <a wire:click.prevent="getCo" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full py-3 sm:py-0 sm:mt-0 sm:ml-2 ml-1'>
+                        {{__('Find Data')}}
+                        
+                        <div class="mx-2">
+                        <i class="fa-sharp fa-solid fa-magnifying-glass"></i>
+                        </div>
+                    </a> 
+                       
 
                                         
                    
@@ -107,8 +104,8 @@
 
                 <div class="pt-4">
                 @if ($control == null and $this->co)
-                    <div class="h4 text-sm text-gray-300 py-2">
-                        <strong>{{ __('Searching...')}} </strong>
+                    <div class="h4 text-sm text-gray-300 py-2" wire:loading wire:target="getCo">
+                        <strong>{{ __('Wait a minute, Searching and synchronizing data...')}} </strong>
                     </div>
                 @endif    
 
