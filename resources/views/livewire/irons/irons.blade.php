@@ -30,19 +30,29 @@
                       <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
                     </div>
                   
-                      <input type="text" id="table-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-10 py-4  sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full sm:w-60" placeholder="{{__('Search Your Control')}}" wire:model="co" wire:keydown.enter="getCo" autocomplete="off">
+                      <input type="text" id="table-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-10 py-4  sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full sm:w-60 
+                      " 
+                      placeholder="{{__('Search Your Control')}}" wire:model="co" wire:keydown.enter="getCo" autocomplete="off"  />
                   
                     </div>
                     
                         
-                    <a wire:click.prevent="getCo" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full py-3 sm:py-0 sm:mt-0 sm:ml-2 ml-1'>
+                    {{-- <a wire:click.prevent="getCo" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest
+                    shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full py-3 sm:py-0 sm:mt-0 sm:ml-2 ml-1'>
                         {{__('Find Data')}}
                         
                         <div class="mx-2">
                         <i class="fa-sharp fa-solid fa-magnifying-glass"></i>
                         </div>
                     </a> 
-                       
+                    
+                    <a wire:click.prevent="clearData" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full py-3 sm:py-0 sm:mt-0 sm:ml-2 ml-1'>
+                        {{__('Clear Data')}}
+                        
+                        <div class="mx-2">
+                        <i class="fa-solid fa-broom"></i>
+                        </div>
+                    </a>  --}}  
 
                                         
                    
@@ -104,7 +114,7 @@
 
                 <div class="pt-4">
                 @if ($control == null and $this->co)
-                    <div class="h4 text-sm text-gray-300 py-2" wire:loading wire:target="getCo">
+                    <div class="h4 text-sm text-gray-300 py-2" wire:loading >
                         <strong>{{ __('Wait a minute, Searching and synchronizing data...')}} </strong>
                     </div>
                 @endif    
@@ -253,14 +263,14 @@
       </x-slot>
 
       <x-slot name="content">         
-            <div wire:loading >
+            <div wire:loading wire:target="updateSampleToPlusManager">
                 <span class="mt-10"><strong>{{__('Loading files in Plus Manager, please wait a moment...')}}</strong></span>
             </div>
          
       </x-slot>
 
       <x-slot name="footer">
-          <x-jet-secondary-button wire:click="$toggle('showUpdateModal')" wire:loading.attr="disabled">
+          <x-jet-secondary-button wire:click="$toggle('showUpdateModal')" wire:loading.attr="disabled" >
               {{ __('Cancel') }}
           </x-jet-secondary-button>
 

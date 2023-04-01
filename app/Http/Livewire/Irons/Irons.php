@@ -47,7 +47,7 @@ class Irons extends Component
         if(in_array("viewPhosphorous", $this->permissions)){
             
 
-            //$this->getCo(); 
+            $this->getCo(); 
             
             
             return view('livewire.irons.irons');
@@ -185,49 +185,30 @@ class Irons extends Component
 
     public function updatingCo()
     {
-        // cuando se actualiza la variable co y no coincide con la del control encontrado 
-        // manda a null las variables y actualiza register en el controlador de la tabla 
-        if ($this->coControl == strval($this->co)) {
-            $this->emit('change_params',[
-                'co' => null,
-                'coControl' => null,
-                'codCart' => null,
-                'standart' => null, 
-               ]);
+        if ($this->coControl == strval($this->co)) {       
+        $this->emit('change_params',[
+            'co' => null,
+            'coControl' => null,
+            'codCart' => null,
+            'standart' => null, 
+           ]);
+         
+        $this->co = null;
+        $this->samples = null;  
+        $this->control = null;
+        $this->codControl = null;
+        $this->coControl = null;
+        $this->cart = null;
+        $this->codCart = null;
+        $this->standart = null;
+        $this->methode = null;
+        $this->LdeD615 = null;
+        $this->LdeD618 = null;
+        }
+          
+    }
+
         
-        }elseif($this->coControl != strval($this->co)){
-             $this->samples = null;  
-            $this->control = null;
-            $this->codControl = null;
-            $this->coControl = null;
-            $this->cart = null;
-            $this->codCart = null;
-            $this->standart = null;
-            $this->methode = null;
-            $this->LdeD615 = null;
-            $this->LdeD618 = null;
-        }
-
-  
-    }
-
-    public function updatedCo()
-    {
-        if($this->coControl != strval($this->co)){
-             $this->samples = null;  
-            $this->control = null;
-            $this->codControl = null;
-            $this->coControl = null;
-            $this->cart = null;
-            $this->codCart = null;
-            $this->standart = null;
-            $this->methode = null;
-            $this->LdeD615 = null;
-            $this->LdeD618 = null;
-        }
-    }
-
-   
     
     // guardar las muestras en la base de datos MySQL
     public function syncSamples()
@@ -281,10 +262,10 @@ class Irons extends Component
                 'number'        => $r,                         
                 'name'          => $sample[0]->muestra,                     
                 'chq'           => $sample[0]->chq,
-                'iron_grade'    => 0,
-                'geo615'        => 0,
-                'geo618'        => 0,
-                'geo644'        => 0,
+                'iron_grade'    => null,
+                'geo615'        => null,
+                'geo618'        => null,
+                'geo644'        => null,
                 'comparative'   => false,
                 'cod_carta'     => $this->codCart,      
                 'element'       => 'Fe',  
@@ -306,7 +287,7 @@ class Irons extends Component
                     ->where('cod_carta', $this->codCart)
                     ->where('number',$r->numero)->first();
             
-            //guardamos el peso 
+            //guardamos el nombre
             $samplex->name = $r->muestra;
             $samplex->chq = $r->chq;
             // $samplex->geo644 = floatval($register[0]->ley);
@@ -341,10 +322,14 @@ class Irons extends Component
 
     public function updateSampleToPlusManager()
     {
+
         // buscamos las muestras por los parametros establecidos y solo subiremos las que tengan ley filtrando por la insersion del parametro de absorbance y por el calculo de la ley de fosforo  
         $samples = Iron::where('co',$this->co)
                             ->where('cod_carta', $this->codCart)
                             ->get();
+
+
+
         
         // element encontrar crear query o sacar de method
         // LdeD = buscar limite de deteccion de standart 
@@ -380,9 +365,14 @@ class Irons extends Component
         $Oculta          = 0;
         $FechaCreacion   = $now;             
 
+        
+
         // para INSERTAR MUSTRAS GEO615
         foreach($samples as $sample){
             
+            $Ley615 = null; 
+            $Ley618 = null; 
+
             //ACTUALIZAR LAS MUESTRAS 
 
             $validate = DB::connection('sqlsrv')
@@ -394,7 +384,16 @@ class Irons extends Component
 
                 
                 //variables dinamicas que dependen de la muestra
-                $grade = round($sample->geo615,3); // two parameters is long of LdeD 
+                // two parameters is long of LdeD 
+                if ($sample->geo615 == null) {
+                    $grade615 = null;
+
+                }else{
+
+                    $grade615 = round($sample->geo615,3);
+                }
+
+                                
                 $writtenBy = User::where('id',$sample->written_by)->first('name');
                     
                 //
@@ -404,11 +403,29 @@ class Irons extends Component
                     $LdeD            = $this->LdeD615;
                     $METODO          = 'GEO-615';
                     $ELEMENTO        = 'Fe3O4'; 
-                    if ($grade <= $this->LdeD615) {
-                        $Ley= '<'.number_format($this->LdeD615,3, ",", ".");           
-                    }elseif($grade > $this->LdeD615){
-                        $Ley= number_format($grade ,3, ",", "."); 
-                    }           
+                    
+                    if ($sample->name == 'BLANCO') {
+                            $Ley615= '<'.number_format($this->LdeD615,3, ",", ".");  
+
+                            
+                    }elseif($sample->name != 'BLANCO'){
+
+                        if($grade615 == null){
+                            $ley615 = null; 
+                        }elseif ($grade615 != null and $grade615 <= $this->LdeD615) {
+                    
+                            $Ley615= '<'.number_format($this->LdeD615,3, ",", ".");  
+
+                        }elseif($grade615 != null and $grade615 > $this->LdeD615){
+
+                            $Ley615= number_format($grade615 ,3, ",", "."); 
+
+                        }                        
+                        
+
+                    }
+
+                          
                                
                     
 
@@ -472,7 +489,7 @@ class Irons extends Component
                                 $LdeD,
                                 $LEIDOPOR,
                                 $FECHAHORA,
-                                $Ley,
+                                $Ley615,
                                 $volumen,
                                 $peso,
                                 $dilucion,
@@ -490,6 +507,8 @@ class Irons extends Component
                                                     
                              
                             ]); 
+
+                $Ley615 = null; 
 
                 Iron::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
 
@@ -502,21 +521,46 @@ class Irons extends Component
                     [$this->co,'GEO-615',$sample->number,'Fe3O4']);
 
                 //variables dinamicas que dependen de la muestra
-                $grade = round($sample->geo615,3); // two parameters is long of LdeD 
+                // two parameters is long of LdeD 
+                if ($sample->geo615 == null) {
+                    $grade615 = null;
+
+                }else{
+
+                    $grade615 = round($sample->geo615,3);
+                }
+
+                                
                 $writtenBy = User::where('id',$sample->written_by)->first('name');
                     
                 //
                     $NUMERO          = $sample->number;
                     $MUESTRA         = $sample->name;            
                     $RESULTADOREAL   = $sample->geo615;
-                    $METODO          = 'GEO-615';
                     $LdeD            = $this->LdeD615;
+                    $METODO          = 'GEO-615';
                     $ELEMENTO        = 'Fe3O4'; 
-                    if ($grade <= $this->LdeD615) {
-                        $Ley= '<'.number_format($this->LdeD615,3, ",", ".");           
-                    }elseif($grade > $this->LdeD615){
-                        $Ley= number_format($grade ,3, ",", "."); 
-                    }         
+                    
+                    if ($sample->name == 'BLANCO') {
+                            $Ley615= '<'.number_format($this->LdeD615,3, ",", ".");  
+
+                            
+                    }elseif($sample->name != 'BLANCO'){
+
+                        if($grade615 == null){
+                            $ley615 = null; 
+                        }elseif ($grade615 != null and $grade615 <= $this->LdeD615) {
+                    
+                            $Ley615= '<'.number_format($this->LdeD615,3, ",", ".");  
+
+                        }elseif($grade615 != null and $grade615 > $this->LdeD615){
+
+                            $Ley615= number_format($grade615 ,3, ",", "."); 
+
+                        }                        
+                        
+
+                    }    
                                
                     $peso            = null;
                     $dilucion        = null;
@@ -581,7 +625,7 @@ class Irons extends Component
                                 $LdeD,
                                 $LEIDOPOR,
                                 $FECHAHORA,
-                                $Ley,
+                                $Ley615,
                                 $volumen,
                                 $peso,
                                 $dilucion,
@@ -600,6 +644,7 @@ class Irons extends Component
                              
                             ]); 
 
+                $Ley615 = null; 
                 
 
 
@@ -610,8 +655,21 @@ class Irons extends Component
             if ($validate) {
 
                 
-                //variables dinamicas que dependen de la muestra
-                $grade = round($sample->geo618,3); // two parameters is long of LdeD 
+               
+                
+               
+
+                    //variables dinamicas que dependen de la muestra
+                // two parameters is long of LdeD 
+                if ($sample->geo618 == null) {
+                    $grade618 = null;
+
+                }else{
+
+                    $grade618 = round($sample->geo618,3);
+                }
+
+                                
                 $writtenBy = User::where('id',$sample->written_by)->first('name');
                     
                 //
@@ -621,11 +679,26 @@ class Irons extends Component
                     $LdeD            = $this->LdeD618;
                     $METODO          = 'GEO-618';
                     $ELEMENTO        = 'FeMag'; 
-                    if ($grade <= $this->LdeD618) {
-                        $Ley= '<'.number_format($this->LdeD618,3, ",", ".");           
-                    }elseif($grade > $this->LdeD618){
-                        $Ley= number_format($grade ,3, ",", "."); 
-                    }           
+                    
+                    if ($sample->name == 'BLANCO') {
+                            $Ley618= '<'.number_format($this->LdeD618,3, ",", ".");  
+
+                            
+                    }elseif($sample->name != 'BLANCO'){
+
+                        if($grade618 == null){
+                            $ley618 = null; 
+                        }elseif ($grade618 != null and $grade618 <= $this->LdeD618) {
+                    
+                            $Ley618= '<'.number_format($this->LdeD618,3, ",", ".");  
+
+                        }elseif($grade618 != null and $grade618 > $this->LdeD618){
+                            $Ley618= number_format($grade618 ,3, ",", "."); 
+
+                        }                        
+                        
+
+                    }    
                                
                     
 
@@ -689,7 +762,7 @@ class Irons extends Component
                                 $LdeD,
                                 $LEIDOPOR,
                                 $FECHAHORA,
-                                $Ley,
+                                $Ley618,
                                 $volumen,
                                 $peso,
                                 $dilucion,
@@ -707,6 +780,8 @@ class Irons extends Component
                                                     
                              
                             ]); 
+
+                $ley618 = null; 
 
                 Iron::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
 
@@ -718,22 +793,49 @@ class Irons extends Component
                 ->insert('INSERT INTO AAS400 (CO,METODO,NUMERO,ELEMENTO) VALUES (?,?,?,?)',
                     [$this->co,'GEO-618',$sample->number,'FeMag']);
 
-                //variables dinamicas que dependen de la muestra
-                $grade = round($sample->geo618,3); // two parameters is long of LdeD 
+                  
+
+                    //variables dinamicas que dependen de la muestra
+                // two parameters is long of LdeD 
+                if ($sample->geo618 == null) {
+                    $grade618 = null;
+
+                }else{
+
+                    $grade618 = round($sample->geo618,3);
+                }
+
+                                
                 $writtenBy = User::where('id',$sample->written_by)->first('name');
                     
                 //
                     $NUMERO          = $sample->number;
                     $MUESTRA         = $sample->name;            
                     $RESULTADOREAL   = $sample->geo618;
-                    $METODO          = 'GEO-618';
                     $LdeD            = $this->LdeD618;
+                    $METODO          = 'GEO-618';
                     $ELEMENTO        = 'FeMag'; 
-                    if ($grade <= $this->LdeD618) {
-                        $Ley= '<'.number_format($this->LdeD618,3, ",", ".");           
-                    }elseif($grade > $this->LdeD618){
-                        $Ley= number_format($grade ,3, ",", "."); 
-                    }         
+                    
+                    if ($sample->name == 'BLANCO') {
+                            $Ley618= '<'.number_format($this->LdeD618,3, ",", ".");  
+
+                            
+                    }elseif($sample->name != 'BLANCO'){
+
+                        if($grade618 == null){
+                            $ley618 = null; 
+                        }elseif ($grade618 != null and $grade618 <= $this->LdeD618) {
+                    
+                            $Ley618= '<'.number_format($this->LdeD618,3, ",", ".");  
+
+                        }elseif($grade618 != null and $grade618 > $this->LdeD618){
+
+                            $Ley618= number_format($grade618 ,3, ",", "."); 
+
+                        }                        
+                        
+
+                    }
                                
                     $peso            = null;
                     $dilucion        = null;
@@ -798,7 +900,7 @@ class Irons extends Component
                                 $LdeD,
                                 $LEIDOPOR,
                                 $FECHAHORA,
-                                $Ley,
+                                $Ley618,
                                 $volumen,
                                 $peso,
                                 $dilucion,
@@ -818,7 +920,7 @@ class Irons extends Component
                             ]); 
 
                 
-
+                $ley618 = null; 
 
                 Iron::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
             
