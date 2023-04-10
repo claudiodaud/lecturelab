@@ -116,15 +116,15 @@
                     </td>
                     <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max text-center">
 
-                      {{$register->geo615}}
+                      {{round($register->geo615,2)}}
                     </td>
                     <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max text-center">
 
-                      {{$register->geo618}}
+                      {{round($register->geo618,2)}}
                     </td>
                     <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max text-center">
 
-                      {{$register->geo644}}
+                      {{round($register->geo644,2)}}
                     </td>
                     <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max text-center">
                       @if($register->geo644 >= $register->geo618)
