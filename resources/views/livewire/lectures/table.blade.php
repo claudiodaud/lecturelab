@@ -26,8 +26,32 @@
                     <th scope="col" class="px-6 py-2 w-max">
                       {{ __('Dilution Factor')}}
                     </th>
+                    <th scope="col" class="px-6 py-2 w-max text-center">
+                      {{ __('Dilution')}}
+                    </th>
+                    
                     <th scope="col" class="px-6 py-2 w-max">
                       {{ __('Phosphorous %')}}
+                    </th>
+
+                    <th scope="col" class="px-6 py-2 w-max sm:w-48 text-center">
+                    
+                        @if(in_array("phosphorous.upload", $permissions))
+                            <a wire:click.prevent="getGeo()" type='button' class='block items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full py-3 sm:py-2 sm:mt-0 sm:ml-2 ml-1'>
+                                {{__('Sync GEO')}}
+                                
+                                {{-- <div class="mx-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                                </div> --}}
+                            </a> 
+                            
+                        @endif
+                    
+                    </th>
+                    <th scope="col" class="px-6 py-2 w-max rounded-tr-lg rounded-br-lg text-center">
+                      {{ __('Comparative')}} <br>
                     </th>
                     
                   </tr>
@@ -159,8 +183,64 @@
                     <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">                     
                        {{$register->dilution_factor}}
                     </td>
+                    
+
+
+                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max text-center">
+
+                        @if($key !== $keyIdDilution)  
+                            @if(in_array("phosphorous.dilution", $permissions)) {{--actualizar el permiso a irons.grade--}}
+                              <div class="cursor-pointer"                            
+                              wire:click.prevent="$set('keyIdDilution',{{$key}})">
+                              {{$register->dilution}} <i class="fa-solid fa-pen fa-2xs pl-4"></i>
+                              </div>
+                            @else
+                              <div>                            
+                              {{$register->dilution}} <i class="fa-solid fa-pen fa-2xs pl-4"></i>
+                              </div>                            
+                            @endif
+                            
+
+                        @elseif($editDilution === true and $key === $keyIdDilution)
+                        <div class="flex justify-center">
+                        <input type="text" id="dilution-{{$key}}"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" placeholder="{{$register->dilution}}" value="{{$register->dilution}}" 
+                            wire:model="dilutionField"
+                            wire:keydown.enter="updateDilution({{$register->id}})" 
+                            wire:keydown.arrow-up="$set('keyIdDilution',{{$keyIdDilution - 1 }})"
+                            wire:keydown.arrow-down="$set('keyIdDilution',{{$keyIdDilution+ 1 }})"
+                            autofocus="autofocus" wire:key="dilutionField-{{$key}}">
+
+                        <a href="" class="pt-2" wire:click.prevent="closeDilution">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="00 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </a>
+
+                        </div>
+                        @endif
+
+                    </td>
+
                     <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
                       {{round($register->phosphorous,3)}}
+                    </td>
+
+                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max text-center">
+                      @if($register->geo_comparative == null)
+
+                      @else
+                        {{round($register->geo_comparative,4)}}
+                      @endif
+                     
+                    </td>
+
+                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max text-center">
+                      @if($register->phosphorous >= $register->geo)
+                          <i class="fa-solid fa-square-check text-green-500"></i>
+                      @else
+                          <i class="fa-solid fa-square-xmark text-red-500"></i>
+                      @endif
+                      
                     </td>
                     
 
@@ -212,5 +292,55 @@
               </table>
     
     @endif
+
+    <!-- Confirmacion Update Modal -->
+  <x-jet-dialog-modal wire:model="showComparativeModal"> 
+      <x-slot name="title">
+          {{ __('¿Do you really want to upload the information to plus manager?') }}
+      </x-slot>
+
+      <x-slot name="content"> 
+
+            <div>
+                @if($methodsRegisters and $coControl)
+
+                <select id="focus-geo-select" wire:model="methodeComparative" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-4 py-3  sm:mx-0 mt-2 sm:mt-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full sm:w-60">
+                        
+                        <option value="0" selected>{{__('Select your method')}}</option>
+                        
+                    @foreach ($methodsRegisters as $methodr)
+
+                      @if($methodr->GEO == $methode)
+
+                      @else
+                         <option value="{{$methodr->GEO}}">{{$methodr->GEO}}</option>
+                      @endif
+                        
+                        
+                        
+                    @endforeach            
+                </select> 
+
+                @else
+                <div class="pt-4 pl-4 text-gray-300">
+                   {{ __('This CO dont have methods')}} 
+                </div>                   
+                @endif
+            </div>        
+            
+         
+      </x-slot>
+
+      <x-slot name="footer">
+          <x-jet-secondary-button wire:click="$toggle('showComparativeModal')" wire:loading.attr="disabled">
+              {{ __('Cancel') }}
+          </x-jet-secondary-button>
+
+          <x-jet-danger-button class="ml-3" wire:click="updateGeoComparative()" wire:loading.attr="disabled">
+              {{ __('Update Comparative Data') }}
+          </x-jet-danger-button>
+          
+      </x-slot>
+  </x-jet-dialog-modal>
     
 </div>

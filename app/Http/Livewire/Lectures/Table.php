@@ -17,6 +17,9 @@ class Table extends Component
     public $codCart;
    
     public $methode;
+    public $methodeComparative;
+
+    public $methodsRegisters;
     
     public $registers; 
     
@@ -25,20 +28,26 @@ class Table extends Component
     public $editAliquot;
     public $editColorimetric;
     public $editAbsorbance;
+    public $editDilution;
     
     Public $aliquotField;
     public $absorbanceField;
     public $colorimetricField;
+    public $dilutionField;
     
     public $keyIdAliquot;
     public $keyIdColorimetric;
     public $keyIdAbsorbance;
+    public $keyIdDilution;
     
     public $listeners = ['getRegisters','change_params','hideRegisters'];
 
     public $permissions; 
 
     public $standart;
+
+    // modal
+    public $showComparativeModal;
 
     public function mount()
     {
@@ -101,9 +110,13 @@ class Table extends Component
         $this->keyIdAliquot = null;
         $this->keyIdAbsorbance = null; 
         $this->keyIdColorimetric = null;
+        $this->keyIdDilution = null;
         $this->editAliquot = null; 
         $this->editAbsorbance = null; 
         $this->editColorimetric = null; 
+        $this->editDilution = null; 
+
+        $this->methodsRegisters = null;
         
         //dd([$this->co ,$this->coControl, $this->methode , $this->codCart, $value]);
 
@@ -120,6 +133,12 @@ class Table extends Component
                  
             $this->registers = DB::table('presamples')->where('co', $this->co)->where('cod_carta', $this->codCart)->where('method', $this->methode)->orderBy('number', 'ASC')->get();
         }  
+
+        if ($this->codCart != null) {
+            $query = "SELECT CODMETODO, GEO, ELEMENTO FROM METODOSGEO WHERE CODCARTA = $this->codCart AND (ELEMENTO = 'P' OR ELEMENTO = 'P DTT')";
+            $this->methodsRegisters = DB::connection('sqlsrv')->select($query);
+            
+        }
 
         
         
@@ -141,6 +160,12 @@ class Table extends Component
     {
         $this->keyIdAbsorbance = $keyIdAbsorbance;
         $this->dispatchBrowserEvent('focus-absorbance', ['key' => $this->keyIdAbsorbance]);
+    }
+
+    public function updatedKeyIdDilution($keyIdDilution)
+    {
+        $this->keyIdDilution = $keyIdDilution;
+        $this->dispatchBrowserEvent('focus-dilution', ['key' => $this->keyIdDilution]);
     }
 
     public function moveToAliquot($key)
@@ -206,6 +231,14 @@ class Table extends Component
 
     }
 
+    public function updatingKeyIdDilution($key)
+    {
+            $this->keyIdDilution = null;
+            $this->editDilution = false;
+            $this->keyIdDilution= $key;
+            $this->editDilution = true;
+
+    }
      
 
     public function updateAliquot($id)
@@ -371,6 +404,112 @@ class Table extends Component
         $this->keyIdAbsorbance = null;
         $this->editAbsorbance = false;
     }
+
+
+    public function updateDilution($id)
+    {
+        //dd($id);
+        // if ($this->absorbanceField != null) {       
+        //     $sample = Presample::updateOrCreate([
+        //         'id' => $id,
+        //     ],[
+        //         'absorbance' => $this->absorbanceField,
+        //     ]);
+            
+        //     //factor de dilucion = (1/((PESO/250)*(ALICUOTA/100)))/1000
+        //     $dilutionFactor = (1/(($sample->weight/250)*($sample->aliquot/100)))/1000;
+
+        //     $sample = Presample::updateOrCreate([
+        //         'id' => $id,
+        //     ],[
+        //         'dilution_factor' => $dilutionFactor,                
+        //     ]);
+
+        //     //% fosforo = factor colorimetrico * factor de dilucion * absorbancia
+        //     $FC = $sample->colorimetric_factor;
+        //     $FD = $sample->dilution_factor;
+        //     $A  = $sample->absorbance;
+        //     $phosphorous = $FC * $FD * $A; 
+        //     //dd($phosphorous);
+        //     Presample::updateOrCreate([
+        //         'id' => $id,
+        //     ],[
+        //         'phosphorous' => $phosphorous,
+        //         'written_by' => auth()->user()->id                
+        //     ]);
+        // }
+
+        $this->dilutionField = null;
+        // if (count($this->registers) > $this->keyIdAbsorbance + 1) {
+        //     $this->keyIdAbsorbance = $this->keyIdAbsorbance + 1;
+        //     $this->editAbsorbance = true;
+        //     $this->dispatchBrowserEvent('focus-absorbance', ['key' => $this->keyIdAbsorbance]);
+            
+        // }else{
+        //     $this->closeAbsorbance();
+
+        // }
+       
+    }
+
+    public function closeDilution()
+    {
+        $this->keyIdDilution = null;
+        $this->editDilution = false;
+    }
+
+
+    public function getGeo()
+    {
+        $this->showComparativeModal = true ;
+
+        
+    }
+
+
+    public function updateGeoComparative()
+    {
+        
+        $query = "SELECT id, number , name, phosphorous FROM presamples WHERE co = $this->co and cod_carta = $this->codCart and method = '".$this->methodeComparative."' ";
+        $comparativeValues = DB::connection('mysql')->select($query);
+
+        foreach ($comparativeValues as $value) {
+            
+            // //dd($value);
+            $r = Presample::where('name', $value->name)->where('number', $value->number)->where('co',$this->co)->where('method',$this->methode)->first();
+            
+            if ($r) {
+                $r->geo = $this->methodeComparative; 
+                $r->geo_comparative = $value->phosphorous;
+                if ($value->phosphorous >= $r->phosphorous) {
+                    $r->comparative = 1;
+                }
+                $r->save();
+
+
+
+            }
+            
+
+
+            // $query = 'UPDATE presamples SET geo = ?, geo_comparative = ? WHERE number = ? and co = ? and method = ?'[$value->phosphorous,$this->methodeComparative,$value->number,$this->co,$this->methode];
+            
+            // DB::connection('mysql')->select($query);
+
+            // Presample::where('number', $value->number)->where('co',$this->co)->where('method',$this->methode)
+            //    ->update([
+            //        'geo' => $this->methodeComparative,
+            //        'geo_comparative' => $value->phosphorous
+            //     ]);
+           
+        }
+
+        $this->showComparativeModal = false ;
+        $this->methodeComparative = false ;
+    }
+
+
+   
 
     
 }

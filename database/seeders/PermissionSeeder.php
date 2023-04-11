@@ -58,6 +58,7 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'phosphorous.absorbance','guard_name' => 'web']);
         Permission::create(['name' => 'phosphorous.aliquot','guard_name' => 'web']);
         Permission::create(['name' => 'phosphorous.colorimetric','guard_name' => 'web']);
+        Permission::create(['name' => 'phosphorous.dilution','guard_name' => 'web']);
 
 
         //Irons Permissions
