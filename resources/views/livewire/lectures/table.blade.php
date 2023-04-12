@@ -50,8 +50,9 @@
                         @endif
                     
                     </th>
-                    <th scope="col" class="px-6 py-2 w-max rounded-tr-lg rounded-br-lg text-center">
+                    <th scope="col" class="px-6 py-2 text-xs w-max rounded-tr-lg rounded-br-lg text-center">
                       {{ __('Comparative')}} <br>
+                      {{ __('Phos >= Geo')}}
                     </th>
                     
                   </tr>
@@ -192,11 +193,13 @@
                             @if(in_array("phosphorous.dilution", $permissions)) {{--actualizar el permiso a irons.grade--}}
                               <div class="cursor-pointer"                            
                               wire:click.prevent="$set('keyIdDilution',{{$key}})">
-                              {{$register->dilution}} <i class="fa-solid fa-pen fa-2xs pl-4"></i>
+                              
+                              {{number_format($register->dilution,3)}} <i class="fa-solid fa-pen fa-2xs pl-4"></i>
+                              
                               </div>
                             @else
                               <div>                            
-                              {{$register->dilution}} <i class="fa-solid fa-pen fa-2xs pl-4"></i>
+                              {{round($register->dilution,3)}} <i class="fa-solid fa-pen fa-2xs pl-4"></i>
                               </div>                            
                             @endif
                             
@@ -229,13 +232,15 @@
                       @if($register->geo_comparative == null)
 
                       @else
-                        {{round($register->geo_comparative,4)}}
+                        {{round($register->geo_comparative,8)}}
                       @endif
                      
                     </td>
 
                     <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max text-center">
-                      @if($register->phosphorous >= $register->geo)
+                      @if($register->geo == null )
+                      
+                      @elseif($register->comparative == 1)
                           <i class="fa-solid fa-square-check text-green-500"></i>
                       @else
                           <i class="fa-solid fa-square-xmark text-red-500"></i>

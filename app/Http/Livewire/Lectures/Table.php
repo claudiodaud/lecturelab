@@ -408,47 +408,48 @@ class Table extends Component
 
     public function updateDilution($id)
     {
-        //dd($id);
-        // if ($this->absorbanceField != null) {       
-        //     $sample = Presample::updateOrCreate([
-        //         'id' => $id,
-        //     ],[
-        //         'absorbance' => $this->absorbanceField,
-        //     ]);
-            
-        //     //factor de dilucion = (1/((PESO/250)*(ALICUOTA/100)))/1000
-        //     $dilutionFactor = (1/(($sample->weight/250)*($sample->aliquot/100)))/1000;
+    
+        //BUSCAR EL REGISTRO 
+        $register = Presample::find($id);
+        $register->dilution = intval($this->dilutionField);
+        
+        $register->save();
 
-        //     $sample = Presample::updateOrCreate([
-        //         'id' => $id,
-        //     ],[
-        //         'dilution_factor' => $dilutionFactor,                
-        //     ]);
 
-        //     //% fosforo = factor colorimetrico * factor de dilucion * absorbancia
-        //     $FC = $sample->colorimetric_factor;
-        //     $FD = $sample->dilution_factor;
-        //     $A  = $sample->absorbance;
-        //     $phosphorous = $FC * $FD * $A; 
-        //     //dd($phosphorous);
-        //     Presample::updateOrCreate([
-        //         'id' => $id,
-        //     ],[
-        //         'phosphorous' => $phosphorous,
-        //         'written_by' => auth()->user()->id                
-        //     ]);
-        // }
+        
+        $register->phosphorous = $register->phosphorous * $register->dilution;
+        $register->save();
+
+        
+
+        //con el fosforo cargado revisamos si es mayor al registro geo de comparación 
+        if ($register->phosphorous >= $register->geo_comparative) {
+           $register->comparative = 1;
+           $register->save();
+           
+        }elseif($register->phosphorous < $register->geo_comparative){
+           $register->comparative = 0;
+           $register->save(); 
+        }
+        
+        $register->written_by = auth()->user()->id;
+        $register->save();
+        
 
         $this->dilutionField = null;
-        // if (count($this->registers) > $this->keyIdAbsorbance + 1) {
-        //     $this->keyIdAbsorbance = $this->keyIdAbsorbance + 1;
-        //     $this->editAbsorbance = true;
-        //     $this->dispatchBrowserEvent('focus-absorbance', ['key' => $this->keyIdAbsorbance]);
+        if (count($this->registers) > $this->keyIdDilution + 1) {
+            $this->keyIdDilution = $this->keyIdDilution + 1;
+            $this->editDilution = true;
+            $this->dispatchBrowserEvent('focus-dilution', ['key' => $this->keyIdDilution]);
             
-        // }else{
-        //     $this->closeAbsorbance();
+        }else{
+            $this->closeAbsorbance();
 
-        // }
+        }
+        
+
+        $this->dilutionField = null;
+       
        
     }
 
@@ -481,7 +482,7 @@ class Table extends Component
             if ($r) {
                 $r->geo = $this->methodeComparative; 
                 $r->geo_comparative = $value->phosphorous;
-                if ($value->phosphorous >= $r->phosphorous) {
+                if ($r->phosphorous >= $value->phosphorous) {
                     $r->comparative = 1;
                 }
                 $r->save();
