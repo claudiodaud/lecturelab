@@ -411,10 +411,9 @@ class Table extends Component
     
         //BUSCAR EL REGISTRO 
         $register = Presample::find($id);
-        $register->dilution = intval($this->dilutionField);
+        $register->dilution = floatval($this->dilutionField);
         
         $register->save();
-
 
         
         $register->phosphorous = $register->phosphorous * $register->dilution;
@@ -449,6 +448,8 @@ class Table extends Component
         
 
         $this->dilutionField = null;
+
+
        
        
     }
@@ -507,6 +508,8 @@ class Table extends Component
 
         $this->showComparativeModal = false ;
         $this->methodeComparative = false ;
+
+        $this->emit('update');
     }
 
 

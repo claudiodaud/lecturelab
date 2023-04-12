@@ -1,5 +1,10 @@
 <div>
-
+    <x-jet-action-message class="" on="update">
+      <div class="text-xl font-normal  max-w-full flex-initial bg-indigo-100 p-4 my-4 rounded-lg border border-indigo-800 ">
+        <div class="text-sm font-base px-4 text-indigo-800 ">
+        {{ __('Update comparative samples registers and sync...') }}</div>  
+      </div>        
+    </x-jet-action-message>
     
     @if($registers)
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 ">
@@ -193,13 +198,17 @@
                             @if(in_array("phosphorous.dilution", $permissions)) {{--actualizar el permiso a irons.grade--}}
                               <div class="cursor-pointer"                            
                               wire:click.prevent="$set('keyIdDilution',{{$key}})">
+                              @if ($register->dilution == null)
+                                  <i class="fa-solid fa-pen fa-2xs pl-4"></i>
+                              @else 
+                                  {{number_format($register->dilution,3)}} <i class="fa-solid fa-pen fa-2xs pl-4"></i> 
+                              @endif
                               
-                              {{number_format($register->dilution,3)}} <i class="fa-solid fa-pen fa-2xs pl-4"></i>
                               
                               </div>
                             @else
                               <div>                            
-                              {{round($register->dilution,3)}} <i class="fa-solid fa-pen fa-2xs pl-4"></i>
+                              {{number_format($register->dilution,3)}} <i class="fa-solid fa-pen fa-2xs pl-4"></i>
                               </div>                            
                             @endif
                             
