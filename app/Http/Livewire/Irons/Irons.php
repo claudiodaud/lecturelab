@@ -405,7 +405,7 @@ class Irons extends Component
                     $ELEMENTO        = 'Fe3O4'; 
                     
                     if ($sample->name == 'BLANCO') {
-                            $Ley615= '<'.number_format($this->LdeD615,3, ",", ".");  
+                            $Ley615= '<'.number_format($this->LdeD615,2, ",", ".");  
 
                             
                     }elseif($sample->name != 'BLANCO'){
@@ -414,11 +414,11 @@ class Irons extends Component
                             $ley615 = null; 
                         }elseif ($grade615 != null and $grade615 <= $this->LdeD615) {
                     
-                            $Ley615= '<'.number_format($this->LdeD615,3, ",", ".");  
+                            $Ley615= '<'.number_format($this->LdeD615,2, ",", ".");  
 
                         }elseif($grade615 != null and $grade615 > $this->LdeD615){
 
-                            $Ley615= number_format($grade615 ,3, ",", "."); 
+                            $Ley615= number_format($grade615 ,2, ",", "."); 
 
                         }                        
                         
@@ -542,7 +542,7 @@ class Irons extends Component
                     $ELEMENTO        = 'Fe3O4'; 
                     
                     if ($sample->name == 'BLANCO') {
-                            $Ley615= '<'.number_format($this->LdeD615,3, ",", ".");  
+                            $Ley615= '<'.number_format($this->LdeD615,2, ",", ".");  
 
                             
                     }elseif($sample->name != 'BLANCO'){
@@ -551,11 +551,11 @@ class Irons extends Component
                             $ley615 = null; 
                         }elseif ($grade615 != null and $grade615 <= $this->LdeD615) {
                     
-                            $Ley615= '<'.number_format($this->LdeD615,3, ",", ".");  
+                            $Ley615= '<'.number_format($this->LdeD615,2, ",", ".");  
 
                         }elseif($grade615 != null and $grade615 > $this->LdeD615){
 
-                            $Ley615= number_format($grade615 ,3, ",", "."); 
+                            $Ley615= number_format($grade615 ,2, ",", "."); 
 
                         }                        
                         
@@ -681,7 +681,7 @@ class Irons extends Component
                     $ELEMENTO        = 'FeMag'; 
                     
                     if ($sample->name == 'BLANCO') {
-                            $Ley618= '<'.number_format($this->LdeD618,3, ",", ".");  
+                            $Ley618= '<'.number_format($this->LdeD618,2, ",", ".");  
 
                             
                     }elseif($sample->name != 'BLANCO'){
@@ -690,10 +690,10 @@ class Irons extends Component
                             $ley618 = null; 
                         }elseif ($grade618 != null and $grade618 <= $this->LdeD618) {
                     
-                            $Ley618= '<'.number_format($this->LdeD618,3, ",", ".");  
+                            $Ley618= '<'.number_format($this->LdeD618,2, ",", ".");  
 
                         }elseif($grade618 != null and $grade618 > $this->LdeD618){
-                            $Ley618= number_format($grade618 ,3, ",", "."); 
+                            $Ley618= number_format($grade618 ,2, ",", "."); 
 
                         }                        
                         
@@ -817,7 +817,7 @@ class Irons extends Component
                     $ELEMENTO        = 'FeMag'; 
                     
                     if ($sample->name == 'BLANCO') {
-                            $Ley618= '<'.number_format($this->LdeD618,3, ",", ".");  
+                            $Ley618= '<'.number_format($this->LdeD618,2, ",", ".");  
 
                             
                     }elseif($sample->name != 'BLANCO'){
@@ -826,11 +826,11 @@ class Irons extends Component
                             $ley618 = null; 
                         }elseif ($grade618 != null and $grade618 <= $this->LdeD618) {
                     
-                            $Ley618= '<'.number_format($this->LdeD618,3, ",", ".");  
+                            $Ley618= '<'.number_format($this->LdeD618,2, ",", ".");  
 
                         }elseif($grade618 != null and $grade618 > $this->LdeD618){
 
-                            $Ley618= number_format($grade618 ,3, ",", "."); 
+                            $Ley618= number_format($grade618 ,2, ",", "."); 
 
                         }                        
                         
