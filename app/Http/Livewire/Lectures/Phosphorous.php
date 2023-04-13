@@ -616,7 +616,7 @@ class Phosphorous extends Component
                 //
                     $NUMERO          = $sample->number;
                     $MUESTRA         = $sample->name;            
-                    $RESULTADOREAL   = $sample->phosphorous;
+                    $RESULTADOREAL   = number_format($sample->phosphorous,3, ",", ".");
                     $ELEMENTO        = $sample->element; 
                     if ($grade <= $this->LdeD) {
                         $Ley= '<'.number_format($this->LdeD,3, ",", ".");           
@@ -724,7 +724,7 @@ class Phosphorous extends Component
                 //
                     $NUMERO          = $sample->number;
                     $MUESTRA         = $sample->name;            
-                    $RESULTADOREAL   = $sample->phosphorous;
+                    $RESULTADOREAL   = number_format($sample->phosphorous,3, ",", ".");
                     $ELEMENTO        = $sample->element; 
                     if ($grade <= $this->LdeD) {
                         $Ley= '<'.number_format($this->LdeD,3, ",", ".");           

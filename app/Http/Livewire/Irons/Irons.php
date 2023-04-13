@@ -811,7 +811,7 @@ class Irons extends Component
                 //
                     $NUMERO          = $sample->number;
                     $MUESTRA         = $sample->name;            
-                    $RESULTADOREAL   = number_format($sample->geo615,2, ",", ".");
+                    $RESULTADOREAL   = number_format($sample->geo618,2, ",", ".");
                     $LdeD            = $this->LdeD618;
                     $METODO          = 'GEO-618';
                     $ELEMENTO        = 'FeMag'; 
