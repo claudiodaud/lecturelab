@@ -399,7 +399,7 @@ class Irons extends Component
                 //
                     $NUMERO          = $sample->number;
                     $MUESTRA         = $sample->name;            
-                    $RESULTADOREAL   = $sample->geo615;
+                    $RESULTADOREAL   = number_format($sample->geo615,2, ",", ".");
                     $LdeD            = $this->LdeD615;
                     $METODO          = 'GEO-615';
                     $ELEMENTO        = 'Fe3O4'; 
@@ -536,7 +536,7 @@ class Irons extends Component
                 //
                     $NUMERO          = $sample->number;
                     $MUESTRA         = $sample->name;            
-                    $RESULTADOREAL   = $sample->geo615;
+                    $RESULTADOREAL   = number_format($sample->geo615,2, ",", ".");
                     $LdeD            = $this->LdeD615;
                     $METODO          = 'GEO-615';
                     $ELEMENTO        = 'Fe3O4'; 
@@ -675,7 +675,7 @@ class Irons extends Component
                 //
                     $NUMERO          = $sample->number;
                     $MUESTRA         = $sample->name;            
-                    $RESULTADOREAL   = $sample->geo618;
+                    $RESULTADOREAL   = number_format($sample->geo618,2, ",", ".");
                     $LdeD            = $this->LdeD618;
                     $METODO          = 'GEO-618';
                     $ELEMENTO        = 'FeMag'; 
@@ -811,7 +811,7 @@ class Irons extends Component
                 //
                     $NUMERO          = $sample->number;
                     $MUESTRA         = $sample->name;            
-                    $RESULTADOREAL   = $sample->geo618;
+                    $RESULTADOREAL   = number_format($sample->geo615,2, ",", ".");
                     $LdeD            = $this->LdeD618;
                     $METODO          = 'GEO-618';
                     $ELEMENTO        = 'FeMag'; 
