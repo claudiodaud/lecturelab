@@ -20,6 +20,7 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'viewPermissions','guard_name' => 'web']);
         Permission::create(['name' => 'viewPhosphorous','guard_name' => 'web']);
         Permission::create(['name' => 'viewIrons','guard_name' => 'web']);
+        Permission::create(['name' => 'viewVolumetries','guard_name' => 'web']);
         
 
         //User permissions
@@ -66,6 +67,14 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'irons.grade','guard_name' => 'web']);
         Permission::create(['name' => 'irons.upload','guard_name' => 'web']);
         Permission::create(['name' => 'irons.download','guard_name' => 'web']);
+
+
+        //Irons Permissions
+        Permission::create(['name' => 'volumetries.find','guard_name' => 'web']);
+        Permission::create(['name' => 'volumetries.grade','guard_name' => 'web']);
+        Permission::create(['name' => 'volumetries.upload','guard_name' => 'web']);
+        Permission::create(['name' => 'volumetries.download','guard_name' => 'web']);
+        Permission::create(['name' => 'volumetries.title','guard_name' => 'web']);
         
         
 

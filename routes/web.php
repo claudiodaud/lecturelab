@@ -4,6 +4,7 @@ use App\Http\Livewire\Irons\Irons;
 use App\Http\Livewire\Lectures\Phosphorous;
 use App\Http\Livewire\Roles\RoleIndex;
 use App\Http\Livewire\Users\UserIndex;
+use App\Http\Livewire\Volumetries\Volumetries;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +36,7 @@ Route::middleware([
 
     Route::get('/phosphorous', Phosphorous::class)->name('phosphorous');
     Route::get('/irons', Irons::class)->name('irons');
+    Route::get('/volumetries', Volumetries::class)->name('volumetries');
 
     //Users - Roles and Permission Modules
     Route::get('/users-index', UserIndex::class)->name('users.index');
