@@ -21,7 +21,7 @@
                 </div>
 
 
-                @if(in_array("irons.find", $permissions))
+                @if(in_array("volumetries.find", $permissions))
                 <div class="block sm:flex justify-start ">
                     
                     <div class="relative">
@@ -35,36 +35,16 @@
                       placeholder="{{__('Search Your Control')}}" wire:model="co" wire:keydown.enter="getCo" autocomplete="off"  />
                   
                     </div>
-                    
-                        
-                    {{-- <a wire:click.prevent="getCo" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest
-                    shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full py-3 sm:py-0 sm:mt-0 sm:ml-2 ml-1'>
-                        {{__('Find Data')}}
-                        
-                        <div class="mx-2">
-                        <i class="fa-sharp fa-solid fa-magnifying-glass"></i>
-                        </div>
-                    </a> 
-                    
-                    <a wire:click.prevent="clearData" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full py-3 sm:py-0 sm:mt-0 sm:ml-2 ml-1'>
-                        {{__('Clear Data')}}
-                        
-                        <div class="mx-2">
-                        <i class="fa-solid fa-broom"></i>
-                        </div>
-                    </a>  --}}  
 
-                                        
-                   
-                   {{--  @if($methodsRegisters and $control)
+                    @if($methods and $control)
                    
                     <select id="focus-geo-select" wire:model="methode" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-4 py-3  sm:mx-0 mt-2 sm:mt-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full sm:w-60">
                             
                             <option value="0" selected>{{__('Select your method')}}</option>
                             
-                        @foreach ($methodsRegisters as $methodr)
+                        @foreach ($methods as $methodr)
                             
-                            <option value="{{$methodr->GEO}}">{{$methodr->GEO}}</option>
+                            <option value="{{$methodr->GEO}}">{{$methodr->GEO}} - {{$methodr->ELEMENTO}}</option>
                             
                         @endforeach            
                     </select> 
@@ -73,16 +53,19 @@
                     <div class="pt-4 pl-4 text-gray-300">
                        {{ __('This CO dont have methods')}} 
                     </div>                   
-                    @endif  --}}
+                    @endif 
+                    
+                        
+                   
                     
                 </div> 
                 @endif
               
               
                 <div class="flex sm:justify-end">
-                   {{--  @if($samples and $control)
+                    @if($samples and $control)
                        
-                        @if(in_array("phosphorous.upload", $permissions))
+                        @if(in_array("volumetries.upload", $permissions))
                         <a wire:click.prevent="showModalUpdate" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full py-3 sm:py-0 sm:mt-0 sm:ml-2 ml-1'>
                             {{__('Upload')}}
                             
@@ -93,7 +76,7 @@
                             </div>
                         </a> 
                         @endif
-                        @if(in_array("phosphorous.download", $permissions))
+                        @if(in_array("volumetries.download", $permissions))
                         <a wire:click="downloadSamples" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full py-3 sm:py-0 mt-2 sm:mt-0 sm:ml-2 ml-1 mr-4'>
                             {{__('Download')}}
                             
@@ -104,7 +87,7 @@
                             </div>
                         </a> 
                         @endif
-                    @endif --}}
+                    @endif
 
                         
                     
@@ -141,48 +124,7 @@
                         <div>
                            
                         </div>
-                        {{-- <div>
-                            @if ($samples)
-                                @if(in_array("phosphorous.parameters", $permissions))
-                                <div>
-                                    <div class="flex justify-start"> 
-                                        <div class="h4 text-sm text-gray-500 mt-2 mr-4 w-32">{{ __('Absorbance')}} :
-                                            
-                                        </div>
-                                        <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-16 sm:w-16" placeholder="{{__('Insert value')}}" wire:model="absorbance">
-                                        @if($absorbance != null)
-                                        <span wire:click.prevent="applyAbsorbance" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Apply')}}</span>
-                                        @endif
-                                    </div>
-   
-                                    <div class="flex justify-start">                                 
-                                        <div class="h4 text-sm text-gray-500 mt-2 mr-4 w-32">{{ __('Aliquot')}} :
-                                            
-                                        </div>
-                                        
-                                        <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-16 sm:w-16" placeholder="{{__('Insert value')}}" wire:model="aliquot">    
-                                        @if($aliquot != null)
-                                        <span wire:click.prevent="applyAliquot" wire:loading.attr="disabled" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer disabled:bg-gray-400 disabled:border-blue-500 ">{{__('Apply')}}</span> 
-                                        @endif
-                                                             
-                                    </div>
-                                    <div class="flex justify-start"> 
-                                        <div class="h4 text-sm text-gray-500 mt-2 mr-4 w-32">{{ __('Colorimetric Factor')}} :
-                                            
-                                        </div>
-                                        <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32" placeholder="{{__('Insert value')}}" wire:model="colorimetricFactor">
-                                        @if($colorimetricFactor != null)
-                                        <span wire:click.prevent="applyColorimetric" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Apply')}}</span>
-                                        @endif
-                                    </div>
-                                    
-                                                        
-                                </div>
-                                @endif
-                            @endif
-                            
-                            
-                        </div> --}}
+                        
                     </div>
                 @endif
                 </div> 

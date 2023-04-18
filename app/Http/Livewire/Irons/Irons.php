@@ -213,7 +213,7 @@ class Irons extends Component
     // guardar las muestras en la base de datos MySQL
     public function syncSamples()
     {   
-        // traer el array de muestras en mysql y revisar que exista en el array de sqlserver si existe, no hago nada, si no existe lo elimino de mysql, significaria que la muestra fue eliminada.
+        // traer el array de muestras en mysql y revisar que exista en el array de sqlserver, si existe, no hago nada, si no existe lo elimino de mysql, significaria que la muestra fue eliminada.
         //traemos las muestras 
         $samplesMySQL = DB::table('irons')->where('co', $this->co)->where('cod_carta', $this->codCart)->get('number');
 
