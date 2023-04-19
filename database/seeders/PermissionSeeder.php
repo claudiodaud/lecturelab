@@ -75,6 +75,7 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'volumetries.upload','guard_name' => 'web']);
         Permission::create(['name' => 'volumetries.download','guard_name' => 'web']);
         Permission::create(['name' => 'volumetries.title','guard_name' => 'web']);
+        Permission::create(['name' => 'volumetries.parameters','guard_name' => 'web']);
         
         
 
