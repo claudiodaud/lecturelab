@@ -155,22 +155,34 @@ class Volumetries extends Component
             $this->methods = DB::connection('sqlsrv')->select($query);
 
            
-            if ($this->coControl == $this->co and $this->codCart != null and $this->methode != null) {
+            if ($this->coControl == $this->co and $this->codCart != null and $this->methode != 0) {
 
                 $query = "SELECT ELEMENTO FROM METODOSGEO WHERE codcarta = $this->codCart AND  GEO = '".$this->methode."' ";
                 $method = DB::connection('sqlsrv')->select($query);
-                $this->element = $method[0]->ELEMENTO;
+               
+                    $this->element = $method[0]->ELEMENTO;
 
-                $query = "SELECT numero, muestra, peso FROM pesajevolumen WHERE codcarta = $this->codCart AND  METODO = '".$this->methode."' ";      
-                $this->samples = DB::connection('sqlsrv')->select($query);
-                
-                if ($this->samples) {
-                    $this->syncSamples();
+                    $query = "SELECT numero, muestra, peso FROM pesajevolumen WHERE codcarta = $this->codCart AND  METODO = '".$this->methode."' ";      
+                    $this->samples = DB::connection('sqlsrv')->select($query);
+                    
+                    if ($this->samples) {
+                        $this->syncSamples();
+                    }
+    
+
+            }else{
+
+                    $this->emit('change_params',[
+                    'co' => null,
+                    'coControl' => null,
+                    'methode' => null,
+                    'codCart' => null,
+                    'standart' => null,
+                    ]);
+                    
+                    $this->emit('render');
+
                 }
-
-                                      
-
-            }
 
         }
     }
@@ -313,20 +325,29 @@ class Volumetries extends Component
 
     public function updatedMethode()
     {
+        if ($this->methode != 0) {
 
-        $standart = DB::connection('sqlsrv')->select('SELECT standart FROM standar_co WHERE co = ? and metodo = ?',[$this->co, $this->methode]);
-            $this->standart = $standart[0]->standart;
+            $standart = DB::connection('sqlsrv')->select('SELECT standart FROM standar_co WHERE co = ? and metodo = ?',[$this->co, $this->methode]);
+                $this->standart = $standart[0]->standart;
 
-        $LdeD = DB::connection('sqlsrv')->select('SELECT LdeD FROM anmuestra WHERE cod_control = ? and analisis = ?',[$this->codControl, $this->methode]);
-            $this->LdeD = $LdeD[0]->LdeD ?? null;
+            $LdeD = DB::connection('sqlsrv')->select('SELECT LdeD FROM anmuestra WHERE cod_control = ? and analisis = ?',[$this->codControl, $this->methode]);
+                $this->LdeD = $LdeD[0]->LdeD ?? null;
 
-        $this->emit('change_params',[
-                'co' => $this->co,
-                'coControl' => $this->coControl,
-                'methode' => $this->methode,
-                'codCart' => $this->codCart,
-                'standart' => $this->standart,
-                ]);
+            $this->emit('change_params',[
+                    'co' => $this->co,
+                    'coControl' => $this->coControl,
+                    'methode' => $this->methode,
+                    'codCart' => $this->codCart,
+                    'standart' => $this->standart,
+                    ]);
+            $this->emit('render');
+        }
+
+        if ($this->methode == 0) {
+            $this->emit('methode');
+        }   
+
     }
+
 
 }

@@ -34,76 +34,76 @@
                 </thead>
                 <tbody>
                   {{--dd($registers)--}}
-                  @forelse ($registers as $key => $register)
-                    <tr class="bg-white border-b hover:bg-gray-100 even:bg-gray-50">
-                    <td class="px-6 py-2 w-max">
+                  @if($registers)
+                      @foreach ($registers as $key => $register)
+                      <tr class="bg-white border-b hover:bg-gray-100 even:bg-gray-50">
+                        <td class="px-6 py-2 w-max">
 
-                      {{$register->number}}
-                    </td>
-                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
-                      @if($register->name == "STD")
-                        {{$register->name}} - {{$this->standart}}
-                      @else
-                        {{$register->name}}
-                      @endif
-                    </td>
+                          {{$register->number}}
+                        </td>
+                        <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
+                          @if($register->name == "STD")
+                            {{$register->name}} - {{$this->standart}}
+                          @else
+                            {{$register->name}}
+                          @endif
+                        </td>
 
-                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
-                      {{round($register->weight,5)}}
-                    </td>
+                        <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
+                          {{round($register->weight,5)}}
+                        </td>
 
-                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
-                       
-                        
-                        @if($key !== $keyIdSpent)  
-                            @if(in_array("volumetries.spent", $permissions)) {{--actualizar el permiso a irons.grade--}}
-                              <div class="cursor-pointer"                            
-                              wire:click.prevent="$set('keyIdSpent',{{$key}})">
-                              {{$register->spent}} <i class="fa-solid fa-pen fa-2xs pl-4"></i>
-                              </div>
-                            @else
-                              <div>                            
-                              {{$register->spent}} <i class="fa-solid fa-pen fa-2xs pl-4"></i>
-                              </div>                            
-                            @endif
+                        <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
+                           
                             
+                            @if($key !== $keyIdSpent)  
+                                @if(in_array("volumetries.spent", $permissions)) {{--actualizar el permiso a irons.grade--}}
+                                  <div class="cursor-pointer"                            
+                                  wire:click.prevent="$set('keyIdSpent',{{$key}})">
+                                  {{$register->spent}} <i class="fa-solid fa-pen fa-2xs pl-4"></i>
+                                  </div>
+                                @else
+                                  <div>                            
+                                  {{$register->spent}} <i class="fa-solid fa-pen fa-2xs pl-4"></i>
+                                  </div>                            
+                                @endif
+                                
 
-                        @elseif($editSpent === true and $key === $keyIdSpent)
-                        <div class="flex justify-center w-32">
-                        <input type="text" id="spent-{{$key}}"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" placeholder="{{$register->spent}}" value="{{$register->spent}}" 
-                            wire:model="spentField"
-                            wire:keydown.enter="updateSpent({{$register->id}})" 
-                            wire:keydown.arrow-up="$set('keyIdSpent',{{$keyIdSpent - 1 }})"
-                            wire:keydown.arrow-down="$set('keyIdSpent',{{$keyIdSpent + 1 }})"
-                            autofocus="autofocus" wire:key="spentField-{{$key}}">
+                            @elseif($editSpent === true and $key === $keyIdSpent)
+                            <div class="flex justify-center w-32">
+                            <input type="text" id="spent-{{$key}}"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" placeholder="{{$register->spent}}" value="{{$register->spent}}" 
+                                wire:model="spentField"
+                                wire:keydown.enter="updateSpent({{$register->id}})" 
+                                wire:keydown.arrow-up="$set('keyIdSpent',{{$keyIdSpent - 1 }})"
+                                wire:keydown.arrow-down="$set('keyIdSpent',{{$keyIdSpent + 1 }})"
+                                autofocus="autofocus" wire:key="spentField-{{$key}}">
 
-                        <a href="" class="pt-2" wire:click.prevent="closeSpent">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="00 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                        </a>
+                            <a href="" class="pt-2" wire:click.prevent="closeSpent">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="00 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </a>
 
-                        </div>
-                        @endif
+                            </div>
+                            @endif
 
-                    </td>
-                    
-                    
-                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">                     
-                       {{round($register->grade,3)}}
-                    </td>
+                        </td>
+                        
+                        
+                        <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">                     
+                           {{round($register->grade,3)}}
+                        </td>
 
-                    
-                    
-                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
-                      {{ round($register->title,3)}}
-                    </td>
-                    
-                  </tr> 
-                  @empty
-                    {{-- empty expr --}}
-                  @endforelse
-                  
+                        
+                        
+                        <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
+                          {{ round($register->title,3)}}
+                        </td>
+                        
+                      </tr> 
+                     
+                      @endforeach
+                  @endif                   
                   
                 </tbody>
               </table>

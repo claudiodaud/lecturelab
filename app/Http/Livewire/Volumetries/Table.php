@@ -102,6 +102,9 @@ class Table extends Component
                                                     ->where('cod_carta', $this->codCart)
                                                     ->where('method', $this->methode)
                                                     ->orderBy('number', 'ASC')->get();
+        }else{
+            
+            $this->registers = false;
         }  
         
         
