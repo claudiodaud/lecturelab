@@ -11,7 +11,7 @@ use Livewire\Component;
 
 class Volumetries extends Component
 {
-    public $co = 72326;    
+    public $co;    
     public $samples;  
     public $control;
     public $codControl;
@@ -20,7 +20,7 @@ class Volumetries extends Component
     public $codCart;
     public $standart;
     public $methods;
-    public $methode = null;
+    public $methode;
     public $element; 
     
     public $title; 
@@ -178,6 +178,7 @@ class Volumetries extends Component
                     'methode' => null,
                     'codCart' => null,
                     'standart' => null,
+                    'title' => null,
                     ]);
                     
                     $this->emit('render');
@@ -310,13 +311,39 @@ class Volumetries extends Component
     }
 
 
-    public function applyTitle()
+    public function saveTitle()
     {
         if ($this->title == null) {
             
         }else{
 
             Parameter::where('control', 'volumetries')->where('type_var', 'title')->update(['value' => $this->title]);
+        }
+
+        $this->emit('success');          
+           
+    }
+
+    public function applyTitle()
+    {
+        if ($this->title == null) {
+            
+        }else{
+
+            $this->saveTitle();
+
+            Volumetry::where('co',$this->co)->where('method', $this->methode)->update(['title' => $this->title]);
+
+            $this->emit('change_params',[
+                    'co' => $this->co,
+                    'coControl' => $this->coControl,
+                    'methode' => $this->methode,
+                    'codCart' => $this->codCart,
+                    'standart' => $this->standart,
+                    'title' => $this->title,
+                    ]);
+            
+            
         }
 
         $this->emit('success');          
@@ -339,6 +366,7 @@ class Volumetries extends Component
                     'methode' => $this->methode,
                     'codCart' => $this->codCart,
                     'standart' => $this->standart,
+                    'title' => $this->title,
                     ]);
             $this->emit('render');
         }

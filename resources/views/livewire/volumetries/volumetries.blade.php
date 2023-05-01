@@ -1,7 +1,7 @@
 <div>
     <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-      {{ __('Irons Module') }}
+      {{ __('Volumetries Module') }}
     </h2>
     </x-slot>
 
@@ -133,7 +133,9 @@
                                         </div>
                                         <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32" placeholder="{{__('Insert value')}}" wire:model="title">
                                         
-                                        <span wire:click.prevent="applyTitle" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Save')}}</span>
+                                        <span wire:click.prevent="saveTitle" class="rounded mx-1 rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Save')}}</span>
+
+                                        <span wire:click.prevent="applyTitle" class="rounded mx-1 rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Apply')}}</span>
                                         
                                     </div>                            
                                                         
@@ -246,6 +248,7 @@
   
     
 <script>
+
      window.addEventListener('focus-geo-select', event => {
         
         document.getElementById('focus-geo-select').focus();
@@ -255,7 +258,32 @@
         
         document.getElementById('spent-'+ event.detail.key).focus();
     })
-
    
+    // Funcion que se ejecuta cada vez que se pulsa una tecla en cualquier input
+    // Tiene que recibir el "event" (evento generado) y el siguiente id donde poner
+    // el foco. Si ese id es "submit" se envia el formulario
+    function saltar(e,id)
+    {
+      // Obtenemos la tecla pulsada
+      (e.keyCode)?k=e.keyCode:k=e.which;
+     
+      // Si la tecla pulsada es enter (codigo ascii 13)
+      if(k==13)
+      {
+        // Si la variable id contiene "submit" enviamos el formulario
+        if(id=="submit")
+        {
+          document.forms[0].submit();
+        }else{
+          // nos posicionamos en el siguiente input
+
+          document.getElementById(id).focus();
+
+        }
+      }
+    }
+
+
+       
 </script>
 </div>
