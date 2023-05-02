@@ -412,6 +412,9 @@ class Irons extends Component
 
                         if($grade615 == null){
                             $ley615 = null; 
+
+                            //OCULTA SI SALE NULL
+                            $Oculta          = 1;
                         }elseif ($grade615 != null and $grade615 <= $this->LdeD615) {
                     
                             $Ley615= '<'.number_format($this->LdeD615,2, ",", ".");  
@@ -508,7 +511,8 @@ class Irons extends Component
                              
                             ]); 
 
-                $Ley615 = null; 
+                $Ley615 = null;
+                $Oculta = 0;
 
                 Iron::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
 
@@ -548,7 +552,8 @@ class Irons extends Component
                     }elseif($sample->name != 'BLANCO'){
 
                         if($grade615 == null){
-                            $ley615 = null; 
+                            $ley615 = null;
+                            $Oculta = 1; 
                         }elseif ($grade615 != null and $grade615 <= $this->LdeD615) {
                     
                             $Ley615= '<'.number_format($this->LdeD615,2, ",", ".");  
@@ -645,6 +650,7 @@ class Irons extends Component
                             ]); 
 
                 $Ley615 = null; 
+                $Oculta = 0;
                 
 
 
@@ -688,6 +694,7 @@ class Irons extends Component
 
                         if($grade618 == null){
                             $ley618 = null; 
+                            $Oculta = 1; 
                         }elseif ($grade618 != null and $grade618 <= $this->LdeD618) {
                     
                             $Ley618= '<'.number_format($this->LdeD618,2, ",", ".");  
@@ -781,7 +788,8 @@ class Irons extends Component
                              
                             ]); 
 
-                $ley618 = null; 
+                $ley618 = null;
+                $Oculta = 0; 
 
                 Iron::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
 
@@ -824,6 +832,7 @@ class Irons extends Component
 
                         if($grade618 == null){
                             $ley618 = null; 
+                            $Oculta = 1;
                         }elseif ($grade618 != null and $grade618 <= $this->LdeD618) {
                     
                             $Ley618= '<'.number_format($this->LdeD618,2, ",", ".");  
@@ -921,6 +930,7 @@ class Irons extends Component
 
                 
                 $ley618 = null; 
+                $Oculta = 0;
 
                 Iron::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
             

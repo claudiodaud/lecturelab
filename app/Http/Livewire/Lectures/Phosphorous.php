@@ -572,9 +572,12 @@ class Phosphorous extends Component
         $samples = Presample::where('co',$this->co)
                             ->where('absorbance','>',0)
                             ->where('phosphorous','>',0)
+                            ->where('phosphorous','!=',null)
                             ->where('cod_carta', $this->codCart)
                             ->where('method', $this->methode)
                             ->get();
+
+                
         
         // element encontrar crear query o sacar de method
         // LdeD = buscar limite de deteccion de standart 
@@ -618,7 +621,11 @@ class Phosphorous extends Component
                     $MUESTRA         = $sample->name;            
                     $RESULTADOREAL   = number_format($sample->phosphorous,3, ",", ".");
                     $ELEMENTO        = $sample->element; 
-                    if ($grade <= $this->LdeD) {
+                    
+                    if($grade == null){
+                            $ley = null; 
+                            $Oculta = 1;
+                    }elseif ( $grade!= null and $grade <= $this->LdeD) {
                         $Ley= '<'.number_format($this->LdeD,3, ",", ".");           
                     }elseif($grade > $this->LdeD){
                         $Ley= number_format($grade ,3, ",", "."); 
@@ -704,7 +711,8 @@ class Phosphorous extends Component
                              
                             ]); 
 
-                
+                $ley = null; 
+                $Oculta = 0;
 
 
                 Presample::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
@@ -726,7 +734,10 @@ class Phosphorous extends Component
                     $MUESTRA         = $sample->name;            
                     $RESULTADOREAL   = number_format($sample->phosphorous,3, ",", ".");
                     $ELEMENTO        = $sample->element; 
-                    if ($grade <= $this->LdeD) {
+                    if($grade == null){
+                            $ley = null; 
+                            $Oculta = 1;
+                    }elseif ( $grade!= null and $grade <= $this->LdeD) {
                         $Ley= '<'.number_format($this->LdeD,3, ",", ".");           
                     }elseif($grade > $this->LdeD){
                         $Ley= number_format($grade ,3, ",", "."); 
@@ -813,7 +824,8 @@ class Phosphorous extends Component
                             ]); 
 
                 
-
+                $ley = null; 
+                $Oculta = 0;
 
                 Presample::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
             }
