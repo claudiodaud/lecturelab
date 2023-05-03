@@ -127,17 +127,17 @@
                                 @if(in_array("volumetries.parameters", $permissions))
                                 <div>
 
-                                    <div class="flex justify-start pr-4"> 
+                                    {{-- <div class="flex justify-start pr-4"> 
                                         <div class="h4 text-sm text-gray-500 mt-2 mr-4 w-16"><strong>{{ __('Title')}} :</strong>
                                             
                                         </div>
                                         <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32" placeholder="{{__('Insert value')}}" wire:model="title">
                                         
-                                        <span wire:click.prevent="saveTitle" class="rounded mx-1 rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Save')}}</span>
+                                        <div wire:click.prevent="saveTitle" class="rounded mx-1 rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Save')}}</div>
 
-                                        <span wire:click.prevent="applyTitle" class="rounded mx-1 rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Apply')}}</span>
+                                        <div wire:click.prevent="applyTitle" class="rounded mx-1 rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Apply')}}</div>
                                         
-                                    </div>                            
+                                    </div>     --}}                        
                                                         
                                 </div>
                                 @endif

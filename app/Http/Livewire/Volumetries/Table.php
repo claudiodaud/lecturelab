@@ -193,7 +193,11 @@ class Table extends Component
            $register->save();
           
            // realizar calculos sobre el titulante y calculo de la ley  
-           $register->grade = $register->title*$register->spent/$register->weight*100;
+            if ($register->weight == 0) {
+               $register->grade == 0; 
+            }else{
+               $register->grade = $register->title*$register->spent/$register->weight*100; 
+            }
            $register->save();
           
            $register->written_by = auth()->user()->id;
@@ -256,8 +260,12 @@ class Table extends Component
            $register->save();
           
            // realizar calculos sobre el titulante y calculo de la ley  
-           $register->grade = $register->title*$register->spent/$register->weight*100;
-        $register->save();
+            if ($register->weight == 0) {
+               $register->grade == 0; 
+            }else{
+               $register->grade = $register->title*$register->spent/$register->weight*100; 
+            }
+           $register->save();
           
            $register->written_by = auth()->user()->id;
            $register->save();
@@ -294,7 +302,12 @@ class Table extends Component
             $register->save();
           
             // realizar calculos sobre el titulante y calculo de la ley  
-            $register->grade = $register->title*$register->spent/$register->weight*100;
+            if ($register->weight == 0) {
+               $register->grade == 0; 
+            }else{
+               $register->grade = $register->title*$register->spent/$register->weight*100; 
+            }
+            
             $register->save();
           
             $register->written_by = auth()->user()->id;

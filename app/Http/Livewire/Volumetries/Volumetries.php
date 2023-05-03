@@ -2,10 +2,12 @@
 
 namespace App\Http\Livewire\Volumetries;
 
+use App\Exports\VolumetriesExport;
 use App\Models\Parameter;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Volumetry;
+use Carbon\Carbon;
 use DB;
 use Livewire\Component;
 
@@ -355,7 +357,7 @@ class Volumetries extends Component
         if ($this->methode != 0) {
 
             $standart = DB::connection('sqlsrv')->select('SELECT standart FROM standar_co WHERE co = ? and metodo = ?',[$this->co, $this->methode]);
-                $this->standart = $standart[0]->standart;
+                $this->standart = $standart[0]->standart ?? null;
 
             $LdeD = DB::connection('sqlsrv')->select('SELECT LdeD FROM anmuestra WHERE cod_control = ? and analisis = ?',[$this->codControl, $this->methode]);
                 $this->LdeD = $LdeD[0]->LdeD ?? null;
@@ -376,6 +378,277 @@ class Volumetries extends Component
         }   
 
     }
+
+    public function downloadSamples()
+    {
+       
+       return (new VolumetriesExport(['co' => $this->co], ['method' => $this->methode], ['quantity' => count($this->samples)]))
+       ->download('co-'.$this->co.'-cant-'.count($this->samples).'-method-'.$this->methode.'-'.Carbon::today().'.xlsx'); 
+       
+    }
+
+    public function showModalUpdate()
+    {
+        $this->showUpdateModal = true;
+    }
+
+
+    public function updateSampleToPlusManager()
+    {
+        // buscamos las muestras por los parametros establecidos y solo subiremos las que tengan ley filtrando por la insersion del parametro de absorbance y por el calculo de la ley de fosforo  
+        $samples = Volumetry::where('co',$this->co)                            
+                            ->where('cod_carta', $this->codCart)
+                            ->where('method', $this->methode)
+                            ->where('grade','!=',null)
+                            ->get();
+        
+        // element encontrar crear query o sacar de method
+        // LdeD = buscar limite de deteccion de standart 
+
+        // capturamos la fecha del disparador                     
+        $now = Carbon::now();  
+
+        //capturamos las variables que no cambiaran durante el update 
+        $CODCARTA        = $this->codCart;
+        $CO              = $this->co;    
+        $RESULTADO       = null;     
+        $METODO          = $this->methode;
+        $UNIDAD1         = '%';
+        $UNIDAD2         = '%';
+        $LdeD            = $this->LdeD;
+        $LEIDOPOR        = auth()->user()->name;
+        $FECHAHORA       = $now;        
+        $volumen         = null; 
+
+        //dd(number_format($this->LdeD,3));
+        
+        $provisorio      = 'SI';        
+        $Oculta          = 0;
+        $FechaCreacion   = $now;             
+
+        foreach($samples as $sample){
+            
+
+            $validate = DB::connection('sqlsrv')
+                        ->select('SELECT NUMERO FROM AAS400 WHERE CO = ? and METODO = ? and NUMERO = ?',
+                            [$this->co,$this->methode,$sample->number]);
+            if ($validate) {
+
+                //dd('aqui');
+                //variables dinamicas que dependen de la muestra
+                $grade = round($sample->grade,3); // two parameters is long of LdeD 
+                $writtenBy = User::where('id',$sample->written_by)->first('name');
+                    
+                //
+                    $NUMERO          = $sample->number;
+                    $MUESTRA         = $sample->name;            
+                    $RESULTADOREAL   = number_format($sample->grade,3, ",", ".");
+                    $ELEMENTO        = $sample->element; 
+                    if ($grade <= $this->LdeD) {
+                        $Ley= '<'.number_format($this->LdeD,3, ",", ".");           
+                    }elseif($grade > $this->LdeD){
+                        $Ley= number_format($grade ,3, ",", "."); 
+                    }           
+                               
+                    $peso            = $sample->weight;
+                    $dilucion        = null;
+
+                    if ($sample->name == 'STD') {
+                         $estandar = $this->standart;
+                    }else{
+                        $estandar = null;
+                    }           
+                    
+                    if ($writtenBy) {
+                        $modificadopor   = $writtenBy->name;                
+                    }else{
+                        $modificadopor   = null;
+                    }
+                
+                
+
+                // las actualizamos ;)
+                DB::connection('sqlsrv')->update('UPDATE AAS400 
+                            SET 
+                            CODCARTA        = ?, 
+                            CO              = ?,
+                            NUMERO          = ?,
+                            MUESTRA         = ?,
+                            RESULTADO       = ?,
+                            RESULTADOREAL   = ?,
+                            ELEMENTO        = ?, 
+                            METODO          = ?,
+                            UNIDAD1         = ?,
+                            UNIDAD2         = ?,
+                            LdeD            = ?,
+                            LEIDOPOR        = ?,
+                            FECHAHORA       = ?,
+                            Ley             = ?,
+                            volumen         = ?,
+                            peso            = ?,
+                            dilucion        = ?,
+                            estandar        = ?,
+                            provisorio      = ?,
+                            modificadopor   = ?,
+                            Oculta          = ?,
+                            FechaCreacion   = ?
+                            WHERE 
+                            CO = ? and 
+                            METODO = ? And  
+                            NUMERO = ? 
+                            '
+                            ,[
+                                
+                                $CODCARTA,
+                                $CO,
+                                $NUMERO,
+                                $MUESTRA,
+                                $RESULTADO,
+                                $RESULTADOREAL,
+                                $ELEMENTO, 
+                                $METODO,
+                                $UNIDAD1,
+                                $UNIDAD2,
+                                $LdeD,
+                                $LEIDOPOR,
+                                $FECHAHORA,
+                                $Ley,
+                                $volumen,
+                                $peso,
+                                $dilucion,
+                                $estandar,
+                                $provisorio,
+                                $modificadopor,
+                                $Oculta,
+                                $FechaCreacion,
+                                $CO,
+                                $METODO,
+                                $NUMERO,
+                                
+                                
+                                                    
+                             
+                            ]); 
+
+                
+
+
+                Volumetry::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
+
+            }else{
+       
+                 
+                //creamos las muestras ;)
+                DB::connection('sqlsrv')
+                ->insert('INSERT INTO AAS400 (CO,METODO,NUMERO) VALUES (?,?,?)',
+                    [$this->co,$this->methode,$sample->number]);
+
+                //variables dinamicas que dependen de la muestra
+                $grade = round($sample->grade,3); // two parameters is long of LdeD 
+                $writtenBy = User::where('id',$sample->written_by)->first('name');
+                    
+                //
+                    $NUMERO          = $sample->number;
+                    $MUESTRA         = $sample->name;            
+                    $RESULTADOREAL   = number_format($sample->grade,3, ",", ".");
+                    $ELEMENTO        = $sample->element; 
+                    if ($grade <= $this->LdeD) {
+                        $Ley= '<'.number_format($this->LdeD,3, ",", ".");           
+                    }elseif($grade > $this->LdeD){
+                        $Ley= number_format($grade ,3, ",", "."); 
+                    }         
+                               
+                    $peso            = $sample->weight;
+                    $dilucion        = null;
+
+                    if ($sample->name == 'STD') {
+                         $estandar = $this->standart;
+                    }else{
+                        $estandar = null;
+                    }           
+                    
+                    if ($writtenBy) {
+                        $modificadopor   = $writtenBy->name;                
+                    }else{
+                        $modificadopor   = null;
+                    }
+                
+                
+
+                // las actualizamos ;)
+                DB::connection('sqlsrv')->update('UPDATE AAS400 
+                            SET 
+                            CODCARTA        = ?, 
+                            CO              = ?,
+                            NUMERO          = ?,
+                            MUESTRA         = ?,
+                            RESULTADO       = ?,
+                            RESULTADOREAL   = ?,
+                            ELEMENTO        = ?, 
+                            METODO          = ?,
+                            UNIDAD1         = ?,
+                            UNIDAD2         = ?,
+                            LdeD            = ?,
+                            LEIDOPOR        = ?,
+                            FECHAHORA       = ?,
+                            Ley             = ?,
+                            volumen         = ?,
+                            peso            = ?,
+                            dilucion        = ?,
+                            estandar        = ?,
+                            provisorio      = ?,
+                            modificadopor   = ?,
+                            Oculta          = ?,
+                            FechaCreacion   = ?
+                            WHERE 
+                            CO = ? and 
+                            METODO = ? And  
+                            NUMERO = ? 
+                            '
+                            ,[
+                                
+                                $CODCARTA,
+                                $CO,
+                                $NUMERO,
+                                $MUESTRA,
+                                $RESULTADO,
+                                $RESULTADOREAL,
+                                $ELEMENTO, 
+                                $METODO,
+                                $UNIDAD1,
+                                $UNIDAD2,
+                                $LdeD,
+                                $LEIDOPOR,
+                                $FECHAHORA,
+                                $Ley,
+                                $volumen,
+                                $peso,
+                                $dilucion,
+                                $estandar,
+                                $provisorio,
+                                $modificadopor,
+                                $Oculta,
+                                $FechaCreacion,
+                                $CO,
+                                $METODO,
+                                $NUMERO,
+                                
+                                
+                                                    
+                             
+                            ]); 
+
+                
+
+
+                Volumetry::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
+            }
+        }
+            
+        $this->showUpdateModal = false;
+        $this->emit('updatedSamplesToPlusManager');
+    }
+    
 
 
 }
