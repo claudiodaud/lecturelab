@@ -33,6 +33,14 @@
                     </x-jet-nav-link>
                 </div>
                 @endif
+
+                @if(in_array("viewVolumetries", $permissions))
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{ route('volumetries') }}" :active="request()->routeIs('volumetries')">
+                        {{ __('Volumetries') }}
+                    </x-jet-nav-link>
+                </div>
+                @endif
                 
             </div>
 
@@ -186,11 +194,27 @@
                 {{ __('Dashboard') }}
             </x-jet-responsive-nav-link>
         </div>
+        @if(in_array("viewPhosphorous", $permissions))
         <div class="pt-2 pb-3 space-y-1">
             <x-jet-responsive-nav-link href="{{ route('phosphorous') }}" :active="request()->routeIs('phosphorous')">
                 {{ __('Phosphorous') }}
             </x-jet-responsive-nav-link>
         </div>
+        @endif
+        @if(in_array("viewIrons", $permissions))
+        <div class="pt-2 pb-3 space-y-1">
+            <x-jet-responsive-nav-link href="{{ route('irons') }}" :active="request()->routeIs('irons')">
+                {{ __('Irons') }}
+            </x-jet-responsive-nav-link>
+        </div>
+        @endif
+        @if(in_array("viewVolumetries", $permissions))
+        <div class="pt-2 pb-3 space-y-1">
+            <x-jet-responsive-nav-link href="{{ route('volumetries') }}" :active="request()->routeIs('volumetries')">
+                {{ __('Volumetries') }}
+            </x-jet-responsive-nav-link>
+        </div>
+        @endif
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">

@@ -20,7 +20,8 @@
         </svg>
         </div> 
     </div>    
-    <div class="my-10"></div>
+    <div class="my-10"></div>   
+      
 </div>
 
 
