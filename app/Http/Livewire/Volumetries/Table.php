@@ -274,11 +274,24 @@ class Table extends Component
            $this->getRegisters();
 
 
+
+
         }
 
         $this->titleField = null;
+
+        if (count($this->registers) > $this->keyIdTitle + 1) {
+            
+            $this->keyIdTitle = $this->keyIdTitle + 1;
+            $this->editTitle = true;
+            $this->dispatchBrowserEvent('title', ['key' => $this->keyIdTitle]);
+            
+            
+        }else{
+            $this->closeTitle(); 
+        }
          
-        $this->closeTitle();      
+             
 
     }
 

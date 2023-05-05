@@ -258,6 +258,11 @@
         
         document.getElementById('spent-'+ event.detail.key).focus();
     })
+
+    window.addEventListener('title', event => {
+        
+        document.getElementById('title-'+ event.detail.key).focus();
+    })
    
     // Funcion que se ejecuta cada vez que se pulsa una tecla en cualquier input
     // Tiene que recibir el "event" (evento generado) y el siguiente id donde poner
