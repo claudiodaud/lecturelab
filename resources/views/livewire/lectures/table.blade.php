@@ -55,9 +55,12 @@
                         @endif
                     
                     </th>
-                    <th scope="col" class="px-6 py-2 text-xs w-max rounded-tr-lg rounded-br-lg text-center">
+                    <th scope="col" class="px-6 py-2 text-xs w-max text-center">
                       {{ __('Comparative')}} <br>
                       {{ __('Phos >= Geo')}}
+                    </th>
+                    <th scope="col" class="px-6 py-2 text-xs w-max rounded-tr-lg rounded-br-lg">
+                      {{ __('Info')}}
                     </th>
                     
                   </tr>
@@ -255,6 +258,11 @@
                           <i class="fa-solid fa-square-xmark text-red-500"></i>
                       @endif
                       
+                    </td>
+                    <td scope="row" class="px-6 py-2 font-medium text-xs text text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max" style="font-size: 0.8em;">                     
+                      <div class="">{{ __('Written by: ')}}{{$register->writtenUser->name ?? ''}}</div>
+                      <div class="">{{ __('Upload by: ')}}{{$register->updatedUser->name ?? ''}}</div>
+
                     </td>
                     
 

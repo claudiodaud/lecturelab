@@ -26,9 +26,13 @@
                     <th scope="col" class="px-6 py-2 w-max ">
                       {{ __('Title')}}
                     </th>
-                    <th scope="col" class="px-6 py-2 w-max rounded-tr-lg rounded-br-lg">
+                    <th scope="col" class="px-6 py-2 w-max">
                       {{ __('Grade')}}
-                    </th>                   
+                    </th> 
+                    <th scope="col" class="px-6 py-2 text-xs w-max rounded-tr-lg rounded-br-lg">
+                      {{ __('Info')}}
+                    </th>  
+                                       
                     
                   </tr>
                 </thead>
@@ -43,9 +47,9 @@
                         </td>
                         <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">
                           @if($register->name == "STD")
-                            {{$register->name}} - {{$this->standart}}
+                            {{$register->name}} - {{$this->standart}} 
                           @else
-                            {{$register->name}}
+                            {{$register->name}} 
                           @endif
                         </td>
 
@@ -144,7 +148,13 @@
                         <td scope="row" class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max">                     
                            {{round($register->grade,3)}}
                         </td>
-                        
+
+                        <td scope="row" class="px-6 py-2 font-medium text-xs text text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max" style="font-size: 0.8em;">                     
+                          <div class="">{{ __('Written by: ')}}{{$register->writtenUser->name ?? ''}}</div>
+                          <div class="">{{ __('Upload by: ')}}{{$register->updatedUser->name ?? ''}}</div>
+
+                        </td>
+                    
                       </tr> 
                      
                       @endforeach
@@ -203,51 +213,40 @@
                   {{-- FILA 1 --}}
                   <tr class="flex justify-between text-center">
                     <td>
-                      <input type="text" name="" wire:model="weight1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" 
-                      
-                      placeholder="{{$weight1}}" value="{{$weight1}}" id="input1" onkeyup="saltar(event,'input2')">
+                      <input type="text" name="" wire:model="weight1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" id="input1" onkeyup="saltar(event,'input2')">
+                  
                     </td>
                     <td>
-                      <input type="text" name="" wire:model="vol1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" 
-                                            
-                      placeholder="{{$vol1}}" value="{{$vol1}}" id="input2" onkeyup="saltar(event,'input3')">
+                      <input type="text" name="" wire:model="vol1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" id="input2" onkeyup="saltar(event,'input3')">
+                 
                     </td>                    
                     <td>
-                      <input type="text" name="" wire:model="title1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus"
-                      id="input3" onkeyup="saltar(event,'input4')"
-                                           
-                      placeholder="{{$title1}}" value="{{$title1}}" >
+                      <input type="text" name="" wire:model="title1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" disabled readonly>
+                  
                     </td> 
                     <td>
-                      <input type="text" name="" wire:model="grade1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus"
-                                           
-                      placeholder="{{$grade1}}" value="{{$grade1}}" disabled readonly>
+                      <input type="text" name="" wire:model="grade1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" disabled readonly>
                     </td>                  
                   </tr>
                   {{-- @if ($weight1 and $vol1 and $grade1 and $title1) --}}
                   {{-- FILA 2 --}}
                   <tr class="flex justify-between">
                     <td>
-                       <input type="text" name="" wire:model="weight2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" 
-                                             
-                       placeholder="{{$weight2}}" value="{{$weight2}}" id="input4" onkeyup="saltar(event,'input5')">
+                       <input type="text" name="" wire:model="weight2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" id="input3" onkeyup="saltar(event,'input4')">
+                  
                     </td>
                     <td>
-                       <input type="text" name="" wire:model="vol2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" 
-                      
-                       placeholder="{{$vol2}}" value="{{$vol2}}" id="input5" onkeyup="saltar(event,'input6')">
+                       <input type="text" name="" wire:model="vol2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" id="input4" onkeyup="saltar(event,'input5')">
+                  
                     </td>
                     
                     <td>
-                       <input type="text" name="" wire:model="title2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus"
-                       id="input6" onkeyup="saltar(event,'input7')" 
-                         
-                       placeholder="{{$title2}}" value="{{$title2}}" >
+                       <input type="text" name="" wire:model="title2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" disabled readonly>
+                   
                     </td> 
                     <td>
-                       <input type="text" name="" wire:model="grade2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" 
-                         
-                       placeholder="{{$grade2}}" value="{{$grade2}}" disabled readonly >
+                       <input type="text" name="" wire:model="grade2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" disabled readonly >
+                   
                     </td>                  
                   </tr>
                   {{-- @endif
@@ -255,25 +254,21 @@
                   {{-- FILA 3 --}}
                    <tr class="flex justify-between">
                     <td>
-                       <input type="text" name="" wire:model="weight3" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" 
-                                            
-                       placeholder="{{$weight3}}" value="{{$weight3}}" id="input7" onkeyup="saltar(event,'input8')">
+                       <input type="text" name="" wire:model="weight3" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" id="input5" onkeyup="saltar(event,'input6')">
+                  
                     </td>
                     <td>
-                       <input type="text" name="" wire:model="vol3" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" 
-                       
-                       placeholder="{{$vol3}}" value="{{$vol3}}" id="input8" onkeyup="saltar(event,'input9')">
+                       <input type="text" name="" wire:model="vol3" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" id="input6" onkeyup="saltar(event,'input7')">
+                  
                     </td>
                     
                     <td>
-                       <input type="text" name="" wire:model="title3" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus"
-                       id="input9" onkeyup="saltar(event,'input10')" 
-                       placeholder="{{$title3}}" value="{{$title3}}" >
+                       <input type="text" name="" wire:model="title3" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" disabled readonly>
+                   
                     </td> 
                     <td>
-                       <input type="text" name="" wire:model="grade3" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" 
-                       
-                       placeholder="{{$grade3}}" value="{{$grade3}}" disabled readonly>
+                       <input type="text" name="" wire:model="grade3" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" disabled readonly>
+                  
                     </td>                  
                   </tr>
                   {{-- @endif
@@ -281,26 +276,21 @@
                   {{-- FILA 4 --}}
                    <tr class="flex justify-between">
                     <td>
-                       <input type="text" name="" wire:model="weight4" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" 
-                      
-                       placeholder="{{$weight4}}" value="{{$weight4}}" id="input10" onkeyup="saltar(event,'input11')">
+                       <input type="text" name="" wire:model="weight4" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" id="input7" onkeyup="saltar(event,'input8')">
+                   
                     </td>
                     <td>
-                       <input type="text" name="" wire:model="vol4" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" 
-                      
-                       placeholder="{{$vol4}}" value="{{$vol4}}" id="input11" onkeyup="saltar(event,'input12')">
+                       <input type="text" name="" wire:model="vol4" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" id="input8" onkeyup="saltar(event,'input9')">
+                    
                     </td>
                     
                     <td>
-                       <input type="text" name="" wire:model="title4" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus"
-                       id="input12" onkeyup="saltar(event,'input13')" 
-                       
-                       placeholder="{{$title4}}" value="{{$title4}}" >
+                       <input type="text" name="" wire:model="title4" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" disabled readonly>
+                 
                     </td>
                     <td>
-                       <input type="text" name="" wire:model="grade4" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" 
-                       
-                       placeholder="{{$grade4}}" value="{{$grade4}}" disabled readonly>
+                       <input type="text" name="" wire:model="grade4" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" disabled readonly>
+                  
                     </td>                   
                   </tr>
                  {{--  @endif
@@ -308,26 +298,22 @@
                   {{-- FILA 5 --}}
                    <tr class="flex justify-between">
                     <td>
-                       <input type="text" name="" wire:model="weight5" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" 
-                       
-                       placeholder="{{$weight5}}" value="{{$weight5}}" id="input13" onkeyup="saltar(event,'input14')">
+                       <input type="text" name="" wire:model="weight5" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" id="input9" onkeyup="saltar(event,'input10')">
+                 
                     </td>
                     <td>
-                       <input type="text" name="" wire:model="vol5" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" 
-                        
-                       placeholder="{{$vol5}}" value="{{$vol5}}" id="input14" onkeyup="saltar(event,'input15')">
+                       <input type="text" name="" wire:model="vol5" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" id="input10" onkeyup="saltar(event,'input11')">
+                  
                     </td>
                     
                     <td>
-                       <input type="text" name="" wire:model="title5" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus"
-                       
-                       
-                       placeholder="{{$title5}}" value="{{$title5}}" id="input15" onkeyup="saltar(event,'input20')" >
+                       <input type="text" name="" wire:model="title5" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" disabled readonly>
+             
                     </td> 
                     <td>
-                       <input type="text" name="" wire:model="grade5" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" 
+                       <input type="text" name="" wire:model="grade5" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" disabled readonly>
                        
-                       placeholder="{{$grade5}}" value="{{$grade5}}" disabled readonly>
+                      
                     </td>                  
                   </tr>
                   {{-- @endif
@@ -335,26 +321,21 @@
                   {{-- FILA 6 --}}
                    <tr class="flex justify-between">
                     <td>
-                       <input type="text" name=""  wire:model="weight6" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" 
-                       
-                       placeholder="{{$weight6}}" value="{{$weight6}}" id="input20" onkeyup="saltar(event,'input21')">
+                       <input type="text" name=""  wire:model="weight6" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" id="input11" onkeyup="saltar(event,'input12')">                
+                        
                     </td>
                     <td>
-                       <input type="text" name="" wire:model="vol6" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" 
+                       <input type="text" name="" wire:model="vol6" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" id="input12" onkeyup="saltar(event,'input1')">                 
                        
-                       placeholder="{{$vol6}}" value="{{$vol6}}" id="input21" onkeyup="saltar(event,'input22')">
                     </td>
                     
                     <td>
-                       <input type="text" name="" wire:model="title6" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" 
-                       id="input22" onkeyup="saltar(event,'input1')"
-                       
-                       placeholder="{{$title6}}" value="{{$title6}}" >
+                       <input type="text" name="" wire:model="title6" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" disabled readonly>             
+           
                     </td>
                     <td>
-                       <input type="text" name="" wire:model="grade6" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" 
+                       <input type="text" name="" wire:model="grade6" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" disabled readonly>                       
                        
-                       placeholder="{{$grade6}}" value="{{$grade6}}" disabled readonly>
                     </td>                   
                   </tr>
                   {{-- @endif --}}
@@ -372,17 +353,17 @@
                     
                    <tr class="flex justify-between border-gray-300 border-solid border-t-2">
                     <td>
-                       <input type="text" name="" wire:model="weightX" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" placeholder="{{$weightX}}" value="{{$weightX}}" disabled readonly>
+                       <input type="text" name="" wire:model="weightX" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" disabled readonly>
                     </td>
                     <td>
-                       <input type="text" name="" wire:model="volX" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" placeholder="{{$volX}}" value="{{$volX}}" disabled readonly>
+                       <input type="text" name="" wire:model="volX" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" disabled readonly>
                     </td>
                     
                     <td>
-                       <input type="text" name="" wire:model="titleX" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" placeholder="{{$titleX}}" value="{{$titleX}}" disabled readonly>
+                       <input type="text" name="" wire:model="titleX" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" disabled readonly>
                     </td>
                     <td>
-                       <input type="text" name="" wire:model="gradeX" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" placeholder="{{$gradeX}}" value="{{$gradeX}}" disabled readonly>
+                       <input type="text" name="" wire:model="gradeX" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32 focus autofocus" disabled readonly>
                     </td>                   
                   </tr>
 

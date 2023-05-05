@@ -149,9 +149,10 @@ class Table extends Component
         
         if ($this->coControl != null and $this->co != null and $this->coControl == strval($this->co) and $this->methode != null and $this->codCart != null) {
                  
-            $this->registers = DB::table('volumetries')->where('co', $this->co)
+            $this->registers = Volumetry::where('co', $this->co)
                                                     ->where('cod_carta', $this->codCart)
                                                     ->where('method', $this->methode)
+                                                    ->with('writtenUser','updatedUser')
                                                     ->orderBy('number', 'ASC')->get();
         }else{
             
@@ -397,20 +398,28 @@ class Table extends Component
         // =+((weightX*62,86)/volX)/100              //
         //////////////////////////////////////////////
 
-        if ($this->weight1 and $this->vol1 and $this->title1) {
+        if ($this->weight1 and $this->vol1 ) {
             
-            $this->grade1 = $this->vol1 / $this->weight1 * $this->title1 * 100;
+            
 
-            $this->weightX = $this->weight1;
-            $this->volX = $this->vol1;
-            $this->gradeX = $this->grade1;
-            $this->titleX = $this->title1;
+            $this->weightX = round($this->weight1,7);
+            $this->volX = round($this->vol1,7);
+            $this->titleCalculated = round(+(($this->weightX*$this->titling)/$this->volX)/100,7);
+            $this->title1 = round($this->titleCalculated,7);
+            $this->grade1 = round($this->vol1 / $this->weight1 * $this->title1 * 100,7);
 
-            $this->titleCalculated = +(($this->weightX*$this->titling)/$this->volX)/100;
+            
+            $this->gradeX = round($this->grade1,7);
+            $this->titleX = round($this->title1,7);
+
+            
+
+            
 
         }else{
 
              $this->grade1 = null;
+             $this->title1 = null;
 
              $this->weight2 = null;
              $this->vol2 = null;
@@ -439,20 +448,29 @@ class Table extends Component
 
         }
 
-        if ($this->weight2 and $this->vol2 and $this->title2) {
+        if ($this->weight2 and $this->vol2) {
             
-            $this->grade2 = $this->vol2 / $this->weight2 * $this->title2 * 100;
+            
+            $this->weightX   = round(($this->weight1 + $this->weight2)/2,7);
+            $this->volX     = round(($this->vol1 + $this->vol2)/2,7);
+            $this->titleCalculated = round(+(($this->weightX*$this->titling)/$this->volX)/100,7);
+            $this->title1 = round($this->titleCalculated,7);
+            $this->title2 = round($this->titleCalculated,7);
+            $this->grade2 = round($this->vol2 / $this->weight2 * $this->title2 * 100,7);
 
-            $this->weightX   = ($this->weight1 + $this->weight2)/2;
-            $this->volX     = ($this->vol1 + $this->vol2)/2;
-            $this->gradeX   = ($this->grade1 + $this->grade2)/2;
-            $this->titleX   = ($this->title1 + $this->title2)/2;
+            
 
-            $this->titleCalculated = +(($this->weightX*$this->titling)/$this->volX)/100;
+            
+            $this->gradeX   = round(($this->grade1 + $this->grade2)/2,7);
+            $this->titleX   = round(($this->title1 + $this->title2)/2,7);
+
+            
+            
 
         }else{
              
              $this->grade2 = null;
+             $this->title2 = null;
 
              $this->weight3 = null;
              $this->vol3 = null;
@@ -476,20 +494,28 @@ class Table extends Component
 
         }
 
-        if ($this->weight3 and $this->vol3 and $this->title3) {
-            
-            $this->grade3 = $this->vol3 / $this->weight3 * $this->title3 * 100;
-            
-            $this->weightX   = ($this->weight1 + $this->weight2 + $this->weight3)/3;
-            $this->volX     = ($this->vol1 + $this->vol2 + $this->vol3)/3;
-            $this->gradeX   = ($this->grade1 + $this->grade2 + $this->grade3)/3;
-            $this->titleX   = ($this->title1 + $this->title2 + $this->title3)/3;
+        if ($this->weight3 and $this->vol3) {
 
-            $this->titleCalculated = +(($this->weightX*$this->titling)/$this->volX)/100;
+            $this->weightX   = round(($this->weight1 + $this->weight2 + $this->weight3)/3,7);
+            $this->volX     = round(($this->vol1 + $this->vol2 + $this->vol3)/3,7);
+            $this->titleCalculated = round(+(($this->weightX*$this->titling)/$this->volX)/100,7);
+            $this->title1 = round($this->titleCalculated,7);
+            $this->title2 = round($this->titleCalculated,7);
+            $this->title3 = round($this->titleCalculated,7);
+            $this->grade3 = round($this->vol3 / $this->weight3 * $this->title3 * 100,7);
+            
+            
+            
+            $this->gradeX   = round(($this->grade1 + $this->grade2 + $this->grade3)/3,7);
+            $this->titleX   = round(($this->title1 + $this->title2 + $this->title3)/3,7);
+
+            
+           
 
         }else{
 
              $this->grade3 = null;
+             $this->title3 = null;
 
              $this->weight4 = null;
              $this->vol4 = null;
@@ -508,20 +534,28 @@ class Table extends Component
 
         }
 
-        if ($this->weight4 and $this->vol4 and $this->title4) {
+        if ($this->weight4 and $this->vol4) {
 
-            $this->grade4 = $this->vol4 / $this->weight4 * $this->title4 * 100;
+            $this->weightX   = round(($this->weight1 + $this->weight2 + $this->weight3 + $this->weight4)/4,7);
+            $this->volX     = round(($this->vol1 + $this->vol2 + $this->vol3 + $this->vol4)/4,7);
+            $this->titleCalculated = round(+(($this->weightX*$this->titling)/$this->volX)/100,7);
+            $this->title1 = round($this->titleCalculated,7);
+            $this->title2 = round($this->titleCalculated,7);
+            $this->title3 = round($this->titleCalculated,7);
+            $this->title4 = round($this->titleCalculated,7);
+            $this->grade4 = round($this->vol4 / $this->weight4 * $this->title4 * 100,7);
             
-            $this->weightX   = ($this->weight1 + $this->weight2 + $this->weight3 + $this->weight4)/4;
-            $this->volX     = ($this->vol1 + $this->vol2 + $this->vol3 + $this->vol4)/4;
-            $this->gradeX   = ($this->grade1 + $this->grade2 + $this->grade3 + $this->grade4)/4;
-            $this->titleX   = ($this->title1 + $this->title2 + $this->title3 + $this->title4)/4;
+            
+            $this->gradeX   = round(($this->grade1 + $this->grade2 + $this->grade3 + $this->grade4)/4,7);
+            $this->titleX   = round(($this->title1 + $this->title2 + $this->title3 + $this->title4)/4,7);
 
-            $this->titleCalculated = +(($this->weightX*$this->titling)/$this->volX)/100;
+            
+            
 
         }else{
 
              $this->grade4 = null;
+             $this->title4 = null;
 
              $this->weight5 = null;
              $this->vol5 = null;
@@ -535,20 +569,28 @@ class Table extends Component
 
         }
 
-        if ($this->weight5 and $this->vol5 and $this->title5) {
+        if ($this->weight5 and $this->vol5) {
 
-            $this->grade5 = $this->vol5 / $this->weight5 * $this->title5 * 100;
+            $this->weightX   = round(($this->weight1 + $this->weight2 + $this->weight3 + $this->weight4 + $this->weight5)/5,7);
+            $this->volX     = round(($this->vol1   + $this->vol2   + $this->vol3   + $this->vol4 + $this->vol5)/5,7);
+            $this->titleCalculated = round(+(($this->weightX*$this->titling)/$this->volX)/100,7);
+            $this->title1 = round($this->titleCalculated,7);
+            $this->title2 = round($this->titleCalculated,7);
+            $this->title3 = round($this->titleCalculated,7);
+            $this->title4 = round($this->titleCalculated,7);
+            $this->title5 = round($this->titleCalculated,7);
+            $this->grade5 = round($this->vol5 / $this->weight5 * $this->title5 * 100,7);
             
-            $this->weightX   = ($this->weight1 + $this->weight2 + $this->weight3 + $this->weight4 + $this->weight5)/5;
-            $this->volX     = ($this->vol1   + $this->vol2   + $this->vol3   + $this->vol4 + $this->vol5)/5;
-            $this->gradeX   = ($this->grade1 + $this->grade2 + $this->grade3 + $this->grade4 + $this->grade5)/5;
-            $this->titleX   = ($this->title1 + $this->title2 + $this->title3 + $this->title4 + $this->title5)/5;
+            
+            $this->gradeX   = round(($this->grade1 + $this->grade2 + $this->grade3 + $this->grade4 + $this->grade5)/5,7);
+            $this->titleX   = round(($this->title1 + $this->title2 + $this->title3 + $this->title4 + $this->title5)/5,7);
+        
 
-            $this->titleCalculated = +(($this->weightX*$this->titling)/$this->volX)/100;
-
+            
         }else{
 
              $this->grade5 = null;
+             $this->title5 = null;
 
              $this->weight6 = null;
              $this->vol6 = null;
@@ -557,21 +599,30 @@ class Table extends Component
 
         }
 
-        if ($this->weight6 and $this->vol6 and $this->title6) {
+        if ($this->weight6 and $this->vol6) {
 
-            $this->grade6 = $this->vol6 / $this->weight6 * $this->title6 * 100;
+            $this->weightX   = round(($this->weight1 + $this->weight2 + $this->weight3 + $this->weight4 + $this->weight5 + $this->weight6)/6,7);
+            $this->volX     = round(($this->vol1   + $this->vol2   + $this->vol3   + $this->vol4   + $this->vol5   + $this->vol6)/6,7);
+            $this->titleCalculated = round(+(($this->weightX*$this->titling)/$this->volX)/100,7);
+            $this->title1 = round($this->titleCalculated,7);
+            $this->title2 = round($this->titleCalculated,7);
+            $this->title3 = round($this->titleCalculated,7);
+            $this->title4 = round($this->titleCalculated,7);
+            $this->title5 = round($this->titleCalculated,7);
+            $this->title6 = round($this->titleCalculated,7);
+            $this->grade6 = round($this->vol6 / $this->weight6 * $this->title6 * 100,7);
             
-            $this->weightX   = ($this->weight1 + $this->weight2 + $this->weight3 + $this->weight4 + $this->weight5 + $this->weight6)/6;
-            $this->volX     = ($this->vol1   + $this->vol2   + $this->vol3   + $this->vol4   + $this->vol5   + $this->vol6)/6;
-            $this->gradeX   = ($this->grade1 + $this->grade2 + $this->grade3 + $this->grade4 + $this->grade5 + $this->grade6)/6;
-            $this->titleX   = ($this->title1 + $this->title2 + $this->title3 + $this->title4 + $this->title5 + $this->title6)/6;
+            
+            $this->gradeX   = round(($this->grade1 + $this->grade2 + $this->grade3 + $this->grade4 + $this->grade5 + $this->grade6)/6,7);
+            $this->titleX   = round(($this->title1 + $this->title2 + $this->title3 + $this->title4 + $this->title5 + $this->title6)/6,7);
 
-            $this->titleCalculated = +(($this->weightX*$this->titling)/$this->volX)/100;
+            
 
         }else{
 
             
              $this->grade6 = null;
+             $this->title6 = null;
 
         }
 

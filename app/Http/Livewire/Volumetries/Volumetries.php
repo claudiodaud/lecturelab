@@ -153,7 +153,7 @@ class Volumetries extends Component
     public function getMethods()
     {
         if ($this->codCart != null) {
-            $query = "SELECT GEO, ELEMENTO FROM METODOSGEO WHERE CODCARTA = $this->codCart";
+            $query = "SELECT GEO, ELEMENTO FROM METODOSGEO WHERE CODCARTA = $this->codCart and ELEMENTO LIKE '%vol%'";
             $this->methods = DB::connection('sqlsrv')->select($query);
 
            
@@ -647,6 +647,14 @@ class Volumetries extends Component
             
         $this->showUpdateModal = false;
         $this->emit('updatedSamplesToPlusManager');
+        $this->emit('change_params',[
+                    'co' => $this->co,
+                    'coControl' => $this->coControl,
+                    'methode' => $this->methode,
+                    'codCart' => $this->codCart,
+                    'standart' => $this->standart,
+                    'title' => $this->title,
+                    ]);
     }
     
 

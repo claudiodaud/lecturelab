@@ -833,6 +833,15 @@ class Phosphorous extends Component
             
         $this->showUpdateModal = false;
         $this->emit('updatedSamplesToPlusManager');
+
+        $this->emit('change_params',[
+                'co' => $this->co,
+                'coControl' => $this->coControl,
+                'methode' => $this->methode,
+                'codCart' => $this->codCart, 
+                'standart' => $this->standart
+            ]);
+
     }
     
     
