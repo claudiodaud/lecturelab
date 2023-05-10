@@ -623,14 +623,15 @@ class Phosphorous extends Component
                     $ELEMENTO        = $sample->element; 
                     
                     if($grade == null){
-                            $ley = null; 
+                            $Ley = null; 
                             $Oculta = 1;
                     }elseif ( $grade!= null and $grade <= $this->LdeD) {
-                        $Ley= '<'.number_format($this->LdeD,3, ",", ".");           
+                        $Ley = '<'.number_format($this->LdeD,3, ",", ".");           
                     }elseif($grade > $this->LdeD){
-                        $Ley= number_format($grade ,3, ",", "."); 
-                    }           
-                               
+                        $Ley = number_format($grade ,3, ",", "."); 
+                    }   
+                    
+                                               
                     $peso            = $sample->weight;
                     $dilucion        = $sample->dilution_factor;
 
@@ -711,7 +712,7 @@ class Phosphorous extends Component
                              
                             ]); 
 
-                $ley = null; 
+                $Ley = null; 
                 $Oculta = 0;
 
 
@@ -735,13 +736,14 @@ class Phosphorous extends Component
                     $RESULTADOREAL   = number_format($sample->phosphorous,3, ",", ".");
                     $ELEMENTO        = $sample->element; 
                     if($grade == null){
-                            $ley = null; 
+                            $Ley = null; 
                             $Oculta = 1;
                     }elseif ( $grade!= null and $grade <= $this->LdeD) {
-                        $Ley= '<'.number_format($this->LdeD,3, ",", ".");           
+                        $Ley = '<'.number_format($this->LdeD,3, ",", ".");           
                     }elseif($grade > $this->LdeD){
-                        $Ley= number_format($grade ,3, ",", "."); 
-                    }         
+                        $Ley = number_format($grade ,3, ",", "."); 
+                    }   
+                         
                                
                     $peso            = $sample->weight;
                     $dilucion        = $sample->dilution_factor;
@@ -824,7 +826,7 @@ class Phosphorous extends Component
                             ]); 
 
                 
-                $ley = null; 
+                $Ley = null; 
                 $Oculta = 0;
 
                 Presample::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
