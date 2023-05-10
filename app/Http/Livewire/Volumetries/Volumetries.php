@@ -399,6 +399,7 @@ class Volumetries extends Component
         $samples = Volumetry::where('co',$this->co)                            
                             ->where('cod_carta', $this->codCart)
                             ->where('method', $this->methode)
+                            ->where('grade','>=',0)
                             ->where('grade','!=',null)
                             ->get();
         
