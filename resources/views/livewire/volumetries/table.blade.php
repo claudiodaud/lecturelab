@@ -150,8 +150,8 @@
                         </td>
 
                         <td scope="row" class="px-6 py-2 font-medium text-xs text text-gray-900 dark:text-white whitespace-nowrap truncate ... w-max" style="font-size: 0.8em;">                     
-                          <div class="">{{ __('Written by: ')}}{{$register->writtenUser->name ?? ''}}</div>
-                          <div class="">{{ __('Upload by: ')}}{{$register->updatedUser->name ?? ''}}</div>
+                          <div class="">{{ __('Written by')}}: {{$register->writtenUser->name ?? ''}}</div>
+                          <div class="">{{ __('Upload by')}}: {{$register->updatedUser->name ?? ''}}</div>
 
                         </td>
                     
@@ -194,7 +194,7 @@
                 <thead>
                   <tr class="flex justify-between">
                     <th class="w-32 text-left">
-                       {{__('Weith')}}
+                       {{__('Weigth')}}
                     </th>
                     <th class="w-32 text-left">
                        {{__('Volume')}}

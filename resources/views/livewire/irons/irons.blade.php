@@ -192,7 +192,7 @@
               {{--Flash Messages--}}
               <x-jet-action-message class="pb-6" on="deleted">{{-- pendiente para deleted--}}
                 <div class="text-xl font-normal  max-w-full flex-initial bg-red-100 p-4 my-4 rounded-lg border border-red-800 flex justify-start">
-                  <div class="text-sm font-base px-4 text-red-800 ">{{ __('Company register successfull deleted') }}</div>  
+                  <div class="text-sm font-base px-4 text-red-800 ">{{ __('Register successfull deleted') }}</div>  
                 </div>        
               </x-jet-action-message> 
 
@@ -204,7 +204,7 @@
 
               <x-jet-action-message class="pb-6" on="updatedSamplesToPlusManager">
                 <div class="text-xl font-normal  max-w-full flex-initial bg-blue-100 p-4 my-4 rounded-lg border border-blue-800 flex justify-start">
-                  <div class="text-sm font-base px-4 text-blue-900 ">{{ __('Company register successfull restored') }}</div>  
+                  <div class="text-sm font-base px-4 text-blue-900 ">{{ __('Register successfull restored') }}</div>  
                 </div>        
               </x-jet-action-message> 
 

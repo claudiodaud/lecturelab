@@ -9,8 +9,7 @@
 
     <div class="mt-6 text-gray-500">
 
-        {{ __('Lecture-lab provides a beautiful and solid starting point to insert your chemical analyses, Lecture-lab is designed to help you easily calculate the results of analyzed samples using a development environment that is simple, powerful and friendly.
-            ')}}
+        {{ __('Lecture-lab provides a beautiful and solid starting point to insert your chemical analyses, Lecture-lab is designed to help you easily calculate the results of analyzed samples using a development environment that is simple, powerful and friendly.')}}
             <br> 
         <div class="flex    ">      
         <h6>{{ __('We hope you like.')}}</h6>
