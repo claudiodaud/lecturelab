@@ -126,10 +126,10 @@ class Phosphorous extends Component
             // limpiar las variables de kei alicuota y edit alicuota 
         
             $standart = DB::connection('sqlsrv')->select('SELECT standart FROM standar_co WHERE co = ? and metodo = ?',[$this->co, $this->methode]);
-            $this->standart = $standart[0]->standart;
+            $this->standart = $standart[0]->standart ?? null;
 
             $LdeD = DB::connection('sqlsrv')->select('SELECT LdeD FROM anmuestra WHERE cod_control = ? and analisis = ?',[$this->codControl, $this->methode]);
-            $this->LdeD = $LdeD[0]->LdeD;
+            $this->LdeD = $LdeD[0]->LdeD ?? null;
 
             $this->emit('change_params',[
                 'co' => $this->co,
