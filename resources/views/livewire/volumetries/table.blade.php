@@ -413,6 +413,75 @@
               {{ __('Cancel') }}
           </x-jet-secondary-button>
 
+          <x-jet-secondary-button wire:click="showFindTitleModal()" wire:loading.attr="disabled">
+              {{ __('Find Titles') }}
+          </x-jet-secondary-button>
+
+          <x-jet-danger-button class="ml-3" wire:click="updateCalculate({{$idModal}})" wire:loading.attr="disabled">
+              {{ __('Update Title') }}
+          </x-jet-danger-button>
+          
+      </x-slot>
+  </x-jet-dialog-modal> 
+
+  <!-- --------------------------------------------------- -->
+
+  <!-- Confirmacion Update Modal -->
+  <x-jet-dialog-modal wire:model="findTitleModal" :maxWidth="'xl'"> 
+      <x-slot name="title">
+          <div class="flex justify-between my-4">
+            {{ __('Titles')}} 
+          </div>
+      </x-slot>
+
+      <x-slot name="content"> 
+
+            <div class="flex justify-around">
+
+                   <table>
+                     <thead>
+                      <tr>
+                       <th>{{ __('Sample Id')}}</th>
+                       <th>{{ __('Sample Name')}}</th>
+                       <th>{{ __('Co')}}</th>
+                       <th>{{ __('Method')}}</th>
+                       <th>{{ __('Element')}}</th>
+                       <th>{{ __('Title')}}</th>
+                       <th>{{ __('Create at')}}</th>
+                       <th>{{ __('Created By')}}</th>
+                      </tr>
+                     </thead>
+                     <tbody>
+                      @if ($this->titles)
+                        
+                        @foreach($this->titles as $title)
+                          <tr>
+                           <td>{{ $title->volumetry_id }}</td>
+                           <td>{{ $title->sample_name }}</td>
+                           <td>{{ $title->co }}</td>
+                           <td>{{ $title->method }}</td>
+                           <td>{{ $title->element }}</td>
+                           <td>{{ $title->titleX }}</td>
+                           <td>{{ $title->user->name }}</td>
+                           <td>{{ $title->created_at }}</td>
+                          </tr> 
+                        @endforeach  
+
+                      @endif
+                     </tbody>
+                     <tfoot>
+                       
+                     </tfoot>
+                   </table>
+            </div>
+         
+      </x-slot>
+
+      <x-slot name="footer">
+          <x-jet-secondary-button wire:click="$toggle('findTitleModal')" wire:loading.attr="disabled">
+              {{ __('Cancel') }}
+          </x-jet-secondary-button>
+
           <x-jet-danger-button class="ml-3" wire:click="updateCalculate({{$idModal}})" wire:loading.attr="disabled">
               {{ __('Update Title') }}
           </x-jet-danger-button>

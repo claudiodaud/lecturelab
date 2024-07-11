@@ -31,7 +31,7 @@ class Irons extends Component
     //modal
     public $showUpdateModal;
 
-
+    Public $close = false;
 
 
     
@@ -109,10 +109,11 @@ class Irons extends Component
 
                 //si el codControl es igual co buscamos la carta 
                 if ($this->coControl == strval($this->co)) {
-                    $query = "SELECT CODCARTA FROM CARTA WHERE COD_CONTROL = $this->codControl";
+                    $query = "SELECT CODCARTA, CERRADA FROM CARTA WHERE COD_CONTROL = $this->codControl";
                     $this->cart = DB::connection('sqlsrv')->select($query);
                     if ($this->cart) {
                         $this->codCart = $this->cart[0]->CODCARTA;
+                        $this->close = $this->cart[0]->CERRADA;
 
                         $query = "SELECT GEO FROM METODOSGEO WHERE CODCARTA = $this->codCart and GEO = 'GEO-644' and ELEMENTO = 'Fe'";
                             $geo = DB::connection('sqlsrv')->select($query);
@@ -204,6 +205,7 @@ class Irons extends Component
         $this->methode = null;
         $this->LdeD615 = null;
         $this->LdeD618 = null;
+        $this->close = false; 
         }
           
     }

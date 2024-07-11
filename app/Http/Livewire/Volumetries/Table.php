@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Volumetries;
 
 use App\Models\Role;
+use App\Models\Title;
 use App\Models\User;
 use App\Models\Volumetry;
 use DB;
@@ -12,6 +13,7 @@ class Table extends Component
 {
 
     public $registers;
+    public $register;
     public $co;
     public $coControl;
     public $codCart;
@@ -31,7 +33,10 @@ class Table extends Component
  
     // Modal VARs //////////////////////////////////////////
     public $calculateModal = false; //open and close modal
+    public $findTitleModal = false;
     public $idModal;
+    public $sample_name;
+
 
     public $weight1;
     public $weight2;
@@ -65,6 +70,8 @@ class Table extends Component
     public $volX;
     public $gradeX;
     public $titleX;
+
+    // titles vars
 
     ////////////////////////////////////////////////////////
 
@@ -339,7 +346,7 @@ class Table extends Component
     public function calculateTitle($id)
     {
        $this->idModal = $id;
-       
+       $this->register = Volumetry::find($id);
        $this->calculateModal = true;
 
     }
@@ -393,7 +400,9 @@ class Table extends Component
         $this->weightX   = null;
         $this->volX     = null;
         $this->gradeX   = null;
-        $this->titleX   = null;        
+        $this->titleX   = null;  
+
+        // AQUI GUARDAR LA INFORMACION DEL CALCULO DEL TITULO MODELO TITULO      
         
         
 
@@ -406,6 +415,7 @@ class Table extends Component
 
     public function calculate()
     {
+
         //////////////////////////////////////////////
         // FOMRULA PARA EL CALCULO DE NUEVO TITULO  //
         // =+((weightX*62,86)/volX)/100              //
@@ -425,7 +435,8 @@ class Table extends Component
             $this->gradeX = round($this->grade1,7);
             $this->titleX = round($this->title1,7);
 
-            
+            // // Create Title 
+            // $this->createTitle();
 
             
 
@@ -477,7 +488,8 @@ class Table extends Component
             $this->gradeX   = round(($this->grade1 + $this->grade2)/2,7);
             $this->titleX   = round(($this->title1 + $this->title2)/2,7);
 
-            
+            // // Create Title 
+            // $this->createTitle();
             
 
         }else{
@@ -522,7 +534,8 @@ class Table extends Component
             $this->gradeX   = round(($this->grade1 + $this->grade2 + $this->grade3)/3,7);
             $this->titleX   = round(($this->title1 + $this->title2 + $this->title3)/3,7);
 
-            
+            // // Create Title 
+            // $this->createTitle();
            
 
         }else{
@@ -562,7 +575,8 @@ class Table extends Component
             $this->gradeX   = round(($this->grade1 + $this->grade2 + $this->grade3 + $this->grade4)/4,7);
             $this->titleX   = round(($this->title1 + $this->title2 + $this->title3 + $this->title4)/4,7);
 
-            
+            // // Create Title 
+            // $this->createTitle();
             
 
         }else{
@@ -598,7 +612,8 @@ class Table extends Component
             $this->gradeX   = round(($this->grade1 + $this->grade2 + $this->grade3 + $this->grade4 + $this->grade5)/5,7);
             $this->titleX   = round(($this->title1 + $this->title2 + $this->title3 + $this->title4 + $this->title5)/5,7);
         
-
+            // // Create Title 
+            // $this->createTitle();
             
         }else{
 
@@ -629,7 +644,8 @@ class Table extends Component
             $this->gradeX   = round(($this->grade1 + $this->grade2 + $this->grade3 + $this->grade4 + $this->grade5 + $this->grade6)/6,7);
             $this->titleX   = round(($this->title1 + $this->title2 + $this->title3 + $this->title4 + $this->title5 + $this->title6)/6,7);
 
-            
+            // // Create Title 
+            // $this->createTitle();
 
         }else{
 
@@ -639,7 +655,70 @@ class Table extends Component
 
         }
 
+        // Create Title 
+        $this->createTitle();
+
     }
 
+    public function createTitle()
+    {
+        // dd($this->titleX);
+        // SAVE VARS //////////////////////////////////////////////////////////////////////////////////////////// 
+        Title::create([
+            'volumetry_id' => $this->register->id,
+            'sample_name' => $this->register->name,
+            'method' => $this->register->method,
+            'element' => $this->register->element,
+            'co' => $this->register->co,
+            'cart' => $this->codCart,
+            'weight1' => $this->weight1,
+            'weight2' => $this->weight2,
+            'weight3' => $this->weight3,
+            'weight4' => $this->weight4,
+            'weight5' => $this->weight5,
+            'weight6' => $this->weight6,
+            'vol1' => $this->vol1,
+            'vol2' => $this->vol2,
+            'vol3' => $this->vol3,
+            'vol4' => $this->vol4,
+            'vol5' => $this->vol5,
+            'vol6' => $this->vol6,
+            'grade1' => $this->grade1,
+            'grade2' => $this->grade2,
+            'grade3' => $this->grade3,
+            'grade4' => $this->grade4,
+            'grade5' => $this->grade5,
+            'grade6' => $this->grade6,
+            'title1' => $this->title1,
+            'title2' => $this->title2,
+            'title3' => $this->title3,
+            'title4' => $this->title4,
+            'title5' => $this->title5,
+            'title6' => $this->title6,
+            'title' => $this->title,
+            'titling' => $this->titling,
+            'titleCalculated' => $this->titleCalculated,
+            'weightX' => $this->weightX,
+            'volX' => $this->volX,
+            'gradeX' => $this->gradeX,
+            'titleX' => $this->titleX,
+            'update_user_id' => auth()->user()->id,
+
+        ]);
+
+    }
+
+    public function showFindTitleModal()
+    {
+        $this->findTitleModal = true; 
+        $this->titles;
+        
+    }
+
+    public function getTitlesProperty()
+    {
+        return Title::all();
+    }
+    
     
 }

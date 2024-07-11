@@ -33,6 +33,9 @@ class Volumetries extends Component
     //modal
     public $showUpdateModal;
 
+    //close 
+    public $close = false; 
+
 
     public function mount()
     {
@@ -109,7 +112,8 @@ class Volumetries extends Component
           $this->dispatchBrowserEvent('focus-geo-select');  
         }
 
-        $this->getParameters();           
+        $this->getParameters(); 
+                 
         
     }
 
@@ -135,11 +139,11 @@ class Volumetries extends Component
 
                 //si el codControl es igual co buscamos la carta 
                 if ($this->coControl == strval($this->co)) {
-                    $query = "SELECT CODCARTA FROM CARTA WHERE COD_CONTROL = $this->codControl";
+                    $query = "SELECT CODCARTA, CERRADA FROM CARTA WHERE COD_CONTROL = $this->codControl";
                     $this->cart = DB::connection('sqlsrv')->select($query);
                     if ($this->cart) {
                         $this->codCart = $this->cart[0]->CODCARTA;
-
+                        $this->close   = $this->cart[0]->CERRADA;
 
                         $this->getMethods();
                         
@@ -153,7 +157,7 @@ class Volumetries extends Component
     public function getMethods()
     {
         if ($this->codCart != null) {
-            $query = "SELECT GEO, ELEMENTO FROM METODOSGEO WHERE CODCARTA = $this->codCart and ELEMENTO LIKE '%vol%'";
+            $query = "SELECT GEO, ELEMENTO FROM METODOSGEO WHERE CODCARTA = $this->codCart and (ELEMENTO LIKE '%vol%' or ELEMENTO LIKE '%DTT%') ";
             $this->methods = DB::connection('sqlsrv')->select($query);
 
            

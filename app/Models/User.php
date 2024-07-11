@@ -4,6 +4,7 @@ namespace App\Models;
 
 
 use App\Models\Permission;
+use App\Models\Title;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -78,6 +79,17 @@ class User extends Authenticatable
     {
         // morphToMany(RelatedModel, morphName, pivotTable = ables, thisKeyOnPivot = able_id, otherKeyOnPivot = _id)
         return $this->morphToMany(Role::class, 'model','model_has_roles','model_id','role_id');
+    }
+
+    /**
+     * User has many Titles.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function titles()
+    {
+        // hasMany(RelatedModel, foreignKeyOnRelatedModel = user_id, localKey = id)
+        return $this->hasMany(Title::class, 'update_user_id');
     }
 
       

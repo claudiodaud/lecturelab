@@ -43,6 +43,8 @@ class Phosphorous extends Component
     public $standart;
     public $LdeD;
 
+    // 
+    public $close = false;
 
 
 
@@ -210,11 +212,12 @@ class Phosphorous extends Component
 
                 //si el codControl es igual co buscamos la carta 
                 if ($this->coControl == strval($this->co)) {
-                    $query = "SELECT * FROM CARTA WHERE COD_CONTROL = $this->codControl";
+                    $query = "SELECT CODCARTA, CERRADA FROM CARTA WHERE COD_CONTROL = $this->codControl";
                     $this->cart = DB::connection('sqlsrv')->select($query);
                     if ($this->cart) {
                         $this->codCart = $this->cart[0]->CODCARTA;
-
+                        $this->close = $this->cart[0]->CERRADA;
+                        // dd($this->close);
                         $this->getMethods();
                         
                     }
@@ -226,6 +229,7 @@ class Phosphorous extends Component
 
     public function getMethods()
     {
+       
         if ($this->codCart != null) {
             $query = "SELECT * FROM METODOSGEO WHERE CODCARTA = $this->codCart AND (ELEMENTO = 'P' OR ELEMENTO = 'P DTT')";
             $this->methodsRegisters = DB::connection('sqlsrv')->select($query);

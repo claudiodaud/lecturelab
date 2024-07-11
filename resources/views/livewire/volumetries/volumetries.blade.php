@@ -36,25 +36,32 @@
                   
                     </div>
 
-                    @if($methods and $control)
-                   
-                    <select id="focus-geo-select" wire:model="methode" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-4 py-3  sm:mx-0 mt-2 sm:mt-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full sm:w-60">
-                            
-                            <option value="0" selected>{{__('Select your method')}}</option>
-                            
-                        @foreach ($methods as $methodr)
-                            
-                            <option value="{{$methodr->GEO}}">{{$methodr->GEO}} - {{$methodr->ELEMENTO}}</option>
-                            
-                        @endforeach            
-                    </select> 
+                    {{-- if co is close dont --}}
+                    @if($this->close != 'SI')
 
+                        @if($methods and $control)
+                       
+                        <select id="focus-geo-select" wire:model="methode" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-4 py-3  sm:mx-0 mt-2 sm:mt-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full sm:w-60">
+                                
+                                <option value="0" selected>{{__('Select your method')}}</option>
+                                
+                            @foreach ($methods as $methodr)
+                                
+                                <option value="{{$methodr->GEO}}">{{$methodr->GEO}} - {{$methodr->ELEMENTO}}</option>
+                                
+                            @endforeach            
+                        </select> 
+
+                        @else
+                        <div class="pt-4 pl-4 text-gray-300">
+                           {{ __('This CO dont have methods')}} 
+                        </div>                   
+                        @endif 
                     @else
-                    <div class="pt-4 pl-4 text-gray-300">
-                       {{ __('This CO dont have methods')}} 
-                    </div>                   
-                    @endif 
-                    
+                        <div class="pt-4 pl-4 text-gray-300">
+                           {{ __('This CO and Cart is close ')}} 
+                        </div>
+                    @endif    
                         
                    
                     

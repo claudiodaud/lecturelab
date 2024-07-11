@@ -80,29 +80,31 @@
               
               
                 <div class="flex sm:justify-end">
-                    @if($samples and $control)
-                       
-                        @if(in_array("phosphorous.upload", $permissions))
-                        <a wire:click.prevent="showModalUpdate" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full py-3 sm:py-0 sm:mt-0 sm:ml-2 ml-1'>
-                            {{__('Upload')}}
-                            
-                            <div class="mx-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            </div>
-                        </a> 
-                        @endif
-                        @if(in_array("phosphorous.download", $permissions))
-                        <a wire:click="downloadSamples" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full py-3 sm:py-0 mt-2 sm:mt-0 sm:ml-2 ml-1 mr-4'>
-                            {{__('Download')}}
-                            
-                            <div class="mx-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                            </svg>
-                            </div>
-                        </a> 
+                    @if($this->close != 'SI')
+                        @if($samples and $control)
+                           
+                            @if(in_array("phosphorous.upload", $permissions))
+                            <a wire:click.prevent="showModalUpdate" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full py-3 sm:py-0 sm:mt-0 sm:ml-2 ml-1'>
+                                {{__('Upload')}}
+                                
+                                <div class="mx-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                </div>
+                            </a> 
+                            @endif
+                            @if(in_array("phosphorous.download", $permissions))
+                            <a wire:click="downloadSamples" type='button' class='inline-flex items-center bg-black px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:text-gray-200 hover:bg-gray-700 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition w-full py-3 sm:py-0 mt-2 sm:mt-0 sm:ml-2 ml-1 mr-4'>
+                                {{__('Download')}}
+                                
+                                <div class="mx-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                                </div>
+                            </a> 
+                            @endif
                         @endif
                     @endif
 
@@ -118,73 +120,79 @@
                         <strong>{{ __('Wait a minute, Searching and synchronizing data...')}} </strong>
                     </div>
                 @endif    
-
-                @if ($control)
-                    <div class="block sm:flex sm:justify-between ">
-                        <div>
-                            
+                @if($this->close != 'SI')
+                    @if ($control)
+                        <div class="block sm:flex sm:justify-between ">
+                            <div>
                                 
-                            
-                                <div class="h4 text-sm text-gray-500 py-2">{{ __('CO')}} : <strong>{{$control[0]->CODIGO}} </strong> 
                                     
-                                </div>
-                                <div class="h4 text-sm text-gray-500 py-2">{{ __('Customer')}} : <strong>{{$control[0]->CLIENTE}} </strong>
-                                </div>
-                            
-                            
-                            @if ($samples)
-                                <div class="h4 text-sm text-gray-500 py-2">{{ __('Quantity')}} :<strong> {{count($samples)
-                                }} </strong></div>
-                            @endif
-                            
-                        </div>
-                        <div>
-                           
-                        </div>
-                        {{-- <div>
-                            @if ($samples)
-                                @if(in_array("phosphorous.parameters", $permissions))
-                                <div>
-                                    <div class="flex justify-start"> 
-                                        <div class="h4 text-sm text-gray-500 mt-2 mr-4 w-32">{{ __('Absorbance')}} :
-                                            
-                                        </div>
-                                        <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-16 sm:w-16" placeholder="{{__('Insert value')}}" wire:model="absorbance">
-                                        @if($absorbance != null)
-                                        <span wire:click.prevent="applyAbsorbance" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Apply')}}</span>
-                                        @endif
+                                
+                                    <div class="h4 text-sm text-gray-500 py-2">{{ __('CO')}} : <strong>{{$control[0]->CODIGO}} </strong> 
+                                        
                                     </div>
-   
-                                    <div class="flex justify-start">                                 
-                                        <div class="h4 text-sm text-gray-500 mt-2 mr-4 w-32">{{ __('Aliquot')}} :
+                                    <div class="h4 text-sm text-gray-500 py-2">{{ __('Customer')}} : <strong>{{$control[0]->CLIENTE}} </strong>
+                                    </div>
+                                
+                                
+                                @if ($samples)
+                                    <div class="h4 text-sm text-gray-500 py-2">{{ __('Quantity')}} :<strong> {{count($samples)
+                                    }} </strong></div>
+                                @endif
+                                
+                            </div>
+                            <div>
+                               
+                            </div>
+                            {{-- <div>
+                                @if ($samples)
+                                    @if(in_array("phosphorous.parameters", $permissions))
+                                    <div>
+                                        <div class="flex justify-start"> 
+                                            <div class="h4 text-sm text-gray-500 mt-2 mr-4 w-32">{{ __('Absorbance')}} :
+                                                
+                                            </div>
+                                            <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-16 sm:w-16" placeholder="{{__('Insert value')}}" wire:model="absorbance">
+                                            @if($absorbance != null)
+                                            <span wire:click.prevent="applyAbsorbance" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Apply')}}</span>
+                                            @endif
+                                        </div>
+       
+                                        <div class="flex justify-start">                                 
+                                            <div class="h4 text-sm text-gray-500 mt-2 mr-4 w-32">{{ __('Aliquot')}} :
+                                                
+                                            </div>
                                             
+                                            <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-16 sm:w-16" placeholder="{{__('Insert value')}}" wire:model="aliquot">    
+                                            @if($aliquot != null)
+                                            <span wire:click.prevent="applyAliquot" wire:loading.attr="disabled" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer disabled:bg-gray-400 disabled:border-blue-500 ">{{__('Apply')}}</span> 
+                                            @endif
+                                                                 
+                                        </div>
+                                        <div class="flex justify-start"> 
+                                            <div class="h4 text-sm text-gray-500 mt-2 mr-4 w-32">{{ __('Colorimetric Factor')}} :
+                                                
+                                            </div>
+                                            <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32" placeholder="{{__('Insert value')}}" wire:model="colorimetricFactor">
+                                            @if($colorimetricFactor != null)
+                                            <span wire:click.prevent="applyColorimetric" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Apply')}}</span>
+                                            @endif
                                         </div>
                                         
-                                        <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-16 sm:w-16" placeholder="{{__('Insert value')}}" wire:model="aliquot">    
-                                        @if($aliquot != null)
-                                        <span wire:click.prevent="applyAliquot" wire:loading.attr="disabled" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer disabled:bg-gray-400 disabled:border-blue-500 ">{{__('Apply')}}</span> 
-                                        @endif
-                                                             
+                                                            
                                     </div>
-                                    <div class="flex justify-start"> 
-                                        <div class="h4 text-sm text-gray-500 mt-2 mr-4 w-32">{{ __('Colorimetric Factor')}} :
-                                            
-                                        </div>
-                                        <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ml-2 pl-4 py-0.5 sm:mx-0 sm:mr-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1 w-32 sm:w-32" placeholder="{{__('Insert value')}}" wire:model="colorimetricFactor">
-                                        @if($colorimetricFactor != null)
-                                        <span wire:click.prevent="applyColorimetric" class="rounded rounded-lg bg-black text-center text-sm text-white py-0.5 my-1 px-2 hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">{{__('Apply')}}</span>
-                                        @endif
-                                    </div>
-                                    
-                                                        
-                                </div>
+                                    @endif
                                 @endif
-                            @endif
-                            
-                            
-                        </div> --}}
-                    </div>
-                @endif
+                                
+                                
+                            </div> --}}
+                        </div>
+                    @endif
+
+                @else
+                        <div class="px-2 py-4 text-gray-300">
+                           {{ __('This CO and Cart is close ')}} 
+                        </div>    
+                @endif        
                 </div> 
             </div>
             <div class="mx-4">
@@ -230,15 +238,18 @@
               </x-jet-action-message> 
 
               {{--Table--}}
+              @if($this->close != 'SI')
 
-              @if($control and $samples) 
-              
-              <div class="relative overflow-x-auto">
-                
-                <livewire:irons.table />
-              
-              </div>
-              @endif 
+                  @if($control and $samples) 
+                  
+                  <div class="relative overflow-x-auto">
+                    
+                    <livewire:irons.table />
+                  
+                  </div>
+                  @endif 
+                 
+              @endif    
             </div>
             
           </div>
