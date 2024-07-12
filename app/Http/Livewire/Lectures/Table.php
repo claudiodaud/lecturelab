@@ -446,15 +446,11 @@ class Table extends Component
             $this->dispatchBrowserEvent('focus-dilution', ['key' => $this->keyIdDilution]);
             
         }else{
-            $this->closeAbsorbance();
+            $this->closeDilution();
 
         }
         
-
-        $this->dilutionField = null;
-
-
-       
+        $this->dilutionField = null;       
        
     }
 
