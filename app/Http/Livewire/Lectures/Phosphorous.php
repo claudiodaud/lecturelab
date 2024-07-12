@@ -43,7 +43,7 @@ class Phosphorous extends Component
     public $standart;
     public $LdeD;
 
-
+    public $notGetCO = false;
 
 
     public function mount()
@@ -233,7 +233,9 @@ class Phosphorous extends Component
                 $query = "SELECT * FROM pesajevolumen WHERE codcarta = $this->codCart AND  METODO = '".$this->methode."' ";      
                     $this->samples = DB::connection('sqlsrv')->select($query);
 
-                    $this->getSamples();
+                    if ($this->notGetCO) {
+                        $this->getSamples();
+                    }
 
             }
 
@@ -568,6 +570,7 @@ class Phosphorous extends Component
 
     public function updateSampleToPlusManager()
     {
+        $this->notGetCO = true;
         // buscamos las muestras por los parametros establecidos y solo subiremos las que tengan ley filtrando por la insersion del parametro de absorbance y por el calculo de la ley de fosforo  
         $samples = Presample::where('co',$this->co)
                             ->where('absorbance','>',0)
@@ -610,6 +613,8 @@ class Phosphorous extends Component
                         ->select('SELECT NUMERO FROM AAS400 WHERE CO = ? and METODO = ? and NUMERO = ?',
                             [$this->co,$this->methode,$sample->number]);
             if ($validate) {
+
+                // dd($samples[1]);
 
                 //dd('aqui');
                 //variables dinamicas que dependen de la muestra
@@ -717,10 +722,13 @@ class Phosphorous extends Component
 
 
                 Presample::find($sample->id)->update(['updated_by' => auth()->user()->id , 'updated_date' => date_format(now(),"Y/m/d H:i:s")]);
+                
 
+                $this->notGetCO = false;
+               
             }else{
        
-                 
+                $this->notGetCO = true;
                 //creamos las muestras ;)
                 DB::connection('sqlsrv')
                 ->insert('INSERT INTO AAS400 (CO,METODO,NUMERO) VALUES (?,?,?)',
@@ -843,7 +851,7 @@ class Phosphorous extends Component
                 'codCart' => $this->codCart, 
                 'standart' => $this->standart
             ]);
-
+        $this->notGetCO = false;
     }
     
     
