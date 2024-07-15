@@ -233,7 +233,7 @@ class Phosphorous extends Component
                 $query = "SELECT * FROM pesajevolumen WHERE codcarta = $this->codCart AND  METODO = '".$this->methode."' ";      
                     $this->samples = DB::connection('sqlsrv')->select($query);
 
-                    if ($this->notGetCO) {
+                    if (!$this->notGetCO) {                  
                         $this->getSamples();
                     }
 
