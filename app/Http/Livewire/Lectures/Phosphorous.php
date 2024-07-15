@@ -431,6 +431,7 @@ class Phosphorous extends Component
                 $phosphorous = $FC * $FD * $A;   
             }    
 
+            // dd($samplex->dilution);
             //guardamos el nombre, peso y los recalculos.
             $samplex->name = $sample->muestra;                      
             $samplex->weight = $sample->peso;                           
@@ -438,7 +439,14 @@ class Phosphorous extends Component
             $samplex->aliquot = $samplex->aliquot;
             $samplex->colorimetric_factor = $samplex->colorimetric_factor;
             $samplex->dilution_factor = $dilutionFactor;
-            $samplex->phosphorous = $phosphorous;
+
+            // si existe un valor mayor a cero en disolucion que lo aplique a la ley. 
+            if ($samplex->dilution > 0) {                
+                $samplex->phosphorous = $phosphorous * $samplex->dilution;
+            }else{                
+                $samplex->phosphorous = $phosphorous;
+            }
+
             $samplex->save();
 
                 
