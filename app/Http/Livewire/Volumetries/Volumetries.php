@@ -157,7 +157,7 @@ class Volumetries extends Component
     public function getMethods()
     {
         if ($this->codCart != null) {
-            $query = "SELECT GEO, ELEMENTO FROM METODOSGEO WHERE CODCARTA = $this->codCart and (ELEMENTO LIKE '%vol%' or ELEMENTO LIKE '%DTT%') ";
+            $query = "SELECT GEO, ELEMENTO FROM METODOSGEO WHERE CODCARTA = $this->codCart and (ELEMENTO LIKE '%Fe Vol%' or ELEMENTO LIKE '%Fe DTT%') ";
             $this->methods = DB::connection('sqlsrv')->select($query);
 
            
