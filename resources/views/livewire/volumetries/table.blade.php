@@ -409,27 +409,32 @@
       </x-slot>
 
       <x-slot name="footer">
-          <x-jet-secondary-button wire:click="$toggle('calculateModal')" wire:loading.attr="disabled">
-              {{ __('Cancel') }}
-          </x-jet-secondary-button>
+          <div class="flex justify-between w-full">
+            <div>
+              <x-jet-button class="float-left" wire:click="showFindTitleModal()" wire:loading.attr="disabled">
+                  {{ __('Find Titles') }}
+              </x-jet-button>
+            </div>
+            <div>
+              <x-jet-secondary-button wire:click="$toggle('calculateModal')" wire:loading.attr="disabled">
+                  {{ __('Cancel') }}
+              </x-jet-secondary-button>            
 
-          <x-jet-secondary-button wire:click="showFindTitleModal()" wire:loading.attr="disabled">
-              {{ __('Find Titles') }}
-          </x-jet-secondary-button>
-
-          <x-jet-danger-button class="ml-3" wire:click="updateCalculate({{$idModal}})" wire:loading.attr="disabled">
-              {{ __('Update Title') }}
-          </x-jet-danger-button>
-          
+              <x-jet-danger-button class="ml-3" wire:click="updateCalculate({{$idModal}})" wire:loading.attr="disabled">
+                  {{ __('Update Title') }}
+              </x-jet-danger-button>
+            </div>
+          </div>
       </x-slot>
   </x-jet-dialog-modal> 
 
   <!-- --------------------------------------------------- -->
 
-  <!-- Confirmacion Update Modal -->
-  <x-jet-dialog-modal wire:model="findTitleModal" :maxWidth="'xl'"> 
+  <!-- Find Title Modal -->
+  
+  <x-jet-dialog-modal wire:model="findTitleModal" class="w-auto" :maxWidth="'7xl'"> 
       <x-slot name="title">
-          <div class="flex justify-between my-4">
+          <div class="flex justify-between my-4 uppercase font-semibold">
             {{ __('Titles')}} 
           </div>
       </x-slot>
@@ -438,41 +443,45 @@
 
             <div class="flex justify-around">
 
-                   <table>
-                     <thead>
-                      <tr>
-                       <th>{{ __('Sample Id')}}</th>
-                       <th>{{ __('Sample Name')}}</th>
-                       <th>{{ __('Co')}}</th>
-                       <th>{{ __('Method')}}</th>
-                       <th>{{ __('Element')}}</th>
-                       <th>{{ __('Title')}}</th>
-                       <th>{{ __('Create at')}}</th>
-                       <th>{{ __('Created By')}}</th>
-                      </tr>
-                     </thead>
-                     <tbody>
-                      @if ($this->titles)
-                        
-                        @foreach($this->titles as $title)
-                          <tr>
-                           <td>{{ $title->volumetry_id }}</td>
-                           <td>{{ $title->sample_name }}</td>
-                           <td>{{ $title->co }}</td>
-                           <td>{{ $title->method }}</td>
-                           <td>{{ $title->element }}</td>
-                           <td>{{ $title->titleX }}</td>
-                           <td>{{ $title->user->name }}</td>
-                           <td>{{ $title->created_at }}</td>
-                          </tr> 
-                        @endforeach  
-
-                      @endif
-                     </tbody>
-                     <tfoot>
-                       
-                     </tfoot>
-                   </table>
+                  <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                {{-- <th scope="col" class="px-6 py-3">{{ __('Sample Id')}}</th> --}}
+                                <th scope="col" class="px-6 py-3">{{ __('Sample Name')}}</th>
+                                <th scope="col" class="px-6 py-3">{{ __('Title')}}</th>
+                                <th scope="col" class="px-6 py-3">{{ __('Co')}}</th>
+                                <th scope="col" class="px-6 py-3">{{ __('Method')}}</th>
+                                <th scope="col" class="px-6 py-3">{{ __('Element')}}</th>
+                                <th scope="col" class="px-6 py-3">{{ __('Created By')}}</th>
+                                <th scope="col" class="px-6 py-3">{{ __('Create at')}}</th>
+                                <th scope="col" class="px-6 py-3">{{ __('Actions')}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          @if ($this->titles)                        
+                            @foreach($this->titles as $title)
+                            <tr class="bg-white border-b hover:bg-gray-100 even:bg-gray-50">
+                                {{-- <td class="px-6 py-2">{{ $title->volumetry_id }}</td> --}}
+                                <td class="px-6 py-2">{{ $title->sample_name }}</td>
+                                <td class="px-6 py-2">{{ $title->titleX }}</td>
+                                <td class="px-6 py-2">{{ $title->co }}</td>
+                                <td class="px-6 py-2">{{ $title->method }}</td>
+                                <td class="px-6 py-2">{{ $title->element }}</td>
+                                <td class="px-6 py-2">{{ $title->user->name }}</td>
+                                <td class="px-6 py-2">{{ $title->created_at }}</td>
+                                <td class="px-6 py-2">
+                                      <x-jet-danger-button 
+                                      class="ml-3" 
+                                      wire:click="useTitle({{$title->id}})" 
+                                      wire:loading.attr="disabled">
+                                            {{ __('Use Title') }}
+                                      </x-jet-danger-button>
+                                </td>
+                            </tr> 
+                            @endforeach 
+                          @endif                           
+                        </tbody>
+                    </table>
             </div>
          
       </x-slot>
@@ -482,9 +491,9 @@
               {{ __('Cancel') }}
           </x-jet-secondary-button>
 
-          <x-jet-danger-button class="ml-3" wire:click="updateCalculate({{$idModal}})" wire:loading.attr="disabled">
+          {{-- <x-jet-danger-button class="ml-3" wire:click="" wire:loading.attr="disabled">
               {{ __('Update Title') }}
-          </x-jet-danger-button>
+          </x-jet-danger-button> --}}
           
       </x-slot>
   </x-jet-dialog-modal> 

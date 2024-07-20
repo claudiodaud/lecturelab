@@ -363,7 +363,14 @@ class Table extends Component
 
         $register->grade = $register->title*$register->spent/$register->weight*100;
         $register->save();
+
+        // AQUI GUARDAR LA INFORMACION DEL CALCULO DEL TITULO MODELO TITULO   
+        // Create Title 
+       
+        $this->createTitle();
         
+        
+
         //limpiar variables 
         $this->weight1 = null;
         $this->weight2 = null;
@@ -402,10 +409,7 @@ class Table extends Component
         $this->gradeX   = null;
         $this->titleX   = null;  
 
-        // AQUI GUARDAR LA INFORMACION DEL CALCULO DEL TITULO MODELO TITULO      
         
-        
-
         //cerrar el modal 
         $this->idModal = null;
         $this->calculateModal = false;
@@ -655,8 +659,7 @@ class Table extends Component
 
         }
 
-        // Create Title 
-        $this->createTitle();
+        
 
     }
 
@@ -715,9 +718,60 @@ class Table extends Component
         
     }
 
+    public function useTitle($titleId)
+    {
+        // buscar el registro 
+        $title = Title::find($titleId);
+
+        // actualizar las variables 
+        $this->weight1 = $title->weight1;
+        $this->weight2 = $title->weight2;
+        $this->weight3 = $title->weight3;
+        $this->weight4 = $title->weight4;
+        $this->weight5 = $title->weight5;
+        $this->weight6 = $title->weight6;
+        $this->vol1 = $title->vol1;
+        $this->vol2 = $title->vol2;
+        $this->vol3 = $title->vol3;
+        $this->vol4 = $title->vol4;
+        $this->vol5 = $title->vol5;
+        $this->vol6 = $title->vol6;
+        $this->grade1 = $title->grade1;
+        $this->grade2 = $title->grade2;
+        $this->grade3 = $title->grade3;
+        $this->grade4 = $title->grade4;
+        $this->grade5 = $title->grade5;
+        $this->grade6 = $title->grade6;
+        $this->title1 = $title->title1;
+        $this->title2 = $title->title2;
+        $this->title3 = $title->title3;
+        $this->title4 = $title->title4;
+        $this->title5 = $title->title5;
+        $this->title6 = $title->title6;
+        $this->title = $title->title;
+        $this->titling = $title->titling;
+        $this->titleCalculated = $title->titleCalculated;
+        $this->weightX = $title->weightX;
+        $this->volX = $title->volX;
+        $this->gradeX = $title->gradeX;
+        $this->titleX = $title->titleX;
+
+
+        // cerrar el modal 
+        $this->closeFindTitleModal();
+    }
+
+    public function closeFindTitleModal()
+    {
+        $this->findTitleModal = false;
+        
+    }
+
+
+
     public function getTitlesProperty()
     {
-        return Title::all();
+        return Title::orderBy('id','Desc')->latest()->take(101)->get();
     }
     
     
