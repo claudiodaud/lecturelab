@@ -80,7 +80,7 @@
               
               
                 <div class="flex sm:justify-end">
-                    @if($this->close != 'SI')
+                    @if($this->close != 'SI' or $this->close == null)
                         @if($samples and $control)
                            
                             @if(in_array("phosphorous.upload", $permissions))
