@@ -37,7 +37,7 @@
                     </div>
 
                     {{-- if co is close dont --}}
-                    @if($this->close != 'SI' or $this->close == null )
+                    @if($this->close == 'NO')
 
                         @if($methods and $control)
                        
